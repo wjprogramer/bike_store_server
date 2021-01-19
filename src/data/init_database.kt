@@ -2,7 +2,7 @@ package com.giant_giraffe.data
 
 import com.giant_giraffe.data.production.brand.BrandTable
 import com.giant_giraffe.data.production.category.CategoryTable
-import com.giant_giraffe.data.production.product.ProductsTable
+import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.production.stock.StockTable
 import com.giant_giraffe.data.sales.customer.CustomerTable
 import com.giant_giraffe.data.sales.order.OrderTable
@@ -12,7 +12,6 @@ import com.giant_giraffe.data.sales.store.StoreTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.*
-import io.ktor.util.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -34,7 +33,7 @@ private fun createTables() = transaction {
         // production
         BrandTable,
         CategoryTable,
-        ProductsTable,
+        ProductTable,
         StockTable,
         // sales
         CustomerTable,

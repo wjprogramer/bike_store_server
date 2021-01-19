@@ -3,7 +3,7 @@ package com.giant_giraffe.data.production.product
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProductsView(
+data class ProductView(
     var id: Int? = null,
     var name: String? = null,
     var modelYear: String? = null,

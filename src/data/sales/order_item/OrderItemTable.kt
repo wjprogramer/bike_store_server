@@ -1,6 +1,6 @@
 package com.giant_giraffe.data.sales.order_item
 
-import com.giant_giraffe.data.production.product.ProductsTable
+import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.sales.order.OrderTable
 import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
@@ -20,7 +20,7 @@ object OrderItemTable: IntIdTable("order_items") {
 
     val productId = reference(
         "product_id",
-        ProductsTable.id,
+        ProductTable.id,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).nullable()
