@@ -9,6 +9,8 @@ class CategoryEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Category, Cat
 
     companion object: IntEntityClass<CategoryEntity>(CategoryTable)
 
+    var name by CategoryTable.name
+
     override fun toModel() =
         Category(this)
 

@@ -4,8 +4,14 @@ import com.giant_giraffe.data.BaseModel
 
 class Brand(brandEntity: BrandEntity): BaseModel<BrandView> {
 
+    var id = brandEntity.id.value
+    var name = brandEntity.name
+
     override fun toView(): BrandView {
-        return BrandView()
+        return BrandView(
+            id,
+            name,
+        )
     }
 
 }

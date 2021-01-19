@@ -9,6 +9,12 @@ class OrderItemEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<OrderItem, O
 
     companion object: IntEntityClass<OrderItemEntity>(OrderItemTable)
 
+    var orderId by OrderItemTable.orderId
+    var quantity by OrderItemTable.quantity
+    var listPrice by OrderItemTable.listPrice
+    var discount by OrderItemTable.discount
+    var productId by OrderItemTable.productId
+
     override fun toModel() =
         OrderItem(this)
 
