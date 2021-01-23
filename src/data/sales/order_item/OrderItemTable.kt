@@ -9,7 +9,7 @@ import java.math.BigDecimal
 object OrderItemTable: IntIdTable("order_items") {
     val orderId = reference(
         "order_id",
-        OrderTable.id,
+        OrderTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).primaryKey()
@@ -20,7 +20,7 @@ object OrderItemTable: IntIdTable("order_items") {
 
     val productId = reference(
         "product_id",
-        ProductTable.id,
+        ProductTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).nullable()

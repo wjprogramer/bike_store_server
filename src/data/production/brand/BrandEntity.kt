@@ -10,7 +10,7 @@ class BrandEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Brand, BrandView
 
     companion object: IntEntityClass<BrandEntity>(BrandTable)
 
-    var name by CategoryTable.name
+    var name by BrandTable.name
 
     override fun toModel() =
         Brand(this)

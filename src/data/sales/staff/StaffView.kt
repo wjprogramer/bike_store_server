@@ -1,11 +1,12 @@
 package com.giant_giraffe.data.sales.staff
 
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class StaffView(
     var id: Int? = null,
+    @SerializedName("first_name")
     var firstName: String? = null,
+    @SerializedName("last_name")
     var lastName: String? = null,
     var email: String? = null,
     var phone: String? = null,

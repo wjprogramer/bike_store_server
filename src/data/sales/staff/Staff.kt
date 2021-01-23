@@ -2,16 +2,27 @@ package com.giant_giraffe.data.sales.staff
 
 import com.giant_giraffe.data.BaseModel
 
-class Staff(staffEntity: StaffEntity): BaseModel<StaffView> {
+class Staff(
+    var id: Int? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var email: String? = null,
+    var phone: String? = null,
+    var active: Int? = null,
+    var storeId: Int? = null,
+    var managerId: Int? = null,
+): BaseModel<StaffView> {
 
-    var id = staffEntity.id.value
-    var firstName = staffEntity.firstName
-    var lastName = staffEntity.lastName
-    var email = staffEntity.email
-    var phone = staffEntity.phone
-    var active = staffEntity.active
-    var storeId = staffEntity.storeId.value
-    var managerId = staffEntity.managerId?.value
+    constructor(staffEntity: StaffEntity): this(
+        staffEntity.id.value,
+        staffEntity.firstName,
+        staffEntity.lastName,
+        staffEntity.email,
+        staffEntity.phone,
+        staffEntity.active,
+        staffEntity.storeId.value,
+        staffEntity.managerId?.value,
+    )
 
     override fun toView(): StaffView {
         return StaffView(

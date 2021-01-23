@@ -1,10 +1,10 @@
 package com.giant_giraffe.data.sales.store
 
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class StoreView(
     var id: Int? = null,
+    @SerializedName("store_name")
     var storeName: String? = null,
     var phone: String? = null,
     var email: String? = null,

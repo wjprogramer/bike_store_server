@@ -2,10 +2,15 @@ package com.giant_giraffe.data.production.category
 
 import com.giant_giraffe.data.BaseModel
 
-class Category(categoryEntity: CategoryEntity): BaseModel<CategoryView> {
+class Category(
+    var id: Int? = null,
+    var name: String? = null,
+): BaseModel<CategoryView> {
 
-    var id = categoryEntity.id.value
-    var name = categoryEntity.name
+    constructor(categoryEntity: CategoryEntity): this(
+        categoryEntity.id.value,
+        categoryEntity.name
+    )
 
     override fun toView(): CategoryView {
         return CategoryView(

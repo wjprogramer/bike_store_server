@@ -1,8 +1,6 @@
 package com.giant_giraffe.core
 
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class ComparablePair<A: Comparable<A>, B: Comparable<B>>(
     val first: A,
     val second: B

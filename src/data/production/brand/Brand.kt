@@ -1,11 +1,17 @@
 package com.giant_giraffe.data.production.brand
 
 import com.giant_giraffe.data.BaseModel
+import com.giant_giraffe.data.production.category.CategoryEntity
 
-class Brand(brandEntity: BrandEntity): BaseModel<BrandView> {
+class Brand(
+    var id: Int? = null,
+    var name: String? = null,
+): BaseModel<BrandView> {
 
-    var id = brandEntity.id.value
-    var name = brandEntity.name
+    constructor(brandEntity: BrandEntity): this(
+        brandEntity.id.value,
+        brandEntity.name
+    )
 
     override fun toView(): BrandView {
         return BrandView(

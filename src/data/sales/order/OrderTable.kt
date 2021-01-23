@@ -15,21 +15,21 @@ object OrderTable: IntIdTable("orders") {
 
     val customerId = reference(
         "customer_id",
-        CustomerTable.id,
+        CustomerTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).nullable()
 
     val storeId = reference(
         "store_id",
-        StoreTable.id,
+        StoreTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     )
 
     val staffId = reference(
         "staff_id",
-        StaffTable.id,
+        StaffTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
     )

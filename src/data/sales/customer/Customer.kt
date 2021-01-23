@@ -2,17 +2,29 @@ package com.giant_giraffe.data.sales.customer
 
 import com.giant_giraffe.data.BaseModel
 
-class Customer(customerEntity: CustomerEntity): BaseModel<CustomerView> {
+class Customer(
+    var id: Int? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var email: String? = null,
+    var phone: String? = null,
+    var street: String? = null,
+    var city: String? = null,
+    var state: String? = null,
+    var zipCode: String? = null,
+): BaseModel<CustomerView> {
 
-    var id = customerEntity.id.value
-    var firstName = customerEntity.firstName
-    var lastName = customerEntity.lastName
-    var email = customerEntity.email
-    var phone = customerEntity.phone
-    var street = customerEntity.street
-    var city = customerEntity.city
-    var state = customerEntity.state
-    var zipCode = customerEntity.zipCode
+    constructor(customerEntity: CustomerEntity): this(
+        customerEntity.id.value,
+        customerEntity.firstName,
+        customerEntity.lastName,
+        customerEntity.email,
+        customerEntity.phone,
+        customerEntity.street,
+        customerEntity.city,
+        customerEntity.state,
+        customerEntity.zipCode,
+    )
 
     override fun toView(): CustomerView {
         return CustomerView(

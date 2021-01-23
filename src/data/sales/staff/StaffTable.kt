@@ -9,16 +9,16 @@ object StaffTable: IntIdTable("staffs") {
     val lastName = varchar("last_name", 50)
     val email = varchar("email", 255).uniqueIndex()
     val phone = varchar("phone", 25).nullable()
-    val active = integer("active")
+    val active = integer("active") // TODO: boolean?
 
     val storeId = reference(
-        "store_id", StoreTable.id,
+        "store_id", StoreTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     )
 
     val managerId = reference(
-        "manager_id", StaffTable.id,
+        "manager_id", StaffTable,
         onDelete = ReferenceOption.NO_ACTION,
         onUpdate = ReferenceOption.NO_ACTION
     ).nullable()

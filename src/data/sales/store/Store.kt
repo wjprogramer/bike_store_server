@@ -2,16 +2,27 @@ package com.giant_giraffe.data.sales.store
 
 import com.giant_giraffe.data.BaseModel
 
-class Store(storeEntity: StoreEntity): BaseModel<StoreView> {
+class Store(
+    var id: Int? = null,
+    var storeName: String? = null,
+    var phone: String? = null,
+    var email: String? = null,
+    var street: String? = null,
+    var city: String? = null,
+    var state: String? = null,
+    var zipCode: String? = null,
+): BaseModel<StoreView> {
 
-    var id = storeEntity.id.value
-    var storeName = storeEntity.storeName
-    var phone = storeEntity.phone
-    var email = storeEntity.email
-    var street = storeEntity.street
-    var city = storeEntity.city
-    var state = storeEntity.state
-    var zipCode = storeEntity.zipCode
+    constructor(storeEntity: StoreEntity): this(
+        id = storeEntity.id.value,
+        storeName = storeEntity.storeName,
+        phone = storeEntity.phone,
+        email = storeEntity.email,
+        street = storeEntity.street,
+        city = storeEntity.city,
+        state = storeEntity.state,
+        zipCode = storeEntity.zipCode,
+    )
 
     override fun toView(): StoreView {
         return StoreView(

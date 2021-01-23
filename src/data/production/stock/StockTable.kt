@@ -12,14 +12,14 @@ object StockTable: IntIdTable("stocks") {
 
     val storeId = reference(
         "store_id",
-        StoreTable.id,
+        StoreTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).nullable()
 
     val productId = reference(
         "product_id",
-        StoreTable.id,
+        StoreTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
     ).nullable()

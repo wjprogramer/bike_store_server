@@ -1,23 +1,33 @@
 package com.giant_giraffe.data.sales.order_item
 
 import com.giant_giraffe.data.BaseModel
+import java.math.BigDecimal
 
-class OrderItem(orderItemEntity: OrderItemEntity): BaseModel<OrderItemView> {
+class OrderItem(
+    var id: Int? = null,
+    var orderId: Int? = null,
+    var quantity: Int? = null,
+    var listPrice: BigDecimal? = null,
+    var discount: BigDecimal? = null,
+    var productId: Int? = null,
+): BaseModel<OrderItemView> {
 
-    var id = orderItemEntity.id.value
-    var orderId = orderItemEntity.orderId.value
-    var quantity = orderItemEntity.quantity
-    var listPrice = orderItemEntity.listPrice
-    var discount = orderItemEntity.discount
-    var productId = orderItemEntity.productId?.value
+    constructor(orderItemEntity: OrderItemEntity): this(
+        orderItemEntity.id.value,
+        orderItemEntity.orderId.value,
+        orderItemEntity.quantity,
+        orderItemEntity.listPrice,
+        orderItemEntity.discount,
+        orderItemEntity.productId?.value,
+    )
 
     override fun toView(): OrderItemView {
         return OrderItemView(
             id,
             orderId,
             quantity,
-            listPrice.toInt(),
-            discount.toInt(),
+            listPrice?.toString(),
+            discount?.toString(),
             productId,
         )
     }
