@@ -6,11 +6,11 @@ import com.giant_giraffe.data.sales.store.StoreView
 
 interface StoreService {
 
-    fun create(store: Store): StoreView
+    fun create(store: Store): Store
 
-    fun getById(storeId: Int): StoreView?
+    fun getById(storeId: Int): Store?
 
-    fun getList(page: Int, size: Int): PageableData<StoreView>
+    fun getList(page: Int, size: Int): PageableData<Store>
 
     fun update(store: Store): Int
 

@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.sales
 import com.giant_giraffe.core.PageableData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.order_item.OrderItemConverter
-import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.services.sales.order_item.OrderItemService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -38,7 +37,7 @@ fun Route.orderItemController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -54,12 +53,12 @@ fun Route.orderItemController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val orderItemView = OrderItemConverter.parametersToView(form)
-                val orderItem = OrderItemConverter.viewToModel(orderItemView)
+                val orderItem = OrderItemConverter.parametersToModel(form)
 
                 val createdOrderItem = orderItemService.create(orderItem)
+
                 call.respondApiResult(
-                    result = createdOrderItem
+                    result = createdOrderItem.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -68,10 +67,13 @@ fun Route.orderItemController() {
 
         get("/{id}") {
             try {
-                val orderItemId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderItemId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val orderItemView = orderItemService.getById(orderItemId) ?: throw NotFoundException()
-                call.respond(orderItemView)
+                val itemView = orderItemService.getById(orderItemId)
+                    ?: throw NotFoundException()
+
+                call.respond(itemView.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -80,10 +82,10 @@ fun Route.orderItemController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val orderItemView = OrderItemConverter.parametersToView(form)
-                val orderItem = OrderItemConverter.viewToModel(orderItemView)
+                val orderItem = OrderItemConverter.parametersToModel(form)
 
-                val orderItemId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderItemId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 orderItem.id = orderItemId
 
                 val result = orderItemService.update(orderItem)
@@ -95,7 +97,8 @@ fun Route.orderItemController() {
 
         post("/delete/{id}") {
             try {
-                val orderItemId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderItemId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = orderItemService.delete(orderItemId)
                 call.respond(result)

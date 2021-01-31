@@ -7,11 +7,11 @@ import com.giant_giraffe.data.sales.order.OrderView
 
 interface OrderService {
 
-    fun create(order: Order): OrderView
+    fun create(order: Order): Order
 
-    fun getById(orderId: Int): OrderView?
+    fun getById(orderId: Int): Order?
 
-    fun getList(page: Int, size: Int): PageableData<OrderView>
+    fun getList(page: Int, size: Int): PageableData<Order>
 
     fun update(order: Order): Int
 

@@ -37,7 +37,7 @@ fun Route.orderController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,12 +53,12 @@ fun Route.orderController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val orderView = OrderConverter.parametersToView(form)
-                val order = OrderConverter.viewToModel(orderView)
+                val order = OrderConverter.parametersToModel(form)
 
                 val createdOrder = orderService.create(order)
+
                 call.respondApiResult(
-                    result = createdOrder
+                    result = createdOrder.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -67,10 +67,13 @@ fun Route.orderController() {
 
         get("/{id}") {
             try {
-                val orderId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val orderView = orderService.getById(orderId) ?: throw NotFoundException()
-                call.respond(orderView)
+                val order = orderService.getById(orderId)
+                    ?: throw NotFoundException()
+
+                call.respond(order.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -79,10 +82,10 @@ fun Route.orderController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val orderView = OrderConverter.parametersToView(form)
-                val order = OrderConverter.viewToModel(orderView)
+                val order = OrderConverter.parametersToModel(form)
 
-                val orderId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 order.id = orderId
 
                 val result = orderService.update(order)
@@ -94,7 +97,8 @@ fun Route.orderController() {
 
         post("/delete/{id}") {
             try {
-                val orderId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val orderId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = orderService.delete(orderId)
                 call.respond(result)

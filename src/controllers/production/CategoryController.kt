@@ -37,7 +37,7 @@ fun Route.categoryController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,12 +53,12 @@ fun Route.categoryController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val categoryView = CategoryConverter.parametersToView(form)
-                val category = CategoryConverter.viewToModel(categoryView)
+                val category = CategoryConverter.parametersToModel(form)
 
                 val createdCategory = categoryService.create(category)
+
                 call.respondApiResult(
-                    result = createdCategory
+                    result = createdCategory.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -67,10 +67,13 @@ fun Route.categoryController() {
 
         get("/{id}") {
             try {
-                val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val categoryId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val categoryView = categoryService.getById(categoryId) ?: throw NotFoundException()
-                call.respond(categoryView)
+                val category = categoryService.getById(categoryId)
+                    ?: throw NotFoundException()
+
+                call.respond(category.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -79,10 +82,10 @@ fun Route.categoryController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val categoryView = CategoryConverter.parametersToView(form)
-                val category = CategoryConverter.viewToModel(categoryView)
+                val category = CategoryConverter.parametersToModel(form)
 
-                val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val categoryId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 category.id = categoryId
 
                 val result = categoryService.update(category)
@@ -94,7 +97,8 @@ fun Route.categoryController() {
 
         post("/delete/{id}") {
             try {
-                val categoryId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val categoryId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = categoryService.delete(categoryId)
                 call.respond(result)

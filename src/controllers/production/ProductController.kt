@@ -37,7 +37,7 @@ fun Route.productController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,10 +53,10 @@ fun Route.productController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val productView = ProductConverter.parametersToView(form)
-                val product = ProductConverter.viewToModel(productView)
+                val product = ProductConverter.parametersToModel(form)
 
                 val createdProduct = productService.create(product)
+
                 call.respondApiResult(
                     result = createdProduct
                 )
@@ -67,9 +67,12 @@ fun Route.productController() {
 
         get("/{id}") {
             try {
-                val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val productId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val productView = productService.getById(productId) ?: throw NotFoundException()
+                val productView = productService.getById(productId)
+                    ?: throw NotFoundException()
+
                 call.respond(productView)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -79,10 +82,10 @@ fun Route.productController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val productView = ProductConverter.parametersToView(form)
-                val product = ProductConverter.viewToModel(productView)
+                val product = ProductConverter.parametersToModel(form)
 
-                val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val productId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 product.id = productId
 
                 val result = productService.update(product)
@@ -94,7 +97,8 @@ fun Route.productController() {
 
         post("/delete/{id}") {
             try {
-                val productId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val productId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = productService.delete(productId)
                 call.respond(result)

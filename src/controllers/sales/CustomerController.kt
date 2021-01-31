@@ -1,14 +1,9 @@
 package com.giant_giraffe.controllers.sales
 
 import com.giant_giraffe.core.PageableData
-import com.giant_giraffe.core.respondApiErrorResult
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.customer.CustomerConverter
-import com.giant_giraffe.data.sales.store.StoreConverter
-import com.giant_giraffe.exceptions.MyBaseException
-import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.services.sales.customer.CustomerService
-import com.giant_giraffe.services.sales.store.StoreService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
@@ -42,7 +37,7 @@ fun Route.customerController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -58,12 +53,12 @@ fun Route.customerController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val customerView = CustomerConverter.parametersToView(form)
-                val customer = CustomerConverter.viewToModel(customerView)
+                val customer = CustomerConverter.parametersToModel(form)
 
                 val createdCustomer = customerService.create(customer)
+
                 call.respondApiResult(
-                    result = createdCustomer
+                    result = createdCustomer.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -72,10 +67,13 @@ fun Route.customerController() {
 
         get("/{id}") {
             try {
-                val customerId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val customerId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val customerView = customerService.getById(customerId) ?: throw NotFoundException()
-                call.respond(customerView)
+                val customer = customerService.getById(customerId)
+                    ?: throw NotFoundException()
+
+                call.respond(customer.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -84,10 +82,10 @@ fun Route.customerController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val customerView = CustomerConverter.parametersToView(form)
-                val customer = CustomerConverter.viewToModel(customerView)
+                val customer = CustomerConverter.parametersToModel(form)
 
-                val customerId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val customerId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 customer.id = customerId
 
                 val result = customerService.update(customer)
@@ -99,7 +97,8 @@ fun Route.customerController() {
 
         post("/delete/{id}") {
             try {
-                val customerId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val customerId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = customerService.delete(customerId)
                 call.respond(result)

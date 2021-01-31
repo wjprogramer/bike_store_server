@@ -37,7 +37,7 @@ fun Route.staffController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,12 +53,12 @@ fun Route.staffController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val staffView = StaffConverter.parametersToView(form)
-                val staff = StaffConverter.viewToModel(staffView)
+                val staff = StaffConverter.parametersToModel(form)
 
                 val createdStaff = staffService.create(staff)
+
                 call.respondApiResult(
-                    result = createdStaff
+                    result = createdStaff.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -67,10 +67,13 @@ fun Route.staffController() {
 
         get("/{id}") {
             try {
-                val staffId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val staffId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val staffView = staffService.getById(staffId) ?: throw NotFoundException()
-                call.respond(staffView)
+                val staff = staffService.getById(staffId)
+                    ?: throw NotFoundException()
+
+                call.respond(staff.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -79,10 +82,10 @@ fun Route.staffController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val staffView = StaffConverter.parametersToView(form)
-                val staff = StaffConverter.viewToModel(staffView)
+                val staff = StaffConverter.parametersToModel(form)
 
-                val staffId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val staffId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 staff.id = staffId
 
                 val result = staffService.update(staff)
@@ -94,7 +97,8 @@ fun Route.staffController() {
 
         post("/delete/{id}") {
             try {
-                val staffId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val staffId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = staffService.delete(staffId)
                 call.respond(result)

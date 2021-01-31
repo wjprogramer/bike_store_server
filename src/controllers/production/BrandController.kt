@@ -37,7 +37,7 @@ fun Route.brandController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,12 +53,12 @@ fun Route.brandController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val brandView = BrandConverter.parametersToView(form)
-                val brand = BrandConverter.viewToModel(brandView)
+                val brand = BrandConverter.parametersToModel(form)
 
                 val createdBrand = brandService.create(brand)
+
                 call.respondApiResult(
-                    result = createdBrand
+                    result = createdBrand.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -67,10 +67,13 @@ fun Route.brandController() {
 
         get("/{id}") {
             try {
-                val brandId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val brandId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val brandView = brandService.getById(brandId) ?: throw NotFoundException()
-                call.respond(brandView)
+                val brand = brandService.getById(brandId)
+                    ?: throw NotFoundException()
+
+                call.respond(brand.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -79,10 +82,10 @@ fun Route.brandController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val brandView = BrandConverter.parametersToView(form)
-                val brand = BrandConverter.viewToModel(brandView)
+                val brand = BrandConverter.parametersToModel(form)
 
-                val brandId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val brandId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 brand.id = brandId
 
                 val result = brandService.update(brand)
@@ -94,7 +97,8 @@ fun Route.brandController() {
 
         post("/delete/{id}") {
             try {
-                val brandId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val brandId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = brandService.delete(brandId)
                 call.respond(result)

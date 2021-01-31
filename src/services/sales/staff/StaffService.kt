@@ -6,11 +6,11 @@ import com.giant_giraffe.data.sales.staff.StaffView
 
 interface StaffService {
 
-    fun create(staff: Staff): StaffView
+    fun create(staff: Staff): Staff
 
-    fun getById(staffId: Int): StaffView?
+    fun getById(staffId: Int): Staff?
 
-    fun getList(page: Int, size: Int): PageableData<StaffView>
+    fun getList(page: Int, size: Int): PageableData<Staff>
 
     fun update(staff: Staff): Int
 

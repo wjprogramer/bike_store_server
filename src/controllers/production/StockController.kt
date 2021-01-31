@@ -37,7 +37,7 @@ fun Route.stockController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -53,12 +53,12 @@ fun Route.stockController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val stockView = StockConverter.parametersToView(form)
-                val stock = StockConverter.viewToModel(stockView)
+                val stock = StockConverter.parametersToModel(form)
 
                 val createdStock = stockService.create(stock)
+
                 call.respondApiResult(
-                    result = createdStock
+                    result = createdStock.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -67,10 +67,13 @@ fun Route.stockController() {
 
         get("/{id}") {
             try {
-                val stockId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val stockId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val stockView = stockService.getById(stockId) ?: throw NotFoundException()
-                call.respond(stockView)
+                val stock = stockService.getById(stockId)
+                    ?: throw NotFoundException()
+
+                call.respond(stock.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -79,10 +82,10 @@ fun Route.stockController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val stockView = StockConverter.parametersToView(form)
-                val stock = StockConverter.viewToModel(stockView)
+                val stock = StockConverter.parametersToModel(form)
 
-                val stockId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val stockId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 stock.id = stockId
 
                 val result = stockService.update(stock)
@@ -94,7 +97,8 @@ fun Route.stockController() {
 
         post("/delete/{id}") {
             try {
-                val stockId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val stockId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = stockService.delete(stockId)
                 call.respond(result)

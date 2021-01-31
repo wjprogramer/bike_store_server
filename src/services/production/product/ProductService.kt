@@ -7,11 +7,11 @@ import com.giant_giraffe.data.sales.customer.CustomerView
 
 interface ProductService {
 
-    fun create(product: Product): ProductView
+    fun create(product: Product): Product
 
-    fun getById(productId: Int): ProductView?
+    fun getById(productId: Int): Product?
 
-    fun getList(page: Int, size: Int): PageableData<ProductView>
+    fun getList(page: Int, size: Int): PageableData<Product>
 
     fun update(product: Product): Int
 

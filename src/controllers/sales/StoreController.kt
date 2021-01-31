@@ -1,12 +1,8 @@
 package com.giant_giraffe.controllers.sales
 
 import com.giant_giraffe.core.PageableData
-import com.giant_giraffe.core.respondApiErrorResult
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.store.StoreConverter
-import com.giant_giraffe.data.sales.store.StoreView
-import com.giant_giraffe.exceptions.MyBaseException
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.store.StoreService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -41,7 +37,7 @@ fun Route.storeController() {
 
                 call.respondApiResult(
                     result = PageableData(
-                        pagingData.data,
+                        pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
@@ -57,12 +53,12 @@ fun Route.storeController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val storeView = StoreConverter.parametersToView(form)
-                val store = StoreConverter.viewToModel(storeView)
+                val store = StoreConverter.parametersToModel(form)
 
                 val createdStore = storeService.create(store)
+
                 call.respondApiResult(
-                    result = createdStore
+                    result = createdStore.toView()
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
@@ -71,10 +67,13 @@ fun Route.storeController() {
 
         get("/{id}") {
             try {
-                val storeId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val storeId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
-                val storeView = storeService.getById(storeId) ?: throw NotFoundException()
-                call.respond(storeView)
+                val store = storeService.getById(storeId)
+                    ?: throw NotFoundException()
+
+                call.respond(store.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -83,10 +82,10 @@ fun Route.storeController() {
         post("/update/{id}") {
             try {
                 val form = call.receiveParameters()
-                val storeView = StoreConverter.parametersToView(form)
-                val store = StoreConverter.viewToModel(storeView)
+                val store = StoreConverter.parametersToModel(form)
 
-                val storeId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val storeId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
                 store.id = storeId
 
                 val result = storeService.update(store)
@@ -98,7 +97,8 @@ fun Route.storeController() {
 
         post("/delete/{id}") {
             try {
-                val storeId = call.parameters["id"]?.toIntOrNull() ?: throw NotFoundException()
+                val storeId = call.parameters["id"]?.toIntOrNull()
+                    ?: throw NotFoundException()
 
                 val result = storeService.delete(storeId)
                 call.respond(result)

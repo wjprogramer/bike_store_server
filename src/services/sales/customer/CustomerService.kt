@@ -7,11 +7,11 @@ import com.giant_giraffe.data.sales.staff.StaffView
 
 interface CustomerService {
 
-    fun create(customer: Customer): CustomerView
+    fun create(customer: Customer): Customer
 
-    fun getById(customerId: Int): CustomerView?
+    fun getById(customerId: Int): Customer?
 
-    fun getList(page: Int, size: Int): PageableData<CustomerView>
+    fun getList(page: Int, size: Int): PageableData<Customer>
 
     fun update(customer: Customer): Int
 
