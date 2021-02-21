@@ -22,15 +22,16 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView> 
     }
 
     override fun viewToModel(view: CustomerView) = Customer(
-        view.id,
-        view.firstName,
-        view.lastName,
-        view.email,
-        view.phone,
-        view.street,
-        view.city,
-        view.state,
-        view.zipCode,
+        id = view.id,
+        firstName = view.firstName,
+        lastName = view.lastName,
+        email = view.email,
+        password = null,
+        phone = view.phone,
+        street = view.street,
+        city = view.city,
+        state = view.state,
+        zipCode = view.zipCode,
     )
 
 }

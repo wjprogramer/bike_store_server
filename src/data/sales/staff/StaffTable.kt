@@ -8,6 +8,7 @@ object StaffTable: IntIdTable("staffs") {
     val firstName = varchar("first_name", 50)
     val lastName = varchar("last_name", 50)
     val email = varchar("email", 255).uniqueIndex()
+    val password = text("password")
     val phone = varchar("phone", 25).nullable()
     val active = integer("active") // TODO: boolean?
 

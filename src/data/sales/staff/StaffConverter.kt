@@ -21,14 +21,15 @@ object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView> {
     }
 
     override fun viewToModel(view: StaffView) = Staff(
-        view.id,
-        view.firstName,
-        view.lastName,
-        view.email,
-        view.phone,
-        view.active,
-        view.storeId,
-        view.managerId,
+        id = view.id,
+        firstName = view.firstName,
+        lastName = view.lastName,
+        email = view.email,
+        password = null,
+        phone = view.phone,
+        active = view.active,
+        storeId = view.storeId,
+        managerId = view.managerId,
     )
 
 }

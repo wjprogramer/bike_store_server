@@ -12,6 +12,7 @@ class StaffEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Staff, StaffView
     var firstName by StaffTable.firstName
     var lastName by StaffTable.lastName
     var email by StaffTable.email
+    var password by StaffTable.password
     var phone by StaffTable.phone
     var active by StaffTable.active
     var storeId by StaffTable.storeId
