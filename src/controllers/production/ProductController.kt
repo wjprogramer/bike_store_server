@@ -3,8 +3,11 @@ package com.giant_giraffe.controllers.production
 import com.giant_giraffe.core.PageableData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.product.ProductConverter
+import com.giant_giraffe.enums.UserType
 import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.utility.ApiUtility
+import com.giant_giraffe.utils.authPost
+import com.giant_giraffe.utils.getUser
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
@@ -50,10 +53,15 @@ fun Route.productController() {
 
     route("/product") {
 
-        post("/create") {
+        authPost("/create") {
             try {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
+
+                val user = call.getUser()
+                if (user.type != UserType.STAFF) {
+                    throw Exception()
+                }
 
                 val createdProduct = productService.create(product)
 
