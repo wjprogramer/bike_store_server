@@ -10,6 +10,8 @@ interface StaffService {
 
     fun getById(staffId: Int): Staff?
 
+    fun getByEmail(email: String): Staff?
+
     fun getList(page: Int, size: Int): PageableData<Staff>
 
     fun update(staff: Staff): Int

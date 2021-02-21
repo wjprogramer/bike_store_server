@@ -38,6 +38,14 @@ object StaffDao {
         }?.toModel()
     }
 
+    fun getByEmail(email: String): Staff? {
+        return transaction {
+            StaffEntity
+                .find { StaffTable.email eq email }
+                .firstOrNull()
+        }?.toModel()
+    }
+
     fun getList(page: Int, size: Int): PageableData<Staff> {
         return transaction {
             val staffs = StaffEntity.all()

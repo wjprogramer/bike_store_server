@@ -37,6 +37,14 @@ object CustomerDao {
         }?.toModel()
     }
 
+    fun getByEmail(email: String): Customer? {
+        return transaction {
+            CustomerEntity
+                .find { CustomerTable.email eq email }
+                .firstOrNull()
+        }?.toModel()
+    }
+
     fun getList(page: Int, size: Int): PageableData<Customer> {
         return transaction {
             val staffs = CustomerEntity.all()

@@ -32,6 +32,10 @@ class CustomerServiceImpl: CustomerService {
         return dao.getById(customerId)
     }
 
+    override fun getByEmail(email: String): Customer? {
+        return dao.getByEmail(email)
+    }
+
     override fun getList(page: Int, size: Int): PageableData<Customer> {
         return dao.getList(page, size)
     }

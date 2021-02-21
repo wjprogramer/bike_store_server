@@ -35,6 +35,10 @@ class StaffServiceImpl: StaffService {
         return dao.getById(staffId)
     }
 
+    override fun getByEmail(email: String): Staff? {
+        return dao.getByEmail(email)
+    }
+
     override fun getList(page: Int, size: Int): PageableData<Staff> {
         return dao.getList(page, size)
     }

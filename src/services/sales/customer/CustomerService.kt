@@ -11,6 +11,8 @@ interface CustomerService {
 
     fun getById(customerId: Int): Customer?
 
+    fun getByEmail(email: String): Customer?
+
     fun getList(page: Int, size: Int): PageableData<Customer>
 
     fun update(customer: Customer): Int
