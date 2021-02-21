@@ -20,6 +20,7 @@ object CustomerDao {
                 firstName = customer.firstName!!
                 lastName = customer.lastName!!
                 email = customer.email!!
+                password = customer.password!!
                 phone = customer.phone
                 street = customer.street
                 city = customer.city

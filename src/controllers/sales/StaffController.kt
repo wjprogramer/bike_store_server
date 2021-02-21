@@ -54,6 +54,7 @@ fun Route.staffController() {
             try {
                 val form = call.receiveParameters()
                 val staff = StaffConverter.parametersToModel(form)
+                staff.password = form["password"]
 
                 val createdStaff = staffService.create(staff)
 

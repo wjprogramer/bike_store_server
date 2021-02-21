@@ -54,6 +54,7 @@ fun Route.customerController() {
             try {
                 val form = call.receiveParameters()
                 val customer = CustomerConverter.parametersToModel(form)
+                customer.password = form["password"]
 
                 val createdCustomer = customerService.create(customer)
 

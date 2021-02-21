@@ -22,6 +22,7 @@ object StaffDao {
                 firstName = staff.firstName!!
                 lastName = staff.lastName!!
                 email = staff.email!!
+                password = staff.password!!
                 phone = staff.phone
                 active = staff.active!!
                 storeId = EntityID(staff.storeId, StoreTable)

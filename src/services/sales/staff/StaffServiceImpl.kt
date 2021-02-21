@@ -8,6 +8,7 @@ import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.staff.StaffView
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.utility.EntityUtility
+import com.giant_giraffe.utility.PasswordUtility
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -23,10 +24,13 @@ class StaffServiceImpl: StaffService {
             staff.firstName == null ||
             staff.lastName == null ||
             staff.email == null ||
+            staff.password == null ||
             staff.active == null
         ) {
             throw Exception()
         }
+
+        staff.password = PasswordUtility.encode(staff.password!!)
 
         return dao.create(staff)
     }

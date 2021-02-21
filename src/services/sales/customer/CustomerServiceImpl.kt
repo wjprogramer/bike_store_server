@@ -7,6 +7,7 @@ import com.giant_giraffe.data.sales.customer.CustomerEntity
 import com.giant_giraffe.data.sales.customer.CustomerTable
 import com.giant_giraffe.data.sales.customer.CustomerView
 import com.giant_giraffe.utility.EntityUtility
+import com.giant_giraffe.utility.PasswordUtility
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -20,10 +21,13 @@ class CustomerServiceImpl: CustomerService {
         if (
             customer.firstName == null ||
             customer.lastName == null ||
-            customer.email == null
+            customer.email == null ||
+            customer.password == null
         ) {
             throw Exception("")
         }
+
+        customer.password = PasswordUtility.encode(customer.password!!)
 
         return dao.create(customer)
     }
