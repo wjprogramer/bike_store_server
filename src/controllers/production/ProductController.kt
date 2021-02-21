@@ -7,7 +7,7 @@ import com.giant_giraffe.enums.UserType
 import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.utility.ApiUtility
 import com.giant_giraffe.utils.authPost
-import com.giant_giraffe.utils.getUser
+import com.giant_giraffe.utils.user
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
@@ -58,8 +58,8 @@ fun Route.productController() {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
 
-                val user = call.getUser()
-                if (user.type != UserType.STAFF) {
+                val user = call.user
+                if (user == null || user.type != UserType.STAFF) {
                     throw Exception()
                 }
 

@@ -5,16 +5,4 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import java.lang.Exception
 
-fun ApplicationCall.getUser(): User {
-    try {
-        val principal = authentication.principal
-
-        if (principal is User) {
-            return principal
-        } else {
-            throw Exception()
-        }
-    } catch (e: Exception) {
-        throw e
-    }
-}
+val ApplicationCall.user get() = authentication.principal<User>()
