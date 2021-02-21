@@ -1,11 +1,19 @@
 package com.giant_giraffe
 
+import com.giant_giraffe.app.JwtConfig
+import com.giant_giraffe.app.initAuth
+import com.giant_giraffe.app.initServices
+import com.giant_giraffe.controllers.common.authController
 import com.giant_giraffe.controllers.production.brandController
 import com.giant_giraffe.controllers.production.categoryController
 import com.giant_giraffe.controllers.production.productController
 import com.giant_giraffe.controllers.production.stockController
 import com.giant_giraffe.controllers.sales.*
 import com.giant_giraffe.data.initDB
+import com.giant_giraffe.services.common.auth.AuthService
+import com.giant_giraffe.services.common.auth.AuthServiceImpl
+import com.giant_giraffe.services.common.user.UserService
+import com.giant_giraffe.services.common.user.UserServiceImpl
 import com.giant_giraffe.services.production.brand.BrandService
 import com.giant_giraffe.services.production.brand.BrandServiceImpl
 import com.giant_giraffe.services.production.category.CategoryService
@@ -30,6 +38,7 @@ import io.ktor.gson.*
 import io.ktor.http.*
 import io.ktor.routing.*
 import org.kodein.di.bind
+import org.kodein.di.instance
 import org.kodein.di.ktor.di
 import org.kodein.di.singleton
 import java.text.DateFormat
@@ -51,8 +60,6 @@ fun Application.module(testing: Boolean = false) {
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
 
-    initDB()
-
     install(ContentNegotiation) {
         gson {
             setDateFormat(DateFormat.LONG)
@@ -60,22 +67,19 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    val application = this
     di {
-        // ## services
-        // production
-        bind<BrandService>() with singleton { BrandServiceImpl() }
-        bind<CategoryService>() with singleton { CategoryServiceImpl() }
-        bind<ProductService>() with singleton { ProductServiceImpl() }
-        bind<StockService>() with singleton { StockServiceImpl() }
-        // sales
-        bind<CustomerService>() with singleton { CustomerServiceImpl() }
-        bind<OrderService>() with singleton { OrderServiceImpl() }
-        bind<OrderItemService>() with singleton { OrderItemServiceImpl() }
-        bind<StaffService>() with singleton { StaffServiceImpl() }
-        bind<StoreService>() with singleton { StoreServiceImpl() }
+        bind<JwtConfig>() with singleton { JwtConfig(environment) }
+        initServices(application)
     }
 
+    initDB()
+    initAuth()
+
     routing {
+
+        // common
+        authController()
 
         // production
         brandController()
