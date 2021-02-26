@@ -73,7 +73,7 @@ fun Route.storeController() {
                 val store = storeService.getById(storeId)
                     ?: throw NotFoundException()
 
-                call.respond(store.toView())
+                call.respondApiResult(result = store.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -89,7 +89,7 @@ fun Route.storeController() {
                 store.id = storeId
 
                 val result = storeService.update(store)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -101,7 +101,7 @@ fun Route.storeController() {
                     ?: throw NotFoundException()
 
                 val result = storeService.delete(storeId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

@@ -73,7 +73,7 @@ fun Route.orderController() {
                 val order = orderService.getById(orderId)
                     ?: throw NotFoundException()
 
-                call.respond(order.toView())
+                call.respondApiResult(result = order.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -89,7 +89,7 @@ fun Route.orderController() {
                 order.id = orderId
 
                 val result = orderService.update(order)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -101,7 +101,7 @@ fun Route.orderController() {
                     ?: throw NotFoundException()
 
                 val result = orderService.delete(orderId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

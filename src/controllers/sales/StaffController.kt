@@ -74,7 +74,7 @@ fun Route.staffController() {
                 val staff = staffService.getById(staffId)
                     ?: throw NotFoundException()
 
-                call.respond(staff.toView())
+                call.respondApiResult(result = staff.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -90,7 +90,7 @@ fun Route.staffController() {
                 staff.id = staffId
 
                 val result = staffService.update(staff)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -102,7 +102,7 @@ fun Route.staffController() {
                     ?: throw NotFoundException()
 
                 val result = staffService.delete(staffId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

@@ -74,7 +74,9 @@ fun Route.customerController() {
                 val customer = customerService.getById(customerId)
                     ?: throw NotFoundException()
 
-                call.respond(customer.toView())
+                call.respondApiResult(
+                    result = customer.toView()
+                )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -90,7 +92,7 @@ fun Route.customerController() {
                 customer.id = customerId
 
                 val result = customerService.update(customer)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -102,7 +104,7 @@ fun Route.customerController() {
                     ?: throw NotFoundException()
 
                 val result = customerService.delete(customerId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

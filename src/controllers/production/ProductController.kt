@@ -81,7 +81,7 @@ fun Route.productController() {
                 val productView = productService.getById(productId)
                     ?: throw NotFoundException()
 
-                call.respond(productView)
+                call.respondApiResult(result = productView)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -97,7 +97,7 @@ fun Route.productController() {
                 product.id = productId
 
                 val result = productService.update(product)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -109,7 +109,7 @@ fun Route.productController() {
                     ?: throw NotFoundException()
 
                 val result = productService.delete(productId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

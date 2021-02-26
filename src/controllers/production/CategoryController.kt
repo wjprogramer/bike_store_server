@@ -73,7 +73,7 @@ fun Route.categoryController() {
                 val category = categoryService.getById(categoryId)
                     ?: throw NotFoundException()
 
-                call.respond(category.toView())
+                call.respondApiResult(result = category.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -89,7 +89,7 @@ fun Route.categoryController() {
                 category.id = categoryId
 
                 val result = categoryService.update(category)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -101,7 +101,7 @@ fun Route.categoryController() {
                     ?: throw NotFoundException()
 
                 val result = categoryService.delete(categoryId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

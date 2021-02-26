@@ -73,7 +73,7 @@ fun Route.stockController() {
                 val stock = stockService.getById(stockId)
                     ?: throw NotFoundException()
 
-                call.respond(stock.toView())
+                call.respondApiResult(result = stock.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -89,7 +89,7 @@ fun Route.stockController() {
                 stock.id = stockId
 
                 val result = stockService.update(stock)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -101,7 +101,7 @@ fun Route.stockController() {
                     ?: throw NotFoundException()
 
                 val result = stockService.delete(stockId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

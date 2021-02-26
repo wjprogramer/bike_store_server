@@ -73,7 +73,7 @@ fun Route.brandController() {
                 val brand = brandService.getById(brandId)
                     ?: throw NotFoundException()
 
-                call.respond(brand.toView())
+                call.respondApiResult(result = brand.toView())
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -89,7 +89,7 @@ fun Route.brandController() {
                 brand.id = brandId
 
                 val result = brandService.update(brand)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -101,7 +101,7 @@ fun Route.brandController() {
                     ?: throw NotFoundException()
 
                 val result = brandService.delete(brandId)
-                call.respond(result)
+                call.respondApiResult(result = result)
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }

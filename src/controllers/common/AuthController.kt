@@ -1,5 +1,6 @@
 package com.giant_giraffe.controllers.common
 
+import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.common.EmailPasswordCredential
 import com.giant_giraffe.enums.UserType
 import com.giant_giraffe.services.common.auth.AuthService
@@ -23,7 +24,7 @@ fun Route.authController() {
         val user = userService.findUserByCredentials(credentials, UserType.CUSTOMER)
         val token = authService.makeToken(user)
 
-        call.respondText(token)
+        call.respondApiResult(result = token)
     }
 
     post("/staffLogin") {
@@ -32,7 +33,7 @@ fun Route.authController() {
         val user = userService.findUserByCredentials(credentials, UserType.STAFF)
         val token = authService.makeToken(user)
 
-        call.respondText(token)
+        call.respondApiResult(result = token)
     }
 
 }
