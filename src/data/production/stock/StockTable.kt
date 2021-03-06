@@ -24,7 +24,7 @@ object StockTable: IntIdTable("stocks") {
         ProductTable,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
-    ).nullable()
+    )
 
     init {
         // Composite unique constraint, or use `uniqueIndex`

@@ -7,8 +7,12 @@ import com.giant_giraffe.data.production.stock.StockEntity
 import com.giant_giraffe.data.production.stock.StockTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.utility.EntityUtility
+import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
@@ -33,18 +37,40 @@ object StockDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<Stock> {
+    fun getList(page: Int, size: Int,
+                productId: Int? = null,
+                storeId: Int? = null,
+    ): PagedData<Stock> {
         return transaction {
-            val staffs = StockEntity.all()
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
 
-            val pageInfo = EntityUtility
-                .getPageInfo(StockEntity, page, size, staffs.size)
+            var predicates: Op<Boolean> = Op.build { Op.TRUE }
+
+            predicates = predicates.tryAnd(productId) { StockTable.productId eq productId }
+            predicates = predicates.tryAnd(storeId) {
+                StockTable.storeId.isNull() or
+                        (StockTable.storeId eq EntityID(storeId, StoreTable))
+            }
+
+            val stocks = StockEntity
+                .find(predicates)
+
+            val pagedStocks = stocks
+                .limit(size, offset = page * size)
+                .map {
+                    it
+                        .load(StockEntity::product)
+                        .load(StockEntity::store)
+                        .toModel()
+                }
 
             PagedData(
-                data = staffs,
-                pageInfo = pageInfo
+                data = pagedStocks,
+                pageInfo = EntityUtility.getPageInfo(
+                    size = size,
+                    page = page,
+                    elements = pagedStocks.size,
+                    totalElements = stocks.count(),
+                )
             )
         }
     }

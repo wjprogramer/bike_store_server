@@ -2,6 +2,9 @@ package com.giant_giraffe.data.production.stock
 
 import com.giant_giraffe.core.ComparablePair
 import com.giant_giraffe.data.BaseEntity
+import com.giant_giraffe.data.production.product.ProductEntity
+import com.giant_giraffe.data.production.product.ProductTable
+import com.giant_giraffe.data.sales.store.StoreEntity
 import org.jetbrains.exposed.dao.*
 
 class StockEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Stock, StockView> {
@@ -12,7 +15,17 @@ class StockEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Stock, StockView
     var storeId by StockTable.storeId
     var productId by StockTable.productId
 
-    override fun toModel() =
-        Stock(this)
+    var product by ProductEntity referencedOn StockTable.productId
+    var store by StoreEntity optionalReferencedOn StockTable.storeId
+
+    override fun toModel(): Stock {
+        val stock = Stock(this)
+
+        stock.product = product.toModel()
+        stock.store = store?.toModel()
+
+        return stock
+    }
+
 
 }

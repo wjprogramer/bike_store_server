@@ -26,8 +26,17 @@ class StockServiceImpl: StockService {
         return dao.getById(stockId)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<Stock> {
-        return dao.getList(page, size)
+    override fun getList(
+        page: Int, size: Int,
+        storeId: Int?,
+        productId: Int?,
+    ): PagedData<Stock> {
+        return dao.getList(
+            page = page,
+            size = size,
+            storeId = storeId,
+            productId = productId,
+        )
     }
 
     override fun update(stock: Stock): Int {

@@ -26,10 +26,14 @@ fun Route.stockController() {
 
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
+                val storeId = queryParameters["store_id"]?.toIntOrNull()
+                val productId = queryParameters["product_id"]?.toIntOrNull()
 
                 val pagingData = stockService.getList(
                     page = page,
-                    size = size
+                    size = size,
+                    storeId = storeId,
+                    productId = productId,
                 )
 
                 call.respondApiResult(
