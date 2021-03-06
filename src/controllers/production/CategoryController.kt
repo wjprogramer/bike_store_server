@@ -24,11 +24,8 @@ fun Route.categoryController() {
             try {
                 val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt()
-                val size = queryParameters["size"]?.toInt()
-                if (page == null || size == null) {
-                    throw Exception("")
-                }
+                val page = queryParameters["page"]?.toInt() ?: 0
+                val size = queryParameters["size"]?.toInt() ?: 10
 
                 val pagingData = categoryService.getList(
                     page = page,
