@@ -1,14 +1,14 @@
 package com.giant_giraffe.controllers.production
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.brand.BrandConverter
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.production.brand.BrandService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -36,7 +36,7 @@ fun Route.brandController() {
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
@@ -53,7 +53,7 @@ fun Route.brandController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val brand = BrandConverter.parametersToModel(form)
+                val brand = BrandConverter.parametersToModel(form) ?: throw UnknownException()
 
                 val createdBrand = brandService.create(brand)
 
@@ -83,6 +83,7 @@ fun Route.brandController() {
             try {
                 val form = call.receiveParameters()
                 val brand = BrandConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val brandId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

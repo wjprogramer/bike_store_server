@@ -18,13 +18,13 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView> {
         return result
     }
 
-    override fun viewToModel(view: ProductView) = Product(
-        view.id,
-        view.name,
-        view.modelYear,
-        view.listPrice?.toBigDecimalOrNull(),
-        view.brandId,
-        view.categoryId,
+    override fun viewToModel(view: ProductView?) = if (view == null) null else Product(
+        id = view.id,
+        name = view.name,
+        modelYear = view.modelYear,
+        listPrice = view.listPrice?.toBigDecimalOrNull(),
+        brandId = view.brandId,
+        categoryId = view.categoryId,
     )
 
 }

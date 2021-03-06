@@ -1,16 +1,15 @@
 package com.giant_giraffe.dao.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.sales.customer.CustomerTable
 import com.giant_giraffe.data.sales.order.Order
 import com.giant_giraffe.data.sales.order.OrderEntity
 import com.giant_giraffe.data.sales.order.OrderTable
-import com.giant_giraffe.data.sales.order.OrderView
 import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -34,13 +33,17 @@ object OrderDao {
 
     fun getById(orderId: Int): Order? {
         return transaction {
-            OrderEntity
+            val order = OrderEntity
                 .find { OrderTable.id eq orderId }
                 .firstOrNull()
-        }?.toModel()
+                ?.load(OrderEntity::orderItems)
+
+            order?.orderItems
+            order?.toDetailsModel()
+        }
     }
 
-    fun getList(page: Int, size: Int): PageableData<Order> {
+    fun getList(page: Int, size: Int): PagedData<Order> {
         return transaction {
             val staffs = OrderEntity.all()
                 .limit(size, offset = page * size)
@@ -49,7 +52,7 @@ object OrderDao {
             val pageInfo = EntityUtility
                 .getPageInfo(OrderEntity, page, size, staffs.size)
 
-            PageableData(
+            PagedData(
                 data = staffs,
                 pageInfo = pageInfo
             )

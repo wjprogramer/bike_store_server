@@ -1,15 +1,13 @@
 package com.giant_giraffe.dao.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.sales.order.OrderTable
 import com.giant_giraffe.data.sales.order_item.OrderItem
 import com.giant_giraffe.data.sales.order_item.OrderItemEntity
 import com.giant_giraffe.data.sales.order_item.OrderItemTable
-import com.giant_giraffe.data.sales.order_item.OrderItemView
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -24,7 +22,7 @@ object OrderItemDao {
                 quantity = orderItem.quantity!!
                 listPrice = orderItem.listPrice!!
                 discount = orderItem.discount!!
-                productId = EntityID(orderItem.productId, ProductTable)
+                product = EntityID(orderItem.productId, ProductTable)
             }
         }.toModel()
     }
@@ -37,7 +35,7 @@ object OrderItemDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PageableData<OrderItem> {
+    fun getList(page: Int, size: Int): PagedData<OrderItem> {
         return transaction {
             val staffs = OrderItemEntity.all()
                 .limit(size, offset = page * size)
@@ -46,7 +44,7 @@ object OrderItemDao {
             val pageInfo = EntityUtility
                 .getPageInfo(OrderItemEntity, page, size, staffs.size)
 
-            PageableData(
+            PagedData(
                 data = staffs,
                 pageInfo = pageInfo
             )
@@ -60,11 +58,11 @@ object OrderItemDao {
                 .firstOrNull() ?: throw Exception()
 
             OrderItemTable.update({ OrderItemTable.id eq orderItem.id }) {
-                orderItem.orderId?.let { e -> it[orderId] = EntityID(e, OrderTable) }
+                orderItem.orderId?.let { e -> it[order] = EntityID(e, OrderTable) }
                 orderItem.quantity?.let { e -> it[quantity] = e }
                 orderItem.listPrice?.let { e -> it[listPrice] = e }
                 orderItem.discount?.let { e -> it[discount] = e }
-                orderItem.productId?.let { e -> it[productId] = EntityID(e, ProductTable) }
+                orderItem.productId?.let { e -> it[product] = EntityID(e, ProductTable) }
             }
         }
     }

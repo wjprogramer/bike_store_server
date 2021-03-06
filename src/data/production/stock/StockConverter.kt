@@ -16,11 +16,11 @@ object StockConverter: BaseConverter<StockEntity, Stock, StockView> {
         return result
     }
 
-    override fun viewToModel(view: StockView) = Stock(
-        view.id,
-        view.quantity,
-        view.storeId,
-        view.productId,
+    override fun viewToModel(view: StockView?) = Stock(
+        view?.id,
+        view?.quantity,
+        view?.storeId,
+        view?.productId,
     )
 
 }

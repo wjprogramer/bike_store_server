@@ -1,14 +1,14 @@
 package com.giant_giraffe.controllers.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.store.StoreConverter
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.store.StoreService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -36,11 +36,21 @@ fun Route.storeController() {
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
                 )
+            } catch (e: Exception) {
+                ApiUtility.handleError(e, call)
+            }
+        }
+
+        get("/all") {
+            try {
+                val stores = storeService.getAll()
+
+                call.respondApiResult(result = stores.map { it.toView() })
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)
             }
@@ -54,6 +64,7 @@ fun Route.storeController() {
             try {
                 val form = call.receiveParameters()
                 val store = StoreConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val createdStore = storeService.create(store)
 
@@ -83,6 +94,7 @@ fun Route.storeController() {
             try {
                 val form = call.receiveParameters()
                 val store = StoreConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val storeId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

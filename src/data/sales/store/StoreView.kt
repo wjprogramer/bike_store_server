@@ -11,5 +11,6 @@ data class StoreView(
     var street: String? = null,
     var city: String? = null,
     var state: String? = null,
+    @SerializedName("zip_code")
     var zipCode: String? = null,
 )

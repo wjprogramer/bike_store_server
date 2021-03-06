@@ -1,14 +1,14 @@
 package com.giant_giraffe.controllers.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.order.OrderConverter
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.order.OrderService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -36,7 +36,7 @@ fun Route.orderController() {
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
@@ -54,6 +54,7 @@ fun Route.orderController() {
             try {
                 val form = call.receiveParameters()
                 val order = OrderConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val createdOrder = orderService.create(order)
 
@@ -83,6 +84,7 @@ fun Route.orderController() {
             try {
                 val form = call.receiveParameters()
                 val order = OrderConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val orderId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

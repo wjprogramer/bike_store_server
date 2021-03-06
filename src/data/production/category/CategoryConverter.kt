@@ -14,7 +14,7 @@ object CategoryConverter: BaseConverter<CategoryEntity, Category, CategoryView> 
         return result
     }
 
-    override fun viewToModel(view: CategoryView) = Category(
+    override fun viewToModel(view: CategoryView?) = if (view == null) null else Category(
         view.id,
         view.name,
     )

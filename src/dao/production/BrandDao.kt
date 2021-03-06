@@ -1,6 +1,6 @@
 package com.giant_giraffe.dao.production
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.brand.Brand
 import com.giant_giraffe.data.production.brand.BrandEntity
 import com.giant_giraffe.data.production.brand.BrandTable
@@ -28,7 +28,7 @@ object BrandDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PageableData<Brand> {
+    fun getList(page: Int, size: Int): PagedData<Brand> {
         return transaction {
             val brands = BrandEntity.all()
                 .limit(size, offset = page * size)
@@ -37,7 +37,7 @@ object BrandDao {
             val pageInfo = EntityUtility
                 .getPageInfo(BrandEntity, page, size, brands.size)
 
-            PageableData(
+            PagedData(
                 data = brands,
                 pageInfo = pageInfo
             )

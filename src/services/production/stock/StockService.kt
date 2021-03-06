@@ -1,9 +1,7 @@
 package com.giant_giraffe.services.production.stock
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.stock.Stock
-import com.giant_giraffe.data.production.stock.StockView
-import com.giant_giraffe.data.sales.customer.CustomerView
 
 interface StockService {
 
@@ -11,7 +9,7 @@ interface StockService {
 
     fun getById(stockId: Int): Stock?
 
-    fun getList(page: Int, size: Int): PageableData<Stock>
+    fun getList(page: Int, size: Int): PagedData<Stock>
 
     fun update(stock: Stock): Int
 

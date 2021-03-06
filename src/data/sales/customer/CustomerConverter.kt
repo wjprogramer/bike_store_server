@@ -21,7 +21,7 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView> 
         return result
     }
 
-    override fun viewToModel(view: CustomerView) = Customer(
+    override fun viewToModel(view: CustomerView?) = if (view == null) null else Customer(
         id = view.id,
         firstName = view.firstName,
         lastName = view.lastName,

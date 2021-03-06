@@ -1,6 +1,6 @@
 package com.giant_giraffe.services.production.category
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.production.CategoryDao
 import com.giant_giraffe.data.production.category.Category
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,7 +24,7 @@ class CategoryServiceImpl: CategoryService {
         return dao.getById(categoryId)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Category> {
+    override fun getList(page: Int, size: Int): PagedData<Category> {
         return dao.getList(page, size)
     }
 

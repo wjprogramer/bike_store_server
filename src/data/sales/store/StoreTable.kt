@@ -9,5 +9,5 @@ object StoreTable: IntIdTable("stores") {
     val street = varchar("street", 255).nullable()
     val city = varchar("city", 255).nullable()
     val state = varchar("state", 10).nullable()
-    val zipCode = varchar("zip_code ", 5).nullable()
+    val zipCode = varchar("zip_code", 5).nullable()
 }

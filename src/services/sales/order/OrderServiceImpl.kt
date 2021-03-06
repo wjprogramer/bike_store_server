@@ -1,19 +1,9 @@
 package com.giant_giraffe.services.sales.order
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.sales.OrderDao
-import com.giant_giraffe.data.sales.customer.CustomerTable
 import com.giant_giraffe.data.sales.order.Order
-import com.giant_giraffe.data.sales.order.OrderEntity
-import com.giant_giraffe.data.sales.order.OrderTable
-import com.giant_giraffe.data.sales.order.OrderView
-import com.giant_giraffe.data.sales.staff.StaffTable
-import com.giant_giraffe.data.sales.store.StoreTable
-import com.giant_giraffe.utility.EntityUtility
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 class OrderServiceImpl: OrderService {
@@ -36,7 +26,7 @@ class OrderServiceImpl: OrderService {
         return dao.getById(orderId)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Order> {
+    override fun getList(page: Int, size: Int): PagedData<Order> {
         return dao.getList(page, size)
     }
 

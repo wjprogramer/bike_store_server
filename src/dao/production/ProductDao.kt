@@ -1,13 +1,15 @@
 package com.giant_giraffe.dao.production
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.brand.BrandTable
 import com.giant_giraffe.data.production.category.CategoryTable
 import com.giant_giraffe.data.production.product.Product
 import com.giant_giraffe.data.production.product.ProductEntity
 import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.utility.EntityUtility
+import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -35,18 +37,43 @@ object ProductDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PageableData<Product> {
+    fun getList(
+        page: Int,
+        size: Int,
+        keyword: String? = null,
+        modelYear: Int? = null,
+        brandId: Int? = null,
+        categoryId: Int? = null,
+        minListPrice: Int? = null,
+        maxListPrice: Int? = null,
+    ): PagedData<Product> {
         return transaction {
-            val staffs = ProductEntity.all()
+
+            var predicates: Op<Boolean> = Op.build { Op.TRUE }
+
+            // FIXME: keyword
+            predicates = predicates.tryAnd(keyword) { ProductTable.name match keyword!! }
+            predicates = predicates.tryAnd(modelYear) { ProductTable.modelYear eq modelYear!! }
+            predicates = predicates.tryAnd(brandId) { ProductTable.brandId eq brandId!! }
+            predicates = predicates.tryAnd(categoryId) { ProductTable.categoryId eq categoryId!! }
+            predicates = predicates.tryAnd(minListPrice) { ProductTable.listPrice greaterEq minListPrice!! }
+            predicates = predicates.tryAnd(maxListPrice) { ProductTable.listPrice lessEq maxListPrice!! }
+
+            val products = ProductEntity
+                .find(predicates)
+
+            val pagedProducts = products
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
 
-            val pageInfo = EntityUtility
-                .getPageInfo(ProductEntity, page, size, staffs.size)
-
-            PageableData(
-                data = staffs,
-                pageInfo = pageInfo
+            PagedData(
+                data = pagedProducts,
+                pageInfo = EntityUtility.getPageInfo(
+                    size = size,
+                    page = page,
+                    elements = pagedProducts.size,
+                    totalElements = products.count(),
+                )
             )
         }
     }

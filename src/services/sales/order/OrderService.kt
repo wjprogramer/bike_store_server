@@ -1,9 +1,7 @@
 package com.giant_giraffe.services.sales.order
 
-import com.giant_giraffe.core.PageableData
-import com.giant_giraffe.data.sales.customer.CustomerView
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.sales.order.Order
-import com.giant_giraffe.data.sales.order.OrderView
 
 interface OrderService {
 
@@ -11,7 +9,7 @@ interface OrderService {
 
     fun getById(orderId: Int): Order?
 
-    fun getList(page: Int, size: Int): PageableData<Order>
+    fun getList(page: Int, size: Int): PagedData<Order>
 
     fun update(order: Order): Int
 

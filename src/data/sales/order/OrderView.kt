@@ -1,5 +1,6 @@
 package com.giant_giraffe.data.sales.order
 
+import com.giant_giraffe.data.sales.order_item.OrderItemView
 import com.google.gson.annotations.SerializedName
 
 data class OrderView(
@@ -18,4 +19,8 @@ data class OrderView(
     var storeId: Int? = null,
     @SerializedName("staff_id")
     var staffId: Int? = null,
+
+    // Relation
+    @SerializedName("order_items")
+    var orderItems: List<OrderItemView>? = null,
 )

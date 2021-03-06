@@ -1,6 +1,6 @@
 package com.giant_giraffe.dao.production
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.category.Category
 import com.giant_giraffe.data.production.category.CategoryEntity
 import com.giant_giraffe.data.production.category.CategoryTable
@@ -28,7 +28,7 @@ object CategoryDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PageableData<Category> {
+    fun getList(page: Int, size: Int): PagedData<Category> {
         return transaction {
             val categories = CategoryEntity.all()
                 .limit(size, offset = page * size)
@@ -37,7 +37,7 @@ object CategoryDao {
             val pageInfo = EntityUtility
                 .getPageInfo(CategoryEntity, page, size, categories.size)
 
-            PageableData(
+            PagedData(
                 data = categories,
                 pageInfo = pageInfo
             )

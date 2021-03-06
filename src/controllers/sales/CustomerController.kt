@@ -1,14 +1,14 @@
 package com.giant_giraffe.controllers.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.customer.CustomerConverter
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.customer.CustomerService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -36,7 +36,7 @@ fun Route.customerController() {
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
@@ -54,6 +54,7 @@ fun Route.customerController() {
             try {
                 val form = call.receiveParameters()
                 val customer = CustomerConverter.parametersToModel(form)
+                    ?: throw UnknownException()
                 customer.password = form["password"]
 
                 val createdCustomer = customerService.create(customer)
@@ -86,6 +87,7 @@ fun Route.customerController() {
             try {
                 val form = call.receiveParameters()
                 val customer = CustomerConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val customerId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

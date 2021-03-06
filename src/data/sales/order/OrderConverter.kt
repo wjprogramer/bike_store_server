@@ -22,15 +22,15 @@ object OrderConverter: BaseConverter<OrderEntity, Order, OrderView> {
         return result
     }
 
-    override fun viewToModel(view: OrderView) = Order(
-        view.id,
-        view.orderStatus?.toOrderStatus(),
-        DateTimeUtility.tryParse(view.orderDate),
-        DateTimeUtility.tryParse(view.requiredDate),
-        DateTimeUtility.tryParse(view.shippedDate),
-        view.customerId,
-        view.storeId,
-        view.staffId,
+    override fun viewToModel(view: OrderView?) = if (view == null) null else Order(
+        id = view.id,
+        orderStatus = view.orderStatus?.toOrderStatus(),
+        orderDate = DateTimeUtility.tryParse(view.orderDate),
+        requiredDate = DateTimeUtility.tryParse(view.requiredDate),
+        shippedDate = DateTimeUtility.tryParse(view.shippedDate),
+        customerId = view.customerId,
+        storeId = view.storeId,
+        staffId = view.staffId,
     )
 
 }

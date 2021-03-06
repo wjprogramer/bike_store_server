@@ -1,14 +1,14 @@
 package com.giant_giraffe.controllers.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.staff.StaffConverter
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.staff.StaffService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -36,7 +36,7 @@ fun Route.staffController() {
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
@@ -54,6 +54,7 @@ fun Route.staffController() {
             try {
                 val form = call.receiveParameters()
                 val staff = StaffConverter.parametersToModel(form)
+                    ?: throw UnknownException()
                 staff.password = form["password"]
 
                 val createdStaff = staffService.create(staff)
@@ -84,6 +85,7 @@ fun Route.staffController() {
             try {
                 val form = call.receiveParameters()
                 val staff = StaffConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val staffId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

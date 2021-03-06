@@ -1,18 +1,9 @@
 package com.giant_giraffe.services.production.stock
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.production.StockDao
-import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.production.stock.Stock
-import com.giant_giraffe.data.production.stock.StockEntity
-import com.giant_giraffe.data.production.stock.StockTable
-import com.giant_giraffe.data.production.stock.StockView
-import com.giant_giraffe.data.sales.store.StoreTable
-import com.giant_giraffe.utility.EntityUtility
-import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 class StockServiceImpl: StockService {
@@ -35,7 +26,7 @@ class StockServiceImpl: StockService {
         return dao.getById(stockId)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Stock> {
+    override fun getList(page: Int, size: Int): PagedData<Stock> {
         return dao.getList(page, size)
     }
 

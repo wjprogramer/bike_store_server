@@ -1,6 +1,7 @@
 package com.giant_giraffe.data.sales.order_item
 
 import com.giant_giraffe.data.BaseConverter
+import com.giant_giraffe.data.sales.order.OrderConverter
 import io.ktor.http.*
 
 object OrderItemConverter: BaseConverter<OrderItemEntity, OrderItem, OrderItemView> {
@@ -18,13 +19,13 @@ object OrderItemConverter: BaseConverter<OrderItemEntity, OrderItem, OrderItemVi
         return result
     }
 
-    override fun viewToModel(view: OrderItemView) = OrderItem(
-        view.id,
-        view.orderId,
-        view.quantity,
-        view.listPrice?.toBigDecimalOrNull(),
-        view.discount?.toBigDecimalOrNull(),
-        view.productId,
+    override fun viewToModel(view: OrderItemView?) = if (view == null) null else OrderItem(
+        id = view.id,
+        orderId = view.orderId,
+        quantity = view.quantity,
+        listPrice = view.listPrice?.toBigDecimalOrNull(),
+        discount = view.discount?.toBigDecimalOrNull(),
+        productId = view.productId,
     )
 
 }

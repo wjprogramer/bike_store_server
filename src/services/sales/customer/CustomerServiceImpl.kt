@@ -1,16 +1,10 @@
 package com.giant_giraffe.services.sales.customer
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.sales.CustomerDao
 import com.giant_giraffe.data.sales.customer.Customer
-import com.giant_giraffe.data.sales.customer.CustomerEntity
-import com.giant_giraffe.data.sales.customer.CustomerTable
-import com.giant_giraffe.data.sales.customer.CustomerView
-import com.giant_giraffe.utility.EntityUtility
 import com.giant_giraffe.utility.PasswordUtility
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 class CustomerServiceImpl: CustomerService {
@@ -40,7 +34,7 @@ class CustomerServiceImpl: CustomerService {
         return dao.getByEmail(email)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Customer> {
+    override fun getList(page: Int, size: Int): PagedData<Customer> {
         return dao.getList(page, size)
     }
 

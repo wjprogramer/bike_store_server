@@ -1,14 +1,12 @@
 package com.giant_giraffe.dao.sales
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.sales.staff.Staff
 import com.giant_giraffe.data.sales.staff.StaffEntity
 import com.giant_giraffe.data.sales.staff.StaffTable
-import com.giant_giraffe.data.sales.staff.StaffView
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -47,7 +45,7 @@ object StaffDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PageableData<Staff> {
+    fun getList(page: Int, size: Int): PagedData<Staff> {
         return transaction {
             val staffs = StaffEntity.all()
                 .limit(size, offset = page * size)
@@ -56,7 +54,7 @@ object StaffDao {
             val pageInfo = EntityUtility
                 .getPageInfo(StaffEntity, page, size, staffs.size)
 
-            PageableData(
+            PagedData(
                 data = staffs,
                 pageInfo = pageInfo
             )

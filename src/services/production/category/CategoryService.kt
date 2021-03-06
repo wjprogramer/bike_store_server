@@ -1,9 +1,7 @@
 package com.giant_giraffe.services.production.category
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.category.Category
-import com.giant_giraffe.data.production.category.CategoryView
-import com.giant_giraffe.data.sales.customer.CustomerView
 
 interface CategoryService {
 
@@ -11,7 +9,7 @@ interface CategoryService {
 
     fun getById(categoryId: Int): Category?
 
-    fun getList(page: Int, size: Int): PageableData<Category>
+    fun getList(page: Int, size: Int): PagedData<Category>
 
     fun update(category: Category): Int
 

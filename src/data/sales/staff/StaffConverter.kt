@@ -20,7 +20,7 @@ object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView> {
         return result
     }
 
-    override fun viewToModel(view: StaffView) = Staff(
+    override fun viewToModel(view: StaffView?) = if (view == null) null else Staff(
         id = view.id,
         firstName = view.firstName,
         lastName = view.lastName,

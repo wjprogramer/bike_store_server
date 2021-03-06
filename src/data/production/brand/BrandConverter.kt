@@ -14,7 +14,7 @@ object BrandConverter: BaseConverter<BrandEntity, Brand, BrandView> {
         return result
     }
 
-    override fun viewToModel(view: BrandView) = Brand(
+    override fun viewToModel(view: BrandView?) = if (view == null) null else Brand(
         view.id,
         view.name,
     )

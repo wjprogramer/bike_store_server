@@ -1,8 +1,7 @@
 package com.giant_giraffe.services.sales.staff
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.sales.staff.Staff
-import com.giant_giraffe.data.sales.staff.StaffView
 
 interface StaffService {
 
@@ -12,7 +11,7 @@ interface StaffService {
 
     fun getByEmail(email: String): Staff?
 
-    fun getList(page: Int, size: Int): PageableData<Staff>
+    fun getList(page: Int, size: Int): PagedData<Staff>
 
     fun update(staff: Staff): Int
 

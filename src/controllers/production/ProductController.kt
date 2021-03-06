@@ -1,9 +1,10 @@
 package com.giant_giraffe.controllers.production
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.product.ProductConverter
 import com.giant_giraffe.enums.UserType
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.utility.ApiUtility
 import com.giant_giraffe.utils.authPost
@@ -11,7 +12,6 @@ import com.giant_giraffe.utils.user
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
-import io.ktor.response.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
@@ -27,19 +27,28 @@ fun Route.productController() {
             try {
                 val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt()
-                val size = queryParameters["size"]?.toInt()
-                if (page == null || size == null) {
-                    throw Exception("")
-                }
+                val page = queryParameters["page"]?.toInt() ?: 0
+                val size = queryParameters["size"]?.toInt() ?: 10
+                val keyword = queryParameters["keyword"]?.toString()
+                val modelYear = queryParameters["model_year"]?.toIntOrNull()
+                val brandId = queryParameters["brand_id"]?.toIntOrNull()
+                val categoryId = queryParameters["category_id"]?.toIntOrNull()
+                val minListPrice = queryParameters["min_list_price"]?.toIntOrNull()
+                val maxListPrice = queryParameters["max_list_price"]?.toIntOrNull()
 
                 val pagingData = productService.getList(
                     page = page,
-                    size = size
+                    size = size,
+                    keyword = keyword,
+                    modelYear = modelYear,
+                    brandId = brandId,
+                    categoryId = categoryId,
+                    minListPrice = minListPrice,
+                    maxListPrice = maxListPrice,
                 )
 
                 call.respondApiResult(
-                    result = PageableData(
+                    result = PagedData(
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
@@ -57,6 +66,7 @@ fun Route.productController() {
             try {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val user = call.user
                 if (user == null || user.type != UserType.STAFF) {
@@ -91,6 +101,7 @@ fun Route.productController() {
             try {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
+                    ?: throw UnknownException()
 
                 val productId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

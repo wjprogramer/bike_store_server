@@ -1,6 +1,6 @@
 package com.giant_giraffe.services.production.product
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.production.ProductDao
 import com.giant_giraffe.data.production.product.Product
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,8 +26,24 @@ class ProductServiceImpl: ProductService {
         return dao.getById(productId)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Product> {
-        return dao.getList(page, size)
+    override fun getList(page: Int, size: Int,
+                         keyword: String?,
+                         modelYear: Int?,
+                         brandId: Int?,
+                         categoryId: Int?,
+                         minListPrice: Int?,
+                         maxListPrice: Int?,
+    ): PagedData<Product> {
+        return dao.getList(
+            page,
+            size,
+            keyword = keyword,
+            modelYear = modelYear,
+            brandId = brandId,
+            categoryId = categoryId,
+            minListPrice = minListPrice,
+            maxListPrice = maxListPrice,
+        )
     }
 
     override fun update(product: Product): Int {

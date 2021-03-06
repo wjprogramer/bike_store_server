@@ -20,15 +20,15 @@ object StoreConverter: BaseConverter<StoreEntity, Store, StoreView> {
         return result
     }
 
-    override fun viewToModel(view: StoreView) = Store(
-        view.id,
-        view.storeName,
-        view.phone,
-        view.email,
-        view.street,
-        view.city,
-        view.state,
-        view.zipCode,
+    override fun viewToModel(view: StoreView?) = if (view == null) null else Store(
+        id = view.id,
+        storeName = view.storeName,
+        phone = view.phone,
+        email = view.email,
+        street = view.street,
+        city = view.city,
+        state = view.state,
+        zipCode = view.zipCode,
     )
 
 }

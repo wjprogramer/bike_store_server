@@ -1,6 +1,6 @@
 package com.giant_giraffe.services.production.brand
 
-import com.giant_giraffe.core.PageableData
+import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.production.BrandDao
 import com.giant_giraffe.data.production.brand.Brand
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -24,7 +24,7 @@ class BrandServiceImpl: BrandService {
         return dao.getById(brandId)
     }
 
-    override fun getList(page: Int, size: Int): PageableData<Brand> {
+    override fun getList(page: Int, size: Int): PagedData<Brand> {
         return dao.getList(page, size)
     }
 
