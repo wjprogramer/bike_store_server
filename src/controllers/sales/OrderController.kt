@@ -3,6 +3,7 @@ package com.giant_giraffe.controllers.sales
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.order.OrderConverter
+import com.giant_giraffe.data.sales.order.OrderView
 import com.giant_giraffe.services.sales.order.OrderService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -46,10 +47,26 @@ fun Route.orderController() {
 
     route("/order") {
 
-        post("/create") {
+        // OLD
+        post("/old/create") {
             try {
                 val form = call.receiveParameters()
                 val order = OrderConverter.parametersToModel(form)
+
+                val createdOrder = orderService.create(order)
+
+                call.respondApiResult(
+                    result = createdOrder.toView()
+                )
+            } catch (e: Exception) {
+                ApiUtility.handleError(e, call)
+            }
+        }
+
+        post("/create") {
+            try {
+                val orderView = call.receive<OrderView>()
+                val order = OrderConverter.viewToModel(orderView)
 
                 val createdOrder = orderService.create(order)
 

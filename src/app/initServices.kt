@@ -28,18 +28,22 @@ import org.kodein.di.bind
 import org.kodein.di.singleton
 
 fun DI.MainBuilder.initServices(application: Application) {
+
     // common
     bind<AuthService>() with singleton { AuthServiceImpl(application) }
     bind<UserService>() with singleton { UserServiceImpl(application) }
+
     // production
     bind<BrandService>() with singleton { BrandServiceImpl() }
     bind<CategoryService>() with singleton { CategoryServiceImpl() }
     bind<ProductService>() with singleton { ProductServiceImpl() }
     bind<StockService>() with singleton { StockServiceImpl() }
+
     // sales
     bind<CustomerService>() with singleton { CustomerServiceImpl() }
-    bind<OrderService>() with singleton { OrderServiceImpl() }
+    bind<OrderService>() with singleton { OrderServiceImpl(application) }
     bind<OrderItemService>() with singleton { OrderItemServiceImpl() }
     bind<StaffService>() with singleton { StaffServiceImpl() }
     bind<StoreService>() with singleton { StoreServiceImpl() }
+
 }

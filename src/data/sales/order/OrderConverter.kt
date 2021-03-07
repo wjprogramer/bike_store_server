@@ -1,6 +1,7 @@
 package com.giant_giraffe.data.sales.order
 
 import com.giant_giraffe.data.BaseConverter
+import com.giant_giraffe.data.sales.order_item.OrderItemConverter
 import com.giant_giraffe.enums.toOrderStatus
 import com.giant_giraffe.utility.DateTimeUtility
 import io.ktor.http.*
@@ -31,6 +32,7 @@ object OrderConverter: BaseConverter<OrderEntity, Order, OrderView> {
         customerId =    view.customerId,
         storeId =       view.storeId,
         staffId =       view.staffId,
+        orderItems =    view.orderItems?.map { OrderItemConverter.viewToModel(it) }
     )
 
 }

@@ -18,9 +18,11 @@ object OrderItemDao:
     BaseDao<Int, OrderItemEntity, OrderItem>()
 {
 
-    fun create(orderItem: OrderItem): OrderItem {
+    fun create(
+        orderItem: OrderItem,
+    ): OrderItem {
         return transaction {
-            OrderItemEntity.new {
+            OrderItemEntity.new(orderItem.id) {
                 orderId = EntityID(orderItem.orderId, OrderTable)
                 quantity = orderItem.quantity!!
                 listPrice = orderItem.listPrice!!
