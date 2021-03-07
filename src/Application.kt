@@ -10,6 +10,7 @@ import com.giant_giraffe.controllers.production.productController
 import com.giant_giraffe.controllers.production.stockController
 import com.giant_giraffe.controllers.sales.*
 import com.giant_giraffe.data.initDB
+import com.google.gson.FieldNamingPolicy
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -40,6 +41,7 @@ fun Application.module(testing: Boolean = false) {
     install(ContentNegotiation) {
         gson {
             setDateFormat(DateFormat.LONG)
+            setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
             setPrettyPrinting()
         }
     }
