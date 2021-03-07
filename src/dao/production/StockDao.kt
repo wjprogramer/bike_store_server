@@ -34,7 +34,10 @@ object StockDao {
             StockEntity
                 .find { StockTable.id eq stockId }
                 .firstOrNull()
-        }?.toModel()
+                ?.load(StockEntity::product)
+                ?.load(StockEntity::store)
+                ?.toDetailsModel()
+        }
     }
 
     fun getList(page: Int, size: Int,
@@ -54,13 +57,24 @@ object StockDao {
             val stocks = StockEntity
                 .find(predicates)
 
+            val needLoadProductModel = productId == null
+            val needLoadStoreModel = storeId == null
+
             val pagedStocks = stocks
                 .limit(size, offset = page * size)
                 .map {
-                    it
-                        .load(StockEntity::product)
-                        .load(StockEntity::store)
-                        .toModel()
+                    if (needLoadProductModel) {
+                        it.load(StockEntity::product)
+                    }
+
+                    if (needLoadStoreModel) {
+                        it.load(StockEntity::store)
+                    }
+
+                    it.toDetailsModel(
+                        hasProduct = needLoadProductModel,
+                        hasStore = needLoadStoreModel,
+                    )
                 }
 
             PagedData(

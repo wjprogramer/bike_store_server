@@ -25,5 +25,22 @@ class StockEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Stock, StockView
         return stock
     }
 
+    fun toDetailsModel(
+        hasProduct: Boolean = true,
+        hasStore: Boolean = true,
+    ): Stock {
+        val stock = Stock(this)
+
+        if (hasProduct) {
+            stock.product = product.toModel()
+        }
+
+        if (hasStore) {
+            stock.store = store?.toModel()
+        }
+
+        return stock
+    }
+
 
 }
