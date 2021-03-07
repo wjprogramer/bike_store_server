@@ -11,9 +11,9 @@ interface BaseConverter<E, M, V> {
 
     fun parametersToView(parameters: Parameters): V
 
-    fun viewToModel(view: V?): M?
+    fun viewToModel(view: V): M
 
-    fun parametersToModel(parameters: Parameters): M? {
+    fun parametersToModel(parameters: Parameters): M {
         val view = parametersToView(parameters)
         return viewToModel(view)
     }

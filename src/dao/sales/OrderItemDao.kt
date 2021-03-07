@@ -22,7 +22,7 @@ object OrderItemDao {
                 quantity = orderItem.quantity!!
                 listPrice = orderItem.listPrice!!
                 discount = orderItem.discount!!
-                product = EntityID(orderItem.productId, ProductTable)
+                productId = EntityID(orderItem.productId, ProductTable)
             }
         }.toModel()
     }
@@ -62,7 +62,7 @@ object OrderItemDao {
                 orderItem.quantity?.let { e -> it[quantity] = e }
                 orderItem.listPrice?.let { e -> it[listPrice] = e }
                 orderItem.discount?.let { e -> it[discount] = e }
-                orderItem.productId?.let { e -> it[product] = EntityID(e, ProductTable) }
+                orderItem.productId?.let { e -> it[productId] = EntityID(e, ProductTable) }
             }
         }
     }

@@ -8,15 +8,15 @@ object BrandConverter: BaseConverter<BrandEntity, Brand, BrandView> {
     override fun parametersToView(parameters: Parameters): BrandView {
         val result = BrandView()
 
-        result.id = parameters["id"]?.toIntOrNull()
-        result.name = parameters["name"]
+        result.id =     parameters["id"]?.toIntOrNull()
+        result.name =   parameters["name"]
 
         return result
     }
 
-    override fun viewToModel(view: BrandView?) = if (view == null) null else Brand(
-        view.id,
-        view.name,
+    override fun viewToModel(view: BrandView) = Brand(
+        id =    view.id,
+        name =  view.name,
     )
 
 }

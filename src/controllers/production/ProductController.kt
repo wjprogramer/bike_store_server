@@ -29,7 +29,7 @@ fun Route.productController() {
 
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
-                val keyword = queryParameters["keyword"]?.toString()
+                val keyword = queryParameters["keyword"]
                 val modelYear = queryParameters["model_year"]?.toIntOrNull()
                 val brandId = queryParameters["brand_id"]?.toIntOrNull()
                 val categoryId = queryParameters["category_id"]?.toIntOrNull()

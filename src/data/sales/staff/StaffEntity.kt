@@ -9,14 +9,14 @@ class StaffEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Staff, StaffView
 
     companion object: IntEntityClass<StaffEntity>(StaffTable)
 
-    var firstName by StaffTable.firstName
-    var lastName by StaffTable.lastName
-    var email by StaffTable.email
-    var password by StaffTable.password
-    var phone by StaffTable.phone
-    var active by StaffTable.active
-    var storeId by StaffTable.storeId
-    var managerId by StaffTable.managerId
+    var firstName   by StaffTable.firstName
+    var lastName    by StaffTable.lastName
+    var email       by StaffTable.email
+    var password    by StaffTable.password
+    var phone       by StaffTable.phone
+    var active      by StaffTable.active
+    var storeId     by StaffTable.storeId
+    var managerId   by StaffTable.managerId
 
     override fun toModel() =
         Staff(this)

@@ -23,23 +23,30 @@ fun Application.initDB() {
     val configPath = environment.config.property(HIKARI_CONFIG_KEY).getString()
     val dbConfig = HikariConfig(configPath)
     val dataSource = HikariDataSource(dbConfig)
+
     Database.connect(dataSource)
     createTables()
-    LoggerFactory.getLogger(Application::class.simpleName).info("Initialized Database")
+
+    LoggerFactory
+        .getLogger(Application::class.simpleName)
+        .info("Initialized Database")
 }
 
 private fun createTables() = transaction {
     SchemaUtils.create(
+
         // production
         BrandTable,
         CategoryTable,
         ProductTable,
         StockTable,
+
         // sales
         CustomerTable,
         OrderTable,
         OrderItemTable,
         StaffTable,
         StoreTable,
+
     )
 }

@@ -8,10 +8,10 @@ import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
 object OrderTable: IntIdTable("orders") {
-    val orderStatus = enumerationByName("order_status", 50, OrderStatus::class)
-    val orderDate = datetime("order_date")
-    val requiredDate = datetime("required_date")
-    val shippedDate = datetime("shipped_date").nullable()
+    val orderStatus =   enumerationByName("order_status", 50, OrderStatus::class)
+    val orderDate =     datetime("order_date")
+    val requiredDate =  datetime("required_date")
+    val shippedDate =   datetime("shipped_date").nullable()
 
     val customerId = reference(
         "customer_id",

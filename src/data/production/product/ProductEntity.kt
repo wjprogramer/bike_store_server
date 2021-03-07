@@ -9,11 +9,11 @@ class ProductEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Product, Produ
 
     companion object: IntEntityClass<ProductEntity>(ProductTable)
 
-    var name by ProductTable.name
-    var modelYear by ProductTable.modelYear
-    var listPrice by ProductTable.listPrice
-    var brandId by ProductTable.brandId
-    var categoryId by ProductTable.categoryId
+    var name        by ProductTable.name
+    var modelYear   by ProductTable.modelYear
+    var listPrice   by ProductTable.listPrice
+    var brandId     by ProductTable.brandId
+    var categoryId  by ProductTable.categoryId
 
     override fun toModel() =
         Product(this)

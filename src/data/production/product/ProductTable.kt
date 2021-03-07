@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
 object ProductTable: IntIdTable("products") {
-    val name = varchar("name", 255)
+    val name =      varchar("name", 255)
     val modelYear = integer("model_year")
     val listPrice = decimal("list_price", 10, 2)
 

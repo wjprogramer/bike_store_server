@@ -15,27 +15,27 @@ class Staff(
 ): BaseModel<StaffView> {
 
     constructor(staffEntity: StaffEntity): this(
-        staffEntity.id.value,
-        staffEntity.firstName,
-        staffEntity.lastName,
-        staffEntity.email,
-        staffEntity.password,
-        staffEntity.phone,
-        staffEntity.active,
-        staffEntity.storeId.value,
-        staffEntity.managerId?.value,
+            id =                staffEntity.id.value,
+            firstName =         staffEntity.firstName,
+            lastName =          staffEntity.lastName,
+            email =             staffEntity.email,
+            password =          staffEntity.password,
+            phone =             staffEntity.phone,
+            active =            staffEntity.active,
+            storeId =           staffEntity.storeId.value,
+            managerId =         staffEntity.managerId?.value,
     )
 
     override fun toView(): StaffView {
         return StaffView(
-            id,
-            firstName,
-            lastName,
-            email,
-            phone,
-            active,
-            storeId,
-            managerId,
+            id =                id,
+            firstName =         firstName,
+            lastName =          lastName,
+            email =             email,
+            phone =             phone,
+            active =            active,
+            storeId =           storeId,
+            managerId =         managerId,
         )
     }
 

@@ -9,9 +9,9 @@ enum class OrderStatus(val statusName: String) {
 }
 
 fun String.toOrderStatus() = when (this) {
-    OrderStatus.PENDING.statusName -> OrderStatus.PENDING
-    OrderStatus.PROCESSING.statusName -> OrderStatus.PROCESSING
-    OrderStatus.REJECTED.statusName -> OrderStatus.REJECTED
-    OrderStatus.COMPLETED.statusName -> OrderStatus.COMPLETED
+    OrderStatus.PENDING.statusName      -> OrderStatus.PENDING
+    OrderStatus.PROCESSING.statusName   -> OrderStatus.PROCESSING
+    OrderStatus.REJECTED.statusName     -> OrderStatus.REJECTED
+    OrderStatus.COMPLETED.statusName    -> OrderStatus.COMPLETED
     else -> OrderStatus.UNKNOWN
 }

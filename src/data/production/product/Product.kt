@@ -13,22 +13,22 @@ class Product(
 ): BaseModel<ProductView> {
 
     constructor(productEntity: ProductEntity): this(
-        productEntity.id.value,
-        productEntity.name,
-        productEntity.modelYear,
-        productEntity.listPrice,
-        productEntity.brandId.value,
-        productEntity.categoryId.value,
+            id =            productEntity.id.value,
+            name =          productEntity.name,
+            modelYear =     productEntity.modelYear,
+            listPrice =     productEntity.listPrice,
+            brandId =       productEntity.brandId.value,
+            categoryId =    productEntity.categoryId.value,
     )
 
     override fun toView(): ProductView {
         return ProductView(
-            id,
-            name,
-            modelYear,
-            listPrice?.toString(),
-            brandId,
-            categoryId,
+            id =            id,
+            name =          name,
+            modelYear =     modelYear,
+            listPrice =     listPrice?.toString(),
+            brandId =       brandId,
+            categoryId =    categoryId,
         )
     }
 

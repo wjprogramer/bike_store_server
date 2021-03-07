@@ -4,7 +4,6 @@ import com.giant_giraffe.data.BaseModel
 import com.giant_giraffe.data.sales.order_item.OrderItem
 import com.giant_giraffe.enums.OrderStatus
 import com.giant_giraffe.utility.DateTimeUtility
-import org.jetbrains.exposed.sql.SizedCollection
 import org.joda.time.DateTime
 
 class Order(
@@ -23,28 +22,28 @@ class Order(
         orderEntity: OrderEntity,
         orderItems: List<OrderItem>? = null,
     ): this(
-        orderEntity.id.value,
-        orderEntity.orderStatus,
-        orderEntity.orderDate,
-        orderEntity.requiredDate,
-        orderEntity.shippedDate,
-        orderEntity.customerId?.value,
-        orderEntity.storeId.value,
-        orderEntity.staffId.value,
-        orderItems,
+            id =                orderEntity.id.value,
+            orderStatus =       orderEntity.orderStatus,
+            orderDate =         orderEntity.orderDate,
+            requiredDate =      orderEntity.requiredDate,
+            shippedDate =       orderEntity.shippedDate,
+            customerId =        orderEntity.customerId?.value,
+            storeId =           orderEntity.storeId.value,
+            staffId =           orderEntity.staffId.value,
+            orderItems =        orderItems,
     )
 
     override fun toView(): OrderView {
         return OrderView(
-            id,
-            orderStatus?.statusName,
-            DateTimeUtility.convertToString(orderDate),
-            DateTimeUtility.convertToString(requiredDate),
-            DateTimeUtility.convertToString(shippedDate),
-            customerId,
-            storeId,
-            staffId,
-            orderItems?.map { it.toView() }
+            id =                id,
+            orderStatus =       orderStatus?.statusName,
+            orderDate =         DateTimeUtility.convertToString(orderDate),
+            requiredDate =      DateTimeUtility.convertToString(requiredDate),
+            shippedDate =       DateTimeUtility.convertToString(shippedDate),
+            customerId =        customerId,
+            storeId =           storeId,
+            staffId =           staffId,
+            orderItems =        orderItems?.map { it.toView() }
         )
     }
 

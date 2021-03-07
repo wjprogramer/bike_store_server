@@ -9,15 +9,15 @@ class CustomerEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Customer, Cus
 
     companion object: IntEntityClass<CustomerEntity>(CustomerTable)
 
-    var firstName by CustomerTable.firstName
-    var lastName by CustomerTable.lastName
-    var email by CustomerTable.email
-    var password by CustomerTable.password
-    var phone by CustomerTable.phone
-    var street by CustomerTable.street
-    var city by CustomerTable.city
-    var state by CustomerTable.state
-    var zipCode by CustomerTable.zipCode
+    var firstName   by CustomerTable.firstName
+    var lastName    by CustomerTable.lastName
+    var email       by CustomerTable.email
+    var password    by CustomerTable.password
+    var phone       by CustomerTable.phone
+    var street      by CustomerTable.street
+    var city        by CustomerTable.city
+    var state       by CustomerTable.state
+    var zipCode     by CustomerTable.zipCode
 
     override fun toModel() =
         Customer(this)

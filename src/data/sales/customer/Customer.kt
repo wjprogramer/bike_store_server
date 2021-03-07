@@ -16,29 +16,29 @@ class Customer(
 ): BaseModel<CustomerView> {
 
     constructor(customerEntity: CustomerEntity): this(
-        customerEntity.id.value,
-        customerEntity.firstName,
-        customerEntity.lastName,
-        customerEntity.email,
-        customerEntity.password,
-        customerEntity.phone,
-        customerEntity.street,
-        customerEntity.city,
-        customerEntity.state,
-        customerEntity.zipCode,
+            id =            customerEntity.id.value,
+            firstName =     customerEntity.firstName,
+            lastName =      customerEntity.lastName,
+            email =         customerEntity.email,
+            password =      customerEntity.password,
+            phone =         customerEntity.phone,
+            street =        customerEntity.street,
+            city =          customerEntity.city,
+            state =         customerEntity.state,
+            zipCode =       customerEntity.zipCode,
     )
 
     override fun toView(): CustomerView {
         return CustomerView(
-            id,
-            firstName,
-            lastName,
-            email,
-            phone,
-            street,
-            city,
-            state,
-            zipCode,
+            id =            id,
+            firstName =     firstName,
+            lastName =      lastName,
+            email =         email,
+            phone =         phone,
+            street =        street,
+            city =          city,
+            state =         state,
+            zipCode =       zipCode,
         )
     }
 

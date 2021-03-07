@@ -8,15 +8,15 @@ object CategoryConverter: BaseConverter<CategoryEntity, Category, CategoryView> 
     override fun parametersToView(parameters: Parameters): CategoryView {
         val result = CategoryView()
 
-        result.id = parameters["id"]?.toIntOrNull()
-        result.name = parameters["name"]
+        result.id =     parameters["id"]?.toIntOrNull()
+        result.name =   parameters["name"]
 
         return result
     }
 
-    override fun viewToModel(view: CategoryView?) = if (view == null) null else Category(
-        view.id,
-        view.name,
+    override fun viewToModel(view: CategoryView) = Category(
+        id =    view.id,
+        name =  view.name,
     )
 
 }

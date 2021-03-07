@@ -7,7 +7,7 @@ enum class UserType(code: String) {
 }
 
 fun String.toUserType() = when (this) {
-    UserType.CUSTOMER.name -> UserType.CUSTOMER
-    UserType.STAFF.name -> UserType.STAFF
+    UserType.CUSTOMER.name  -> UserType.CUSTOMER
+    UserType.STAFF.name     -> UserType.STAFF
     else -> UserType.UNKNOWN
 }

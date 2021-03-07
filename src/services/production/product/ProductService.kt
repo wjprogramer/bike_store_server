@@ -11,12 +11,12 @@ interface ProductService {
 
     fun getList(
         page: Int, size: Int,
-        keyword: String?,
-        modelYear: Int?,
-        brandId: Int?,
-        categoryId: Int?,
-        minListPrice: Int?,
-        maxListPrice: Int?,
+        keyword: String? = null,
+        modelYear: Int? = null,
+        brandId: Int? = null,
+        categoryId: Int? = null,
+        minListPrice: Int? = null,
+        maxListPrice: Int? = null,
     ): PagedData<Product>
 
     fun update(product: Product): Int

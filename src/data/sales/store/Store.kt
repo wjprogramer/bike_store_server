@@ -14,26 +14,26 @@ class Store(
 ): BaseModel<StoreView> {
 
     constructor(storeEntity: StoreEntity): this(
-        id = storeEntity.id.value,
-        storeName = storeEntity.storeName,
-        phone = storeEntity.phone,
-        email = storeEntity.email,
-        street = storeEntity.street,
-        city = storeEntity.city,
-        state = storeEntity.state,
-        zipCode = storeEntity.zipCode,
+            id =            storeEntity.id.value,
+            storeName =     storeEntity.storeName,
+            phone =         storeEntity.phone,
+            email =         storeEntity.email,
+            street =        storeEntity.street,
+            city =          storeEntity.city,
+            state =         storeEntity.state,
+            zipCode =       storeEntity.zipCode,
     )
 
     override fun toView(): StoreView {
         return StoreView(
-            id,
-            storeName,
-            phone,
-            email,
-            street,
-            city,
-            state,
-            zipCode,
+            id =            id,
+            storeName =     storeName,
+            phone =         phone,
+            email =         email,
+            street =        street,
+            city =          city,
+            state =         state,
+            zipCode =       zipCode,
         )
     }
 

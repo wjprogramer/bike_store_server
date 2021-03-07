@@ -8,14 +8,14 @@ class Category(
 ): BaseModel<CategoryView> {
 
     constructor(categoryEntity: CategoryEntity): this(
-        categoryEntity.id.value,
-        categoryEntity.name
+            id =    categoryEntity.id.value,
+            name =  categoryEntity.name
     )
 
     override fun toView(): CategoryView {
         return CategoryView(
-            id,
-            name,
+            id =    id,
+            name =  name,
         )
     }
 

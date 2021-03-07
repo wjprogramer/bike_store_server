@@ -1,6 +1,5 @@
 package com.giant_giraffe.data.production.stock
 
-import com.giant_giraffe.data.production.product.Product
 import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import org.jetbrains.exposed.dao.IntIdTable
@@ -27,7 +26,6 @@ object StockTable: IntIdTable("stocks") {
     )
 
     init {
-        // Composite unique constraint, or use `uniqueIndex`
         index(true, storeId, productId)
     }
 

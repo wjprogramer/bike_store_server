@@ -18,12 +18,12 @@ class Stock(
         product: Product? = null,
         store: Store? = null,
     ): this(
-        id = stockEntity.id.value,
-        quantity = stockEntity.quantity,
-        storeId = stockEntity.storeId?.value,
-        productId = stockEntity.productId.value,
-        product = product,
-        store = store,
+            id =            stockEntity.id.value,
+            quantity =      stockEntity.quantity,
+            storeId =       stockEntity.storeId?.value,
+            productId =     stockEntity.productId.value,
+            product =       product,
+            store =         store,
     )
 
     override fun toView(): StockView {
@@ -31,12 +31,12 @@ class Stock(
         val storeView = store?.toView()
 
         return StockView(
-            id,
-            quantity,
-            storeId,
-            productId,
-            productView,
-            storeView,
+            id =            id,
+            quantity =      quantity,
+            storeId =       storeId,
+            productId =     productId,
+            product =       productView,
+            store =         storeView,
         )
     }
 

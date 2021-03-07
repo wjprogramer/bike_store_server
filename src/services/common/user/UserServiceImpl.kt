@@ -11,7 +11,7 @@ import org.kodein.di.instance
 import org.kodein.di.ktor.di
 import java.lang.Exception
 
-class UserServiceImpl(private val application: Application): UserService {
+class UserServiceImpl(application: Application): UserService {
 
     private val customerService by application.di().instance<CustomerService>()
     private val staffService by application.di().instance<StaffService>()

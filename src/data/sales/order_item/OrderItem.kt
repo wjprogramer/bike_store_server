@@ -1,7 +1,6 @@
 package com.giant_giraffe.data.sales.order_item
 
 import com.giant_giraffe.data.BaseModel
-import com.giant_giraffe.data.sales.order.Order
 import java.math.BigDecimal
 
 class OrderItem(
@@ -14,22 +13,22 @@ class OrderItem(
 ): BaseModel<OrderItemView> {
 
     constructor(orderItemEntity: OrderItemEntity): this(
-        orderItemEntity.id.value,
-        orderItemEntity.orderId.value,
-        orderItemEntity.quantity,
-        orderItemEntity.listPrice,
-        orderItemEntity.discount,
-        orderItemEntity.product?.value,
+            id =            orderItemEntity.id.value,
+            orderId =       orderItemEntity.orderId.value,
+            quantity =      orderItemEntity.quantity,
+            listPrice =     orderItemEntity.listPrice,
+            discount =      orderItemEntity.discount,
+            productId =     orderItemEntity.productId?.value,
     )
 
     override fun toView(): OrderItemView {
         return OrderItemView(
-            id,
-            orderId,
-            quantity,
-            listPrice?.toString(),
-            discount?.toString(),
-            productId,
+            id =            id,
+            orderId =       orderId,
+            quantity =      quantity,
+            listPrice =     listPrice?.toString(),
+            discount =      discount?.toString(),
+            productId =     productId,
         )
     }
 

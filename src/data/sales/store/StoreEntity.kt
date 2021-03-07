@@ -9,13 +9,13 @@ class StoreEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Store, StoreView
 
     companion object: IntEntityClass<StoreEntity>(StoreTable)
 
-    var storeName by StoreTable.storeName
-    var phone by StoreTable.phone
-    var email by StoreTable.email
-    var street by StoreTable.street
-    var city by StoreTable.city
-    var state by StoreTable.state
-    var zipCode by StoreTable.zipCode
+    var storeName   by StoreTable.storeName
+    var phone       by StoreTable.phone
+    var email       by StoreTable.email
+    var street      by StoreTable.street
+    var city        by StoreTable.city
+    var state       by StoreTable.state
+    var zipCode     by StoreTable.zipCode
 
     override fun toModel() =
         Store(this)

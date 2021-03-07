@@ -18,7 +18,7 @@ object OrderItemTable: IntIdTable("order_items") {
     val listPrice = decimal("list_price", 10, 2)
     val discount = decimal("discount", 4, 2).default(BigDecimal.valueOf(0))
 
-    val product = reference(
+    val productId = reference(
         "product_id",
         ProductTable,
         onDelete = ReferenceOption.CASCADE,
