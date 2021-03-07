@@ -1,16 +1,18 @@
 package com.giant_giraffe.dao.sales
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.sales.store.Store
 import com.giant_giraffe.data.sales.store.StoreEntity
 import com.giant_giraffe.data.sales.store.StoreTable
-import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object StoreDao {
+object StoreDao:
+    BaseDao<Int, StoreEntity, Store>()
+{
 
     fun create(store: Store): Store {
         return transaction {
@@ -35,27 +37,9 @@ object StoreDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Store> {
-        var totalDataSize = 0
-
-        val stores = transaction {
-            val allData = StoreEntity.all()
-            totalDataSize = allData.count()
-
-            allData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return StoreEntity.findAndGetPagedData(
             page = page,
-            dataCount = stores.size,
-            totalDataCount = totalDataSize,
-        )
-
-        return PagedData(
-            data = stores,
-            pageInfo = pageInfo
+            size = size,
         )
     }
 

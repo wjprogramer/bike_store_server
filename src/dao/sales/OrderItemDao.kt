@@ -1,6 +1,7 @@
 package com.giant_giraffe.dao.sales
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.sales.order.OrderTable
 import com.giant_giraffe.data.sales.order_item.OrderItem
@@ -13,7 +14,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object OrderItemDao {
+object OrderItemDao:
+    BaseDao<Int, OrderItemEntity, OrderItem>()
+{
 
     fun create(orderItem: OrderItem): OrderItem {
         return transaction {

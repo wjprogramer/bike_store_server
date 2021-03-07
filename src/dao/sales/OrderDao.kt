@@ -1,13 +1,13 @@
 package com.giant_giraffe.dao.sales
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.sales.customer.CustomerTable
 import com.giant_giraffe.data.sales.order.Order
 import com.giant_giraffe.data.sales.order.OrderEntity
 import com.giant_giraffe.data.sales.order.OrderTable
 import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.store.StoreTable
-import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.load
 import org.jetbrains.exposed.sql.deleteWhere
@@ -15,7 +15,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object OrderDao {
+object OrderDao:
+    BaseDao<Int, OrderEntity, Order>()
+{
 
     fun create(order: Order): Order {
         return transaction {
@@ -44,27 +46,9 @@ object OrderDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Order> {
-        var totalDataSize = 0
-
-        val orders = transaction {
-            val allData = OrderEntity.all()
-            totalDataSize = allData.count()
-
-            allData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return OrderEntity.findAndGetPagedData(
             page = page,
-            dataCount = orders.size,
-            totalDataCount = totalDataSize,
-        )
-
-        return PagedData(
-            data = orders,
-            pageInfo = pageInfo
+            size = size,
         )
     }
 

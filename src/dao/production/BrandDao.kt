@@ -1,16 +1,18 @@
 package com.giant_giraffe.dao.production
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.brand.Brand
 import com.giant_giraffe.data.production.brand.BrandEntity
 import com.giant_giraffe.data.production.brand.BrandTable
-import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object BrandDao {
+object BrandDao:
+    BaseDao<Int, BrandEntity, Brand>()
+{
 
     fun create(brand: Brand): Brand {
         return transaction {
@@ -29,27 +31,9 @@ object BrandDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Brand> {
-        var totalDataSize = 0
-
-        val brands = transaction {
-            val allData = BrandEntity.all()
-            totalDataSize = allData.count()
-
-            allData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return BrandEntity.findAndGetPagedData(
             page = page,
-            dataCount = brands.size,
-            totalDataCount = totalDataSize,
-        )
-
-        return PagedData(
-            data = brands,
-            pageInfo = pageInfo
+            size = size,
         )
     }
 

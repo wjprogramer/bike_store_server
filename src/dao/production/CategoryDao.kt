@@ -1,16 +1,18 @@
 package com.giant_giraffe.dao.production
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.category.Category
 import com.giant_giraffe.data.production.category.CategoryEntity
 import com.giant_giraffe.data.production.category.CategoryTable
-import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object CategoryDao {
+object CategoryDao:
+    BaseDao<Int, CategoryEntity, Category>()
+{
 
     fun create(category: Category): Category {
         return transaction {
@@ -29,28 +31,9 @@ object CategoryDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Category> {
-        var totalDataSize = 0
-
-        val categories = transaction {
-            val allData = CategoryEntity.all()
-            totalDataSize = allData.count()
-
-            allData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility
-            .getPageInfo(
-                dataCount = categories.size,
-                totalDataCount = totalDataSize,
-                page = page,
-                size = size,
-            )
-
-        return PagedData(
-            data = categories,
-            pageInfo = pageInfo
+        return CategoryEntity.findAndGetPagedData(
+            page = page,
+            size = size,
         )
     }
 

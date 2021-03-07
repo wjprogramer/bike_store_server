@@ -1,6 +1,7 @@
 package com.giant_giraffe.dao.production
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.product.ProductTable
 import com.giant_giraffe.data.production.stock.Stock
 import com.giant_giraffe.data.production.stock.StockEntity
@@ -17,7 +18,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object StockDao {
+object StockDao:
+    BaseDao<Int, StockEntity, Stock>()
+{
 
     fun create(stock: Stock): Stock {
         return transaction {

@@ -1,16 +1,18 @@
 package com.giant_giraffe.dao.sales
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.sales.customer.Customer
 import com.giant_giraffe.data.sales.customer.CustomerEntity
 import com.giant_giraffe.data.sales.customer.CustomerTable
-import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object CustomerDao {
+object CustomerDao:
+    BaseDao<Int, CustomerEntity, Customer>()
+{
 
     fun create(customer: Customer): Customer {
         return transaction {
@@ -45,27 +47,9 @@ object CustomerDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Customer> {
-        var totalDataSize = 0
-
-        val customers = transaction {
-            val allData = CustomerEntity.all()
-            totalDataSize = allData.count()
-
-            allData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return CustomerEntity.findAndGetPagedData(
             page = page,
-            dataCount = customers.size,
-            totalDataCount = totalDataSize,
-        )
-
-        return PagedData(
-            data = customers,
-            pageInfo = pageInfo
+            size = size,
         )
     }
 

@@ -1,12 +1,12 @@
 package com.giant_giraffe.dao.production
 
 import com.giant_giraffe.core.PagedData
+import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.brand.BrandTable
 import com.giant_giraffe.data.production.category.CategoryTable
 import com.giant_giraffe.data.production.product.Product
 import com.giant_giraffe.data.production.product.ProductEntity
 import com.giant_giraffe.data.production.product.ProductTable
-import com.giant_giraffe.utility.EntityUtility
 import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Op
@@ -15,7 +15,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
-object ProductDao {
+object ProductDao:
+    BaseDao<Int, ProductEntity, Product>()
+{
 
     fun create(product: Product): Product {
         return transaction {
@@ -47,7 +49,6 @@ object ProductDao {
         minListPrice: Int? = null,
         maxListPrice: Int? = null,
     ): PagedData<Product> {
-        var totalDataSize = 0
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
         // FIXME: keyword
@@ -58,25 +59,10 @@ object ProductDao {
         predicates = predicates.tryAnd(minListPrice) { ProductTable.listPrice greaterEq minListPrice!! }
         predicates = predicates.tryAnd(maxListPrice) { ProductTable.listPrice lessEq maxListPrice!! }
 
-        val products = transaction {
-            val allFilteredData = ProductEntity.find(predicates)
-            totalDataSize = allFilteredData.count()
-
-            allFilteredData
-                .limit(size, offset = page * size)
-                .map { it.toModel() }
-        }
-
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return ProductEntity.findAndGetPagedData(
             page = page,
-            dataCount = products.size,
-            totalDataCount = totalDataSize,
-        )
-
-        return PagedData(
-            data = products,
-            pageInfo = pageInfo
+            size = size,
+            predicates = predicates
         )
     }
 
