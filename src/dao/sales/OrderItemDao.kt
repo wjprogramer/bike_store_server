@@ -9,6 +9,7 @@ import com.giant_giraffe.data.sales.order_item.OrderItemEntity
 import com.giant_giraffe.data.sales.order_item.OrderItemTable
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -32,10 +33,13 @@ object OrderItemDao:
         }.toModel()
     }
 
-    fun getById(orderItemId: Int): OrderItem? {
+    fun getById(orderId: Int, orderItemId: Int): OrderItem? {
         return transaction {
             OrderItemEntity
-                .find { OrderItemTable.id eq orderItemId }
+                .find {
+                    OrderItemTable.orderId eq orderId and
+                            (OrderItemTable.id eq orderItemId)
+                }
                 .firstOrNull()
         }?.toModel()
     }
@@ -71,19 +75,24 @@ object OrderItemDao:
                 .find { OrderItemTable.id eq orderItem.id }
                 .firstOrNull() ?: throw Exception()
 
-            OrderItemTable.update({ OrderItemTable.id eq orderItem.id }) {
-                orderItem.orderId?.let { e -> it[order] = EntityID(e, OrderTable) }
-                orderItem.quantity?.let { e -> it[quantity] = e }
-                orderItem.listPrice?.let { e -> it[listPrice] = e }
-                orderItem.discount?.let { e -> it[discount] = e }
-                orderItem.productId?.let { e -> it[productId] = EntityID(e, ProductTable) }
+            OrderItemTable.update({
+                OrderItemTable.orderId eq orderItem.orderId and
+                        (OrderItemTable.id eq orderItem.id)
+            }) {
+                orderItem.quantity?.let     { e -> it[quantity]     = e }
+                orderItem.listPrice?.let    { e -> it[listPrice]    = e }
+                orderItem.discount?.let     { e -> it[discount]     = e }
+                orderItem.productId?.let    { e -> it[productId]    = EntityID(e, ProductTable) }
             }
         }
     }
 
-    fun delete(orderItemId: Int): Int {
+    fun delete(orderId: Int, orderItemId: Int): Int {
         return transaction {
-            OrderItemTable.deleteWhere { OrderItemTable.id eq orderItemId }
+            OrderItemTable.deleteWhere {
+                OrderItemTable.orderId eq orderId and
+                        (OrderItemTable.id eq orderItemId)
+            }
         }
     }
 

@@ -22,8 +22,8 @@ class OrderItemServiceImpl: OrderItemService {
         return dao.create(orderItem)
     }
 
-    override fun getById(orderItemId: Int): OrderItem? {
-        return dao.getById(orderItemId)
+    override fun getById(orderId: Int, orderItemId: Int): OrderItem? {
+        return dao.getById(orderId, orderItemId)
     }
 
     override fun find(page: Int, size: Int): PagedData<OrderItem> {
@@ -34,11 +34,14 @@ class OrderItemServiceImpl: OrderItemService {
         return dao.update(orderItem)
     }
 
-    override fun delete(orderItemId: Int): Boolean {
+    override fun delete(orderId: Int, orderItemId: Int): Boolean {
         var result = true
 
         transaction {
-            val number = dao.delete(orderItemId)
+            val number = dao.delete(
+                orderId = orderId,
+                orderItemId = orderItemId
+            )
             if (number != 1) {
                 rollback()
                 result = false

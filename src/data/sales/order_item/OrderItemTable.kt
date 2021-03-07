@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import java.math.BigDecimal
 
 object OrderItemTable: IntIdTable("order_items") {
-    val order = reference(
+    val orderId = reference(
         "order_id",
         OrderTable,
         onDelete = ReferenceOption.CASCADE,

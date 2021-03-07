@@ -48,7 +48,51 @@ class OrderServiceImpl(application: Application): OrderService {
     }
 
     override fun update(order: Order): Int {
-        return dao.update(order)
+        var result = 0
+
+        if (order.id == null) {
+            throw Exception()
+        }
+
+        // Process received data
+        val newItems = order.orderItems?.toMutableList() ?: mutableListOf()
+        val newItemIds = newItems.mapNotNull { it.id }
+
+        transaction {
+            val oldOrder = dao.getById(order.id!!) ?: throw Exception()
+
+            // Prepare items
+            val oldItemIds = oldOrder.orderItems?.mapNotNull { it.id } ?: listOf()
+            val deleteItemIds = (oldItemIds + newItemIds)
+                .groupBy { it }
+                .filter { it.value.size == 1}
+                .flatMap { it.value }
+
+            newItems.removeIf { deleteItemIds.contains(it.id) }
+            var nextOrderItemId = oldItemIds.maxOf { it } + 1
+
+            // Update
+            result = dao.update(order)
+
+            // Delete Items
+            deleteItemIds.forEach { itemId ->
+                orderItemService.delete(oldOrder.id!! , itemId)
+            }
+
+            // Create or update Items
+            newItems.forEach { orderItem ->
+                if (orderItem.id != null) {
+                    orderItemService.update(orderItem)
+                } else {
+                    orderItem.id = nextOrderItemId
+                    orderItem.orderId = oldOrder.id
+                    orderItemService.create(orderItem)
+                    nextOrderItemId++
+                }
+            }
+
+        }
+        return result
     }
 
     override fun delete(orderId: Int): Boolean {

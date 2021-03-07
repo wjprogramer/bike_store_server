@@ -7,12 +7,12 @@ interface OrderItemService {
 
     fun create(orderItem: OrderItem): OrderItem
 
-    fun getById(orderItemId: Int): OrderItem?
+    fun getById(orderId: Int, orderItemId: Int): OrderItem?
 
     fun find(page: Int, size: Int): PagedData<OrderItem>
 
     fun update(orderItem: OrderItem): Int
 
-    fun delete(orderItemId: Int): Boolean
+    fun delete(orderId: Int, orderItemId: Int): Boolean
 
 }

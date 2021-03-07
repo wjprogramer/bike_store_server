@@ -54,10 +54,6 @@ object OrderDao:
 
     fun update(order: Order): Int {
         return transaction {
-            OrderEntity
-                .find { OrderTable.id eq order.id }
-                .firstOrNull() ?: throw Exception()
-
             OrderTable.update({ OrderTable.id eq order.id }) {
                 order.orderStatus?.let { e -> it[orderStatus] = e }
                 order.orderDate?.let { e -> it[orderDate] = e }

@@ -61,48 +61,6 @@ fun Route.orderItemController() {
             }
         }
 
-        get("/{id}") {
-            try {
-                val orderItemId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-
-                val itemView = orderItemService.getById(orderItemId)
-                    ?: throw NotFoundException()
-
-                call.respondApiResult(result = itemView.toView())
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
-        }
-
-        post("/update/{id}") {
-            try {
-                val form = call.receiveParameters()
-                val orderItem = OrderItemConverter.parametersToModel(form)
-
-                val orderItemId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-                orderItem.id = orderItemId
-
-                val result = orderItemService.update(orderItem)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
-        }
-
-        post("/delete/{id}") {
-            try {
-                val orderItemId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-
-                val result = orderItemService.delete(orderItemId)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
-        }
-
     }
 
 }

@@ -19,7 +19,7 @@ class OrderEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Order, OrderView
     var storeId         by OrderTable.storeId
     var staffId         by OrderTable.staffId
 
-    val orderItems by OrderItemEntity.referrersOn(OrderItemTable.order)
+    val orderItems by OrderItemEntity.referrersOn(OrderItemTable.orderId)
 
     override fun toModel() =
         Order(this)
