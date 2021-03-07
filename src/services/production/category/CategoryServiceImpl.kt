@@ -28,6 +28,10 @@ class CategoryServiceImpl: CategoryService {
         return dao.getList(page, size)
     }
 
+    override fun findAll(): List<Category> {
+        return dao.findAll()
+    }
+
     override fun update(category: Category): Int {
         return dao.update(category)
     }

@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.production
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.brand.BrandConverter
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.production.brand.BrandService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -37,6 +36,18 @@ fun Route.brandController() {
                         pagingData.data.map { it.toView() },
                         pagingData.pageInfo,
                     )
+                )
+            } catch (e: Exception) {
+                ApiUtility.handleError(e, call)
+            }
+        }
+
+        get("/all") {
+            try {
+                val brands = brandService.findAll()
+
+                call.respondApiResult(
+                    result = brands.map { it.toView() }
                 )
             } catch (e: Exception) {
                 ApiUtility.handleError(e, call)

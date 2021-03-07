@@ -44,6 +44,13 @@ object CategoryDao {
         }
     }
 
+    fun findAll(): List<Category> {
+        return transaction {
+            CategoryEntity.all()
+                .map { it.toModel() }
+        }
+    }
+
     fun update(category: Category): Int {
         return transaction {
             CategoryEntity

@@ -15,4 +15,6 @@ interface BrandService {
 
     fun delete(brandId: Int): Boolean
 
+    fun findAll(): List<Brand>
+
 }

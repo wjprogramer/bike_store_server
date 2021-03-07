@@ -15,4 +15,6 @@ interface CategoryService {
 
     fun delete(categoryId: Int): Boolean
 
+    fun findAll(): List<Category>
+
 }

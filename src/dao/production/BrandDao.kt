@@ -44,6 +44,14 @@ object BrandDao {
         }
     }
 
+    fun getAll(): List<Brand> {
+        return transaction {
+            BrandEntity
+                .all()
+                .map { it.toModel() }
+        }
+    }
+
     fun update(brand: Brand): Int {
         return transaction {
             BrandEntity

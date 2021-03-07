@@ -45,5 +45,9 @@ class BrandServiceImpl: BrandService {
 
         return result
     }
+
+    override fun findAll(): List<Brand> {
+        return dao.getAll()
+    }
     
 }

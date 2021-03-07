@@ -42,6 +42,18 @@ fun Route.categoryController() {
             }
         }
 
+        get("/all") {
+            try {
+                val categories = categoryService.findAll()
+
+                call.respondApiResult(
+                    result = categories.map { it.toView() }
+                )
+            } catch (e: Exception) {
+                ApiUtility.handleError(e, call)
+            }
+        }
+
     }
 
     route("/category") {
