@@ -30,6 +30,7 @@ object CategoryDao {
 
     fun find(page: Int, size: Int): PagedData<Category> {
         var totalDataSize = 0
+
         val categories = transaction {
             val allData = CategoryEntity.all()
             totalDataSize = allData.count()

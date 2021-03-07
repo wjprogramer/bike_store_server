@@ -35,19 +35,28 @@ object StoreDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Store> {
-        return transaction {
-            val stores = StoreEntity.all()
+        var totalDataSize = 0
+
+        val stores = transaction {
+            val allData = StoreEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(StoreEntity, page, size, stores.size)
-
-            PagedData(
-                data = stores,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = stores.size,
+            totalDataCount = totalDataSize,
+        )
+
+        return PagedData(
+            data = stores,
+            pageInfo = pageInfo
+        )
     }
 
     fun findAll(): List<Store> {

@@ -44,29 +44,28 @@ object StockDao {
              productId: Int? = null,
              storeId: Int? = null,
     ): PagedData<Stock> {
-        return transaction {
+        var totalDataCount = 0
+        var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
-            var predicates: Op<Boolean> = Op.build { Op.TRUE }
+        val needLoadProductModel = productId == null
+        val needLoadStoreModel = storeId == null
 
-            predicates = predicates.tryAnd(productId) { StockTable.productId eq productId }
-            predicates = predicates.tryAnd(storeId) {
-                StockTable.storeId.isNull() or
-                        (StockTable.storeId eq EntityID(storeId, StoreTable))
-            }
+        predicates = predicates.tryAnd(productId) { StockTable.productId eq productId }
+        predicates = predicates.tryAnd(storeId) {
+            StockTable.storeId.isNull() or
+                    (StockTable.storeId eq EntityID(storeId, StoreTable))
+        }
 
-            val stocks = StockEntity
-                .find(predicates)
+        val stocks = transaction {
+            val allFilteredData = StockEntity.find(predicates)
+            totalDataCount = allFilteredData.count()
 
-            val needLoadProductModel = productId == null
-            val needLoadStoreModel = storeId == null
-
-            val pagedStocks = stocks
+            allFilteredData
                 .limit(size, offset = page * size)
                 .map {
                     if (needLoadProductModel) {
                         it.load(StockEntity::product)
                     }
-
                     if (needLoadStoreModel) {
                         it.load(StockEntity::store)
                     }
@@ -76,17 +75,19 @@ object StockDao {
                         hasStore = needLoadStoreModel,
                     )
                 }
-
-            PagedData(
-                data = pagedStocks,
-                pageInfo = EntityUtility.getPageInfo(
-                    size = size,
-                    page = page,
-                    dataCount = pagedStocks.size,
-                    totalDataCount = stocks.count(),
-                )
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = stocks.size,
+            totalDataCount = totalDataCount,
+        )
+
+        return PagedData(
+            data = stocks,
+            pageInfo = pageInfo
+        )
     }
 
     fun update(stock: Stock): Int {

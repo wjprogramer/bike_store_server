@@ -47,35 +47,37 @@ object ProductDao {
         minListPrice: Int? = null,
         maxListPrice: Int? = null,
     ): PagedData<Product> {
-        return transaction {
+        var totalDataSize = 0
+        var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
-            var predicates: Op<Boolean> = Op.build { Op.TRUE }
+        // FIXME: keyword
+        predicates = predicates.tryAnd(keyword) { ProductTable.name match keyword!! }
+        predicates = predicates.tryAnd(modelYear) { ProductTable.modelYear eq modelYear!! }
+        predicates = predicates.tryAnd(brandId) { ProductTable.brandId eq brandId!! }
+        predicates = predicates.tryAnd(categoryId) { ProductTable.categoryId eq categoryId!! }
+        predicates = predicates.tryAnd(minListPrice) { ProductTable.listPrice greaterEq minListPrice!! }
+        predicates = predicates.tryAnd(maxListPrice) { ProductTable.listPrice lessEq maxListPrice!! }
 
-            // FIXME: keyword
-            predicates = predicates.tryAnd(keyword) { ProductTable.name match keyword!! }
-            predicates = predicates.tryAnd(modelYear) { ProductTable.modelYear eq modelYear!! }
-            predicates = predicates.tryAnd(brandId) { ProductTable.brandId eq brandId!! }
-            predicates = predicates.tryAnd(categoryId) { ProductTable.categoryId eq categoryId!! }
-            predicates = predicates.tryAnd(minListPrice) { ProductTable.listPrice greaterEq minListPrice!! }
-            predicates = predicates.tryAnd(maxListPrice) { ProductTable.listPrice lessEq maxListPrice!! }
+        val products = transaction {
+            val allFilteredData = ProductEntity.find(predicates)
+            totalDataSize = allFilteredData.count()
 
-            val products = ProductEntity
-                .find(predicates)
-
-            val pagedProducts = products
+            allFilteredData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            PagedData(
-                data = pagedProducts,
-                pageInfo = EntityUtility.getPageInfo(
-                    size = size,
-                    page = page,
-                    dataCount = pagedProducts.size,
-                    totalDataCount = products.count(),
-                )
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = products.size,
+            totalDataCount = totalDataSize,
+        )
+
+        return PagedData(
+            data = products,
+            pageInfo = pageInfo
+        )
     }
 
     fun update(product: Product): Int {

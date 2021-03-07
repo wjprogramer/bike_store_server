@@ -45,19 +45,28 @@ object CustomerDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Customer> {
-        return transaction {
-            val staffs = CustomerEntity.all()
+        var totalDataSize = 0
+
+        val customers = transaction {
+            val allData = CustomerEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(CustomerEntity, page, size, staffs.size)
-
-            PagedData(
-                data = staffs,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = customers.size,
+            totalDataCount = totalDataSize,
+        )
+
+        return PagedData(
+            data = customers,
+            pageInfo = pageInfo
+        )
     }
 
     fun update(customer: Customer): Int {

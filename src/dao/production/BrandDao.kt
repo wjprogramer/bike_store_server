@@ -31,7 +31,7 @@ object BrandDao {
     fun find(page: Int, size: Int): PagedData<Brand> {
         var totalDataSize = 0
 
-        val brands: List<Brand> = transaction {
+        val brands = transaction {
             val allData = BrandEntity.all()
             totalDataSize = allData.count()
 
@@ -40,13 +40,12 @@ object BrandDao {
                 .map { it.toModel() }
         }
 
-        val pageInfo = EntityUtility
-            .getPageInfo(
-                dataCount = brands.size,
-                totalDataCount = totalDataSize,
-                page = page,
-                size = size,
-            )
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = brands.size,
+            totalDataCount = totalDataSize,
+        )
 
         return PagedData(
             data = brands,

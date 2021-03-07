@@ -36,19 +36,28 @@ object OrderItemDao {
     }
 
     fun find(page: Int, size: Int): PagedData<OrderItem> {
-        return transaction {
-            val staffs = OrderItemEntity.all()
+        var totalDataSize = 0
+
+        val orderItems = transaction {
+            val allData = OrderItemEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(OrderItemEntity, page, size, staffs.size)
-
-            PagedData(
-                data = staffs,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = orderItems.size,
+            totalDataCount = totalDataSize,
+        )
+
+        return PagedData(
+            data = orderItems,
+            pageInfo = pageInfo
+        )
     }
 
     fun update(orderItem: OrderItem): Int {

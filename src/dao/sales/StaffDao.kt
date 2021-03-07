@@ -46,19 +46,28 @@ object StaffDao {
     }
 
     fun find(page: Int, size: Int): PagedData<Staff> {
-        return transaction {
-            val staffs = StaffEntity.all()
+        var totalDataSize = 0
+
+        val staffs = transaction {
+            val allData = StaffEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(StaffEntity, page, size, staffs.size)
-
-            PagedData(
-                data = staffs,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility.getPageInfo(
+            size = size,
+            page = page,
+            dataCount = staffs.size,
+            totalDataCount = totalDataSize,
+        )
+
+        return PagedData(
+            data = staffs,
+            pageInfo = pageInfo
+        )
     }
 
     fun update(staff: Staff): Int {
