@@ -50,7 +50,7 @@ fun Route.brandController() {
         post("/create") {
             try {
                 val form = call.receiveParameters()
-                val brand = BrandConverter.parametersToModel(form) ?: throw UnknownException()
+                val brand = BrandConverter.parametersToModel(form)
 
                 val createdBrand = brandService.create(brand)
 
@@ -80,7 +80,6 @@ fun Route.brandController() {
             try {
                 val form = call.receiveParameters()
                 val brand = BrandConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val brandId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

@@ -61,7 +61,6 @@ fun Route.storeController() {
             try {
                 val form = call.receiveParameters()
                 val store = StoreConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val createdStore = storeService.create(store)
 
@@ -91,7 +90,6 @@ fun Route.storeController() {
             try {
                 val form = call.receiveParameters()
                 val store = StoreConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val storeId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

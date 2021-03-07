@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.production
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.category.CategoryConverter
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.production.category.CategoryService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -51,7 +50,6 @@ fun Route.categoryController() {
             try {
                 val form = call.receiveParameters()
                 val category = CategoryConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val createdCategory = categoryService.create(category)
 
@@ -81,7 +79,6 @@ fun Route.categoryController() {
             try {
                 val form = call.receiveParameters()
                 val category = CategoryConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val categoryId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

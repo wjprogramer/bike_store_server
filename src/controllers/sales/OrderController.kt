@@ -51,7 +51,6 @@ fun Route.orderController() {
             try {
                 val form = call.receiveParameters()
                 val order = OrderConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val createdOrder = orderService.create(order)
 
@@ -81,7 +80,6 @@ fun Route.orderController() {
             try {
                 val form = call.receiveParameters()
                 val order = OrderConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val orderId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

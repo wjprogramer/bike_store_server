@@ -4,7 +4,6 @@ import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.product.ProductConverter
 import com.giant_giraffe.enums.UserType
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.production.product.ProductService
 import com.giant_giraffe.utility.ApiUtility
 import com.giant_giraffe.utils.authPost
@@ -66,7 +65,6 @@ fun Route.productController() {
             try {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val user = call.user
                 if (user == null || user.type != UserType.STAFF) {
@@ -101,7 +99,6 @@ fun Route.productController() {
             try {
                 val form = call.receiveParameters()
                 val product = ProductConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val productId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()

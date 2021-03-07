@@ -51,7 +51,6 @@ fun Route.customerController() {
             try {
                 val form = call.receiveParameters()
                 val customer = CustomerConverter.parametersToModel(form)
-                    ?: throw UnknownException()
                 customer.password = form["password"]
 
                 val createdCustomer = customerService.create(customer)
@@ -84,7 +83,6 @@ fun Route.customerController() {
             try {
                 val form = call.receiveParameters()
                 val customer = CustomerConverter.parametersToModel(form)
-                    ?: throw UnknownException()
 
                 val customerId = call.parameters["id"]?.toIntOrNull()
                     ?: throw NotFoundException()
