@@ -36,13 +36,13 @@ object StockDao {
                 .firstOrNull()
                 ?.load(StockEntity::product)
                 ?.load(StockEntity::store)
-                ?.toDetailsModel()
-        }
+        }?.toDetailsModel()
     }
 
-    fun getList(page: Int, size: Int,
-                productId: Int? = null,
-                storeId: Int? = null,
+    fun find(page: Int,
+             size: Int,
+             productId: Int? = null,
+             storeId: Int? = null,
     ): PagedData<Stock> {
         return transaction {
 
@@ -82,8 +82,8 @@ object StockDao {
                 pageInfo = EntityUtility.getPageInfo(
                     size = size,
                     page = page,
-                    elements = pagedStocks.size,
-                    totalElements = stocks.count(),
+                    dataCount = pagedStocks.size,
+                    totalDataCount = stocks.count(),
                 )
             )
         }

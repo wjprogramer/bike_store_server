@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.sales
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.order.OrderConverter
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.order.OrderService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -27,7 +26,7 @@ fun Route.orderController() {
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
 
-                val pagingData = orderService.getList(
+                val pagingData = orderService.find(
                     page = page,
                     size = size
                 )

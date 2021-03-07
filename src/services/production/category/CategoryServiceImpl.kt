@@ -24,8 +24,8 @@ class CategoryServiceImpl: CategoryService {
         return dao.getById(categoryId)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<Category> {
-        return dao.getList(page, size)
+    override fun find(page: Int, size: Int): PagedData<Category> {
+        return dao.find(page, size)
     }
 
     override fun findAll(): List<Category> {

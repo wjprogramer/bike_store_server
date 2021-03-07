@@ -26,8 +26,8 @@ class OrderItemServiceImpl: OrderItemService {
         return dao.getById(orderItemId)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<OrderItem> {
-        return dao.getList(page, size)
+    override fun find(page: Int, size: Int): PagedData<OrderItem> {
+        return dao.find(page, size)
     }
 
     override fun update(orderItem: OrderItem): Int {

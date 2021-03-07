@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.sales
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.staff.StaffConverter
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.staff.StaffService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -27,7 +26,7 @@ fun Route.staffController() {
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
 
-                val pagingData = staffService.getList(
+                val pagingData = staffService.find(
                     page = page,
                     size = size
                 )

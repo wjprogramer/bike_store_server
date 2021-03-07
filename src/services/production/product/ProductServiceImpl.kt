@@ -26,15 +26,16 @@ class ProductServiceImpl: ProductService {
         return dao.getById(productId)
     }
 
-    override fun getList(page: Int, size: Int,
-                         keyword: String?,
-                         modelYear: Int?,
-                         brandId: Int?,
-                         categoryId: Int?,
-                         minListPrice: Int?,
-                         maxListPrice: Int?,
+    override fun find(page: Int,
+                      size: Int,
+                      keyword: String?,
+                      modelYear: Int?,
+                      brandId: Int?,
+                      categoryId: Int?,
+                      minListPrice: Int?,
+                      maxListPrice: Int?,
     ): PagedData<Product> {
-        return dao.getList(
+        return dao.find(
             page,
             size,
             keyword = keyword,

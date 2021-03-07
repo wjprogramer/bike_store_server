@@ -34,8 +34,8 @@ class CustomerServiceImpl: CustomerService {
         return dao.getByEmail(email)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<Customer> {
-        return dao.getList(page, size)
+    override fun find(page: Int, size: Int): PagedData<Customer> {
+        return dao.find(page, size)
     }
 
     override fun update(customer: Customer): Int {

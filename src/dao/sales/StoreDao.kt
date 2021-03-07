@@ -34,7 +34,7 @@ object StoreDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<Store> {
+    fun find(page: Int, size: Int): PagedData<Store> {
         return transaction {
             val stores = StoreEntity.all()
                 .limit(size, offset = page * size)
@@ -47,6 +47,14 @@ object StoreDao {
                 data = stores,
                 pageInfo = pageInfo
             )
+        }
+    }
+
+    fun findAll(): List<Store> {
+        return transaction {
+            StoreEntity
+                .all()
+                .map { it.toModel() }
         }
     }
 
@@ -71,14 +79,6 @@ object StoreDao {
     fun delete(storeId: Int): Int {
         return transaction {
             StoreTable.deleteWhere { StoreTable.id eq storeId }
-        }
-    }
-
-    fun getAll(): List<Store> {
-        return transaction {
-            StoreEntity
-                .all()
-                .map { it.toModel() }
         }
     }
 

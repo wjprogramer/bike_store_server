@@ -3,7 +3,6 @@ package com.giant_giraffe.controllers.sales
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.store.StoreConverter
-import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.store.StoreService
 import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
@@ -27,7 +26,7 @@ fun Route.storeController() {
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
 
-                val pagingData = storeService.getList(
+                val pagingData = storeService.find(
                     page = page,
                     size = size
                 )
@@ -45,7 +44,7 @@ fun Route.storeController() {
 
         get("/all") {
             try {
-                val stores = storeService.getAll()
+                val stores = storeService.findAll()
 
                 call.respondApiResult(result = stores.map { it.toView() })
             } catch (e: Exception) {

@@ -9,12 +9,12 @@ interface StoreService {
 
     fun getById(storeId: Int): Store?
 
-    fun getList(page: Int, size: Int): PagedData<Store>
+    fun find(page: Int, size: Int): PagedData<Store>
+
+    fun findAll(): List<Store>
 
     fun update(store: Store): Int
 
     fun delete(storeId: Int): Boolean
-
-    fun getAll(): List<Store>
 
 }

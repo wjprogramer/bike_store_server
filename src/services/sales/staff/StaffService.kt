@@ -11,7 +11,7 @@ interface StaffService {
 
     fun getByEmail(email: String): Staff?
 
-    fun getList(page: Int, size: Int): PagedData<Staff>
+    fun find(page: Int, size: Int): PagedData<Staff>
 
     fun update(staff: Staff): Int
 

@@ -9,8 +9,9 @@ interface StockService {
 
     fun getById(stockId: Int): Stock?
 
-    fun getList(
-        page: Int, size: Int,
+    fun find(
+        page: Int,
+        size: Int,
         storeId: Int? = null,
         productId: Int? = null,
     ): PagedData<Stock>

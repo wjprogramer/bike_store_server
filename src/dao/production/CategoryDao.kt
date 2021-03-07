@@ -28,20 +28,29 @@ object CategoryDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<Category> {
-        return transaction {
-            val categories = CategoryEntity.all()
+    fun find(page: Int, size: Int): PagedData<Category> {
+        var totalDataSize = 0
+        val categories = transaction {
+            val allData = CategoryEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(CategoryEntity, page, size, categories.size)
-
-            PagedData(
-                data = categories,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility
+            .getPageInfo(
+                dataCount = categories.size,
+                totalDataCount = totalDataSize,
+                page = page,
+                size = size,
+            )
+
+        return PagedData(
+            data = categories,
+            pageInfo = pageInfo
+        )
     }
 
     fun findAll(): List<Category> {

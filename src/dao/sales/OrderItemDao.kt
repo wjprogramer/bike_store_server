@@ -35,7 +35,7 @@ object OrderItemDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<OrderItem> {
+    fun find(page: Int, size: Int): PagedData<OrderItem> {
         return transaction {
             val staffs = OrderItemEntity.all()
                 .limit(size, offset = page * size)

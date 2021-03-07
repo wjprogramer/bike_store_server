@@ -9,12 +9,12 @@ interface CategoryService {
 
     fun getById(categoryId: Int): Category?
 
-    fun getList(page: Int, size: Int): PagedData<Category>
+    fun find(page: Int, size: Int): PagedData<Category>
+
+    fun findAll(): List<Category>
 
     fun update(category: Category): Int
 
     fun delete(categoryId: Int): Boolean
-
-    fun findAll(): List<Category>
 
 }

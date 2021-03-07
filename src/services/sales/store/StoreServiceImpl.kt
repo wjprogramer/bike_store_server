@@ -22,8 +22,12 @@ class StoreServiceImpl: StoreService {
         return dao.getById(storeId)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<Store> {
-        return dao.getList(page, size)
+    override fun find(page: Int, size: Int): PagedData<Store> {
+        return dao.find(page, size)
+    }
+
+    override fun findAll(): List<Store> {
+        return dao.findAll()
     }
 
     override fun update(store: Store): Int {
@@ -42,10 +46,6 @@ class StoreServiceImpl: StoreService {
         }
 
         return result
-    }
-
-    override fun getAll(): List<Store> {
-        return dao.getAll()
     }
 
 }

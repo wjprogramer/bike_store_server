@@ -24,8 +24,12 @@ class BrandServiceImpl: BrandService {
         return dao.getById(brandId)
     }
 
-    override fun getList(page: Int, size: Int): PagedData<Brand> {
-        return dao.getList(page, size)
+    override fun find(page: Int, size: Int): PagedData<Brand> {
+        return dao.find(page, size)
+    }
+
+    override fun findAll(): List<Brand> {
+        return dao.findAll()
     }
 
     override fun update(brand: Brand): Int {
@@ -44,10 +48,6 @@ class BrandServiceImpl: BrandService {
         }
 
         return result
-    }
-
-    override fun findAll(): List<Brand> {
-        return dao.getAll()
     }
     
 }

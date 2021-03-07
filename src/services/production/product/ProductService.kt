@@ -9,8 +9,9 @@ interface ProductService {
 
     fun getById(productId: Int): Product?
 
-    fun getList(
-        page: Int, size: Int,
+    fun find(
+        page: Int,
+        size: Int,
         keyword: String? = null,
         modelYear: Int? = null,
         brandId: Int? = null,

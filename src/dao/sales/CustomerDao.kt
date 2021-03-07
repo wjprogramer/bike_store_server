@@ -44,7 +44,7 @@ object CustomerDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<Customer> {
+    fun find(page: Int, size: Int): PagedData<Customer> {
         return transaction {
             val staffs = CustomerEntity.all()
                 .limit(size, offset = page * size)

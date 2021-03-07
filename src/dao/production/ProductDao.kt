@@ -37,7 +37,7 @@ object ProductDao {
         }?.toModel()
     }
 
-    fun getList(
+    fun find(
         page: Int,
         size: Int,
         keyword: String? = null,
@@ -71,8 +71,8 @@ object ProductDao {
                 pageInfo = EntityUtility.getPageInfo(
                     size = size,
                     page = page,
-                    elements = pagedProducts.size,
-                    totalElements = products.count(),
+                    dataCount = pagedProducts.size,
+                    totalDataCount = products.count(),
                 )
             )
         }

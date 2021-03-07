@@ -9,7 +9,7 @@ interface OrderService {
 
     fun getById(orderId: Int): Order?
 
-    fun getList(page: Int, size: Int): PagedData<Order>
+    fun find(page: Int, size: Int): PagedData<Order>
 
     fun update(order: Order): Int
 

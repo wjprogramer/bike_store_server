@@ -28,7 +28,7 @@ fun Route.stockController() {
                 val storeId = queryParameters["store_id"]?.toIntOrNull()
                 val productId = queryParameters["product_id"]?.toIntOrNull()
 
-                val pagingData = stockService.getList(
+                val pagingData = stockService.find(
                     page = page,
                     size = size,
                     storeId = storeId,

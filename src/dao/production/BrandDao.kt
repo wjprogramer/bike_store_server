@@ -28,23 +28,33 @@ object BrandDao {
         }?.toModel()
     }
 
-    fun getList(page: Int, size: Int): PagedData<Brand> {
-        return transaction {
-            val brands = BrandEntity.all()
+    fun find(page: Int, size: Int): PagedData<Brand> {
+        var totalDataSize = 0
+
+        val brands: List<Brand> = transaction {
+            val allData = BrandEntity.all()
+            totalDataSize = allData.count()
+
+            allData
                 .limit(size, offset = page * size)
                 .map { it.toModel() }
-
-            val pageInfo = EntityUtility
-                .getPageInfo(BrandEntity, page, size, brands.size)
-
-            PagedData(
-                data = brands,
-                pageInfo = pageInfo
-            )
         }
+
+        val pageInfo = EntityUtility
+            .getPageInfo(
+                dataCount = brands.size,
+                totalDataCount = totalDataSize,
+                page = page,
+                size = size,
+            )
+
+        return PagedData(
+            data = brands,
+            pageInfo = pageInfo
+        )
     }
 
-    fun getAll(): List<Brand> {
+    fun findAll(): List<Brand> {
         return transaction {
             BrandEntity
                 .all()

@@ -33,9 +33,9 @@ object EntityUtility {
             PageInfo(
                 size = pageSize,
                 page = page,
-                elements = elementCount,
+                dataCount = elementCount,
                 totalPages = totalPages,
-                totalElements = totalElements
+                totalDataCount = totalElements
             )
         }
     }
@@ -61,9 +61,9 @@ object EntityUtility {
             val pageInfo = PageInfo(
                 size = pageSize,
                 page = page,
-                elements = data.size,
+                dataCount = data.size,
                 totalPages = totalPages,
-                totalElements = totalElements
+                totalDataCount = totalElements
             )
 
             PagedData(
@@ -74,22 +74,22 @@ object EntityUtility {
     }
 
     fun getPageInfo(
-        elements: Int,
-        totalElements: Int,
+        dataCount: Int,
+        totalDataCount: Int,
         page: Int,
         size: Int
     ): PageInfo {
-        var totalPages = totalElements / size
-        if (totalElements % size != 0) {
+        var totalPages = totalDataCount / size
+        if (totalDataCount % size != 0) {
             totalPages++
         }
 
         return PageInfo(
             size = size,
             page = page,
-            elements = elements,
+            dataCount = dataCount,
             totalPages = totalPages,
-            totalElements = totalElements
+            totalDataCount = totalDataCount
         )
     }
 

@@ -35,7 +35,7 @@ fun Route.productController() {
                 val minListPrice = queryParameters["min_list_price"]?.toIntOrNull()
                 val maxListPrice = queryParameters["max_list_price"]?.toIntOrNull()
 
-                val pagingData = productService.getList(
+                val pagingData = productService.find(
                     page = page,
                     size = size,
                     keyword = keyword,
