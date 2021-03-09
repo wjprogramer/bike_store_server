@@ -3,6 +3,7 @@ package com.giant_giraffe.services.sales.order
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.sales.OrderDao
 import com.giant_giraffe.data.sales.order.Order
+import com.giant_giraffe.enums.OrderStatus
 import com.giant_giraffe.services.sales.order_item.OrderItemService
 import io.ktor.application.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -43,8 +44,22 @@ class OrderServiceImpl(application: Application): OrderService {
         return dao.getById(orderId)
     }
 
-    override fun find(page: Int, size: Int): PagedData<Order> {
-        return dao.find(page, size)
+    override fun find(
+        page: Int,
+        size: Int,
+        orderStatus: OrderStatus?,
+        customerId: Int?,
+        storeId: Int?,
+        staffId: Int?,
+    ): PagedData<Order> {
+        return dao.find(
+            page,
+            size,
+            orderStatus = orderStatus,
+            customerId = customerId,
+            storeId = storeId,
+            staffId = staffId,
+        )
     }
 
     override fun update(order: Order): Int {

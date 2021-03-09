@@ -5,6 +5,8 @@ import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.sales.order.OrderConverter
 import com.giant_giraffe.data.sales.order.OrderView
 import com.giant_giraffe.data.sales.order_item.OrderItemConverter
+import com.giant_giraffe.enums.OrderStatus
+import com.giant_giraffe.enums.toOrderStatus
 import com.giant_giraffe.services.sales.order.OrderService
 import com.giant_giraffe.services.sales.order_item.OrderItemService
 import com.giant_giraffe.utility.ApiUtility
@@ -27,12 +29,24 @@ fun Route.orderController() {
             try {
                 val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
+                val page        = queryParameters["page"]?.toInt() ?: 0
+                val size        = queryParameters["size"]?.toInt() ?: 10
+                var orderStatus = queryParameters["order_status"]?.toOrderStatus()
+                val customerId  = queryParameters["customer_id"]?.toIntOrNull()
+                val storeId     = queryParameters["store_id"]?.toIntOrNull()
+                val staffId     = queryParameters["staff_id"]?.toIntOrNull()
+
+                if (orderStatus == OrderStatus.UNKNOWN) {
+                    orderStatus = null
+                }
 
                 val pagingData = orderService.find(
                     page = page,
-                    size = size
+                    size = size,
+                    orderStatus = orderStatus,
+                    customerId = customerId,
+                    storeId = storeId,
+                    staffId = staffId,
                 )
 
                 call.respondApiResult(
