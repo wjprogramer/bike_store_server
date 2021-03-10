@@ -26,8 +26,8 @@ object CustomerDao:
                 city = customer.city
                 state = customer.state
                 zipCode = customer.zipCode
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(customerId: Int): Customer? {
@@ -35,7 +35,8 @@ object CustomerDao:
             CustomerEntity
                 .find { CustomerTable.id eq customerId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun getByEmail(email: String): Customer? {
@@ -43,7 +44,8 @@ object CustomerDao:
             CustomerEntity
                 .find { CustomerTable.email eq email }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun find(page: Int, size: Int): PagedData<Customer> {

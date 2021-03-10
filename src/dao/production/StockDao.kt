@@ -8,14 +8,12 @@ import com.giant_giraffe.data.production.stock.StockEntity
 import com.giant_giraffe.data.production.stock.StockTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.utility.EntityUtility
-import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.load
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNull
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object StockDao:
@@ -28,8 +26,8 @@ object StockDao:
                 quantity = stock.quantity
                 storeId = EntityID(stock.storeId, StoreTable)
                 productId = EntityID(stock.productId, ProductTable)
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(stockId: Int): Stock? {
@@ -39,7 +37,8 @@ object StockDao:
                 .firstOrNull()
                 ?.load(StockEntity::product)
                 ?.load(StockEntity::store)
-        }?.toDetailsModel()
+                ?.toDetailsModel()
+        }
     }
 
     fun find(page: Int,
@@ -47,50 +46,37 @@ object StockDao:
              productId: Int? = null,
              storeId: Int? = null,
     ): PagedData<Stock> {
-        var totalDataCount = 0
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
-
         val needLoadProductModel = productId == null
         val needLoadStoreModel = storeId == null
 
-        predicates = predicates.tryAnd(productId) { StockTable.productId eq productId }
-        predicates = predicates.tryAnd(storeId) {
-            StockTable.storeId.isNull() or
-                    (StockTable.storeId eq EntityID(storeId, StoreTable))
+        productId?.let {
+            predicates = predicates and (StockTable.productId eq productId)
         }
-
-        val stocks = transaction {
-            val allFilteredData = StockEntity.find(predicates)
-            totalDataCount = allFilteredData.count()
-
-            allFilteredData
-                .limit(size, offset = page * size)
-                .map {
-                    if (needLoadProductModel) {
-                        it.load(StockEntity::product)
-                    }
-                    if (needLoadStoreModel) {
-                        it.load(StockEntity::store)
-                    }
-
-                    it.toDetailsModel(
-                        hasProduct = needLoadProductModel,
-                        hasStore = needLoadStoreModel,
+        storeId?.let {
+            predicates = predicates and (
+                    StockTable.storeId eq EntityID(storeId, StoreTable) or
+                        StockTable.storeId.isNull()
                     )
-                }
         }
 
-        val pageInfo = EntityUtility.getPageInfo(
-            size = size,
+        return StockEntity.findAndGetPagedData(
             page = page,
-            dataCount = stocks.size,
-            totalDataCount = totalDataCount,
-        )
+            size = size,
+            predicates = predicates,
+        ) { entity ->
+            if (needLoadProductModel) {
+                entity.load(StockEntity::product)
+            }
+            if (needLoadStoreModel) {
+                entity.load(StockEntity::store)
+            }
 
-        return PagedData(
-            data = stocks,
-            pageInfo = pageInfo
-        )
+            entity.toDetailsModel(
+                hasProduct = needLoadProductModel,
+                hasStore = needLoadStoreModel,
+            )
+        }
     }
 
     fun update(stock: Stock): Int {

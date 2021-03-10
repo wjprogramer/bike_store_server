@@ -1,6 +1,7 @@
 package com.giant_giraffe.data.sales.order_item
 
 import com.giant_giraffe.data.BaseModel
+import com.giant_giraffe.data.production.product.Product
 import java.math.BigDecimal
 
 class OrderItem(
@@ -10,6 +11,8 @@ class OrderItem(
     var listPrice: BigDecimal? = null,
     var discount: BigDecimal? = null,
     var productId: Int? = null,
+
+    var product: Product? = null
 ): BaseModel<OrderItemView> {
 
     constructor(orderItemEntity: OrderItemEntity): this(
@@ -29,6 +32,7 @@ class OrderItem(
             listPrice =     listPrice?.toString(),
             discount =      discount?.toString(),
             productId =     productId,
+            product =       product?.toView(),
         )
     }
 

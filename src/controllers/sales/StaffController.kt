@@ -23,12 +23,14 @@ fun Route.staffController() {
             try {
                 val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
+                val page = queryParameters["page"]?.toIntOrNull() ?: 0
+                val size = queryParameters["size"]?.toIntOrNull() ?: 10
+                val storeId = queryParameters["store_id"]?.toIntOrNull()
 
                 val pagingData = staffService.find(
                     page = page,
-                    size = size
+                    size = size,
+                    storeId = storeId,
                 )
 
                 call.respondApiResult(

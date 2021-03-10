@@ -9,14 +9,12 @@ import com.giant_giraffe.data.sales.order.OrderTable
 import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import com.giant_giraffe.enums.OrderStatus
-import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.load
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNull
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object OrderDao:
@@ -43,7 +41,9 @@ object OrderDao:
                 .find { OrderTable.id eq orderId }
                 .firstOrNull()
                 ?.load(OrderEntity::orderItems)
-                ?.toDetailsModel()
+                ?.toDetailsModel(
+                    hasOrderItems = true
+                )
         }
     }
 
@@ -56,20 +56,28 @@ object OrderDao:
         staffId: Int?,
     ): PagedData<Order> {
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
+        val needLoadCustomer = customerId == null
+        val needLoadStore = storeId == null
+        val needLoadStaff = staffId == null
 
-        predicates = predicates.tryAnd(orderStatus) { OrderTable.orderStatus eq orderStatus!! }
-        predicates = predicates.tryAnd(customerId) {
-            OrderTable.customerId.isNull() or
-                    (OrderTable.customerId eq EntityID(customerId, CustomerTable) )
+        orderStatus?.let { predicates = predicates and (OrderTable.orderStatus eq orderStatus ) }
+
+        customerId?.let {
+            predicates = predicates and (
+                    OrderTable.customerId.isNull() or
+                            (OrderTable.customerId eq EntityID(customerId, CustomerTable))
+                    )
         }
-        predicates = predicates.tryAnd(storeId) { OrderTable.storeId eq storeId!! }
-        predicates = predicates.tryAnd(staffId) { OrderTable.staffId eq staffId!! }
+        storeId?.let { predicates = predicates and (OrderTable.storeId eq it) }
+        staffId?.let { predicates = predicates and (OrderTable.staffId eq it) }
 
         return OrderEntity.findAndGetPagedData(
             page = page,
             size = size,
             predicates = predicates
-        )
+        ) { entity ->
+            entity.toDetailsModel()
+        }
     }
 
     fun update(order: Order): Int {

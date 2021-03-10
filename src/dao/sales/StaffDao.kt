@@ -7,6 +7,10 @@ import com.giant_giraffe.data.sales.staff.StaffEntity
 import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.load
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -27,8 +31,8 @@ object StaffDao:
                 active = staff.active!!
                 storeId = EntityID(staff.storeId, StoreTable)
                 staff.managerId?.let { managerId = EntityID(staff.managerId, StaffTable) }
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(staffId: Int): Staff? {
@@ -36,7 +40,8 @@ object StaffDao:
             StaffEntity
                 .find { StaffTable.id eq staffId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun getByEmail(email: String): Staff? {
@@ -44,14 +49,31 @@ object StaffDao:
             StaffEntity
                 .find { StaffTable.email eq email }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
-    fun find(page: Int, size: Int): PagedData<Staff> {
+    fun find(page: Int,
+             size: Int,
+             storeId: Int? = null
+    ): PagedData<Staff> {
+        var predicates: Op<Boolean> = Op.build { Op.TRUE }
+        val needLoadStore = storeId == null
+
+        storeId?.let { predicates = predicates and (StaffTable.storeId eq it) }
+
         return StaffEntity.findAndGetPagedData(
             page = page,
             size = size,
-        )
+            predicates = predicates,
+        ) {
+            if (needLoadStore) {
+                it.load(StaffEntity::store)
+            }
+            it.toDetailsModel(
+                hasStore = needLoadStore
+            )
+        }
     }
 
     fun update(staff: Staff): Int {

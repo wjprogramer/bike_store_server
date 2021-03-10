@@ -18,8 +18,8 @@ object BrandDao:
         return transaction {
             BrandEntity.new {
                 name = brand.name!!
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(brandId: Int): Brand? {
@@ -27,7 +27,8 @@ object BrandDao:
             BrandEntity
                 .find { BrandTable.id eq brandId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun find(page: Int, size: Int): PagedData<Brand> {

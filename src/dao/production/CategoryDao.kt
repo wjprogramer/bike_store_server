@@ -18,8 +18,8 @@ object CategoryDao:
         return transaction {
             CategoryEntity.new {
                 name = category.name!!
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(categoryId: Int): Category? {
@@ -27,7 +27,8 @@ object CategoryDao:
             CategoryEntity
                 .find { CategoryTable.id eq categoryId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun find(page: Int, size: Int): PagedData<Category> {

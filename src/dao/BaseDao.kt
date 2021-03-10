@@ -21,7 +21,8 @@ open class BaseDao<ID: Comparable<ID>, E, M: BaseModel<*>>
     protected fun EntityClass<ID, E>.findAndGetPagedData(
         page: Int,
         size: Int,
-        predicates: Op<Boolean>? = null
+        predicates: Op<Boolean>? = null,
+        load: ((E) -> M)? = null,
     ): PagedData<M> {
         var totalDataSize = 0
 
@@ -35,7 +36,13 @@ open class BaseDao<ID: Comparable<ID>, E, M: BaseModel<*>>
 
             allOrFilteredData
                 .limit(size, offset = page * size)
-                .map { it.toModel() }
+                .map { entity ->
+                    if (load != null) {
+                        load(entity)
+                    } else {
+                        entity.toModel()
+                    }
+                }
         }
 
         val pageInfo = EntityUtility.getPageInfo(

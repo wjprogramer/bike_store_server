@@ -1,6 +1,7 @@
 package com.giant_giraffe.data.sales.staff
 
 import com.giant_giraffe.data.BaseModel
+import com.giant_giraffe.data.sales.store.Store
 
 class Staff(
     var id: Int? = null,
@@ -12,6 +13,7 @@ class Staff(
     var active: Int? = null,
     var storeId: Int? = null,
     var managerId: Int? = null,
+    var store: Store? = null,
 ): BaseModel<StaffView> {
 
     constructor(staffEntity: StaffEntity): this(
@@ -36,6 +38,7 @@ class Staff(
             active =            active,
             storeId =           storeId,
             managerId =         managerId,
+            store =             store?.toView(),
         )
     }
 

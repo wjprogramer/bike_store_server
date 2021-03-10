@@ -35,8 +35,14 @@ class StaffServiceImpl: StaffService {
         return dao.getByEmail(email)
     }
 
-    override fun find(page: Int, size: Int): PagedData<Staff> {
-        return dao.find(page, size)
+    override fun find(page: Int,
+                      size: Int,
+                      storeId: Int?,): PagedData<Staff> {
+        return dao.find(
+            page,
+            size,
+            storeId = storeId,
+        )
     }
 
     override fun update(staff: Staff): Int {

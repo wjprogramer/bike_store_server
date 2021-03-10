@@ -7,9 +7,13 @@ import com.giant_giraffe.data.production.category.CategoryTable
 import com.giant_giraffe.data.production.product.Product
 import com.giant_giraffe.data.production.product.ProductEntity
 import com.giant_giraffe.data.production.product.ProductTable
-import com.giant_giraffe.utils.tryAnd
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.match
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -27,8 +31,8 @@ object ProductDao:
                 listPrice = product.listPrice!!
                 brandId = EntityID(product.brandId, BrandTable)
                 categoryId = EntityID(product.categoryId, CategoryTable)
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(productId: Int): Product? {
@@ -36,7 +40,8 @@ object ProductDao:
             ProductEntity
                 .find { ProductTable.id eq productId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun find(
@@ -52,12 +57,12 @@ object ProductDao:
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
         // FIXME: keyword
-        predicates = predicates.tryAnd(keyword) { ProductTable.name match keyword!! }
-        predicates = predicates.tryAnd(modelYear) { ProductTable.modelYear eq modelYear!! }
-        predicates = predicates.tryAnd(brandId) { ProductTable.brandId eq brandId!! }
-        predicates = predicates.tryAnd(categoryId) { ProductTable.categoryId eq categoryId!! }
-        predicates = predicates.tryAnd(minListPrice) { ProductTable.listPrice greaterEq minListPrice!! }
-        predicates = predicates.tryAnd(maxListPrice) { ProductTable.listPrice lessEq maxListPrice!! }
+        keyword?.let        { predicates = predicates and (ProductTable.name match it)  }
+        modelYear?.let      { predicates = predicates and (ProductTable.modelYear eq it)  }
+        brandId?.let        { predicates = predicates and (ProductTable.brandId eq it)  }
+        categoryId?.let     { predicates = predicates and (ProductTable.categoryId eq it)  }
+        minListPrice?.let   { predicates = predicates and (ProductTable.listPrice greaterEq it)  }
+        maxListPrice?.let   { predicates = predicates and (ProductTable.listPrice lessEq it)  }
 
         return ProductEntity.findAndGetPagedData(
             page = page,

@@ -8,15 +8,15 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 //fun Op<Boolean>?.or(x: Op<Boolean>) = this?.or(x) ?: x
 
-fun <V> Op<Boolean>.tryAnd(
-    value: V?,
-    op: SqlExpressionBuilder.() -> Op<Boolean>
-): Op<Boolean> {
-    if (value != null) {
-        return this.and(Op.build { op() })
-    }
-    return this
-}
+//fun <V> Op<Boolean>.tryAnd(
+//    value: V?,
+//    op: SqlExpressionBuilder.() -> Op<Boolean>
+//): Op<Boolean> {
+//    if (value != null) {
+//        return this.and(Op.build { op() })
+//    }
+//    return this
+//}
 
 /**
  *

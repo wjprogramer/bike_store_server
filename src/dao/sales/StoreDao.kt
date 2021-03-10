@@ -24,8 +24,8 @@ object StoreDao:
                 city = store.city
                 state = store.state
                 zipCode = store.zipCode
-            }
-        }.toModel()
+            }.toModel()
+        }
     }
 
     fun getById(storeId: Int): Store? {
@@ -33,7 +33,8 @@ object StoreDao:
             StoreEntity
                 .find { StoreTable.id eq storeId }
                 .firstOrNull()
-        }?.toModel()
+                ?.toModel()
+        }
     }
 
     fun find(page: Int, size: Int): PagedData<Store> {

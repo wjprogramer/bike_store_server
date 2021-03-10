@@ -1,7 +1,10 @@
 package com.giant_giraffe.data.sales.order
 
 import com.giant_giraffe.data.BaseModel
+import com.giant_giraffe.data.sales.customer.Customer
 import com.giant_giraffe.data.sales.order_item.OrderItem
+import com.giant_giraffe.data.sales.staff.Staff
+import com.giant_giraffe.data.sales.store.Store
 import com.giant_giraffe.enums.OrderStatus
 import com.giant_giraffe.utility.DateTimeUtility
 import org.joda.time.DateTime
@@ -15,6 +18,10 @@ class Order(
     var customerId: Int? = null,
     var storeId: Int? = null,
     var staffId: Int? = null,
+
+    var customer: Customer? = null,
+    var store: Store? = null,
+    var staff: Staff? = null,
     var orderItems: List<OrderItem>? = null,
 ): BaseModel<OrderView> {
 
@@ -43,6 +50,9 @@ class Order(
             customerId =        customerId,
             storeId =           storeId,
             staffId =           staffId,
+            customer =          customer?.toView(),
+            store =             store?.toView(),
+            staff =             staff?.toView(),
             orderItems =        orderItems?.map { it.toView() }
         )
     }

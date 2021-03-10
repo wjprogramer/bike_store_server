@@ -23,12 +23,14 @@ fun Route.orderItemController() {
             try {
                 val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
+                val page = queryParameters["page"]?.toIntOrNull() ?: 0
+                val size = queryParameters["size"]?.toIntOrNull() ?: 10
+                val orderId = queryParameters["order_id"]?.toIntOrNull()
 
                 val pagingData = orderItemService.find(
                     page = page,
-                    size = size
+                    size = size,
+                    orderId = orderId,
                 )
 
                 call.respondApiResult(
