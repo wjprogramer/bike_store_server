@@ -25,10 +25,12 @@ fun Route.customerController() {
 
                 val page = queryParameters["page"]?.toInt() ?: 0
                 val size = queryParameters["size"]?.toInt() ?: 10
+                val keyword = queryParameters["keyword"]
 
                 val pagingData = customerService.find(
                     page = page,
-                    size = size
+                    size = size,
+                    keyword = keyword,
                 )
 
                 call.respondApiResult(

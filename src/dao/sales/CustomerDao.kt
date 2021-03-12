@@ -5,9 +5,9 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.sales.customer.Customer
 import com.giant_giraffe.data.sales.customer.CustomerEntity
 import com.giant_giraffe.data.sales.customer.CustomerTable
-import org.jetbrains.exposed.sql.deleteWhere
+import com.giant_giraffe.utils.ilike
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object CustomerDao:
@@ -48,11 +48,34 @@ object CustomerDao:
         }
     }
 
-    fun find(page: Int, size: Int): PagedData<Customer> {
-        return CustomerEntity.findAndGetPagedData(
-            page = page,
-            size = size,
-        )
+    fun find(page: Int,
+             size: Int,
+             keyword: String? = null,
+    ): PagedData<Customer> {
+        var predicates: Op<Boolean> = Op.build { Op.TRUE }
+
+        return transaction {
+
+            keyword?.let        {
+                predicates = predicates and (
+                        (CustomerTable.firstName ilike "%$it%") or
+                                (CustomerTable.firstName ilike "%$it%") or
+                                (CustomerTable.lastName ilike "%$it%") or
+                                (CustomerTable.email ilike "%$it%") or
+                                (CustomerTable.phone ilike "%$it%") or
+                                (CustomerTable.street ilike "%$it%") or
+                                (CustomerTable.city ilike "%$it%") or
+                                (CustomerTable.state ilike "%$it%") or
+                                (CustomerTable.zipCode ilike "%$it%")
+                        )
+            }
+
+            CustomerEntity.findAndGetPagedData(
+                page = page,
+                size = size,
+                predicates = predicates,
+            )
+        }
     }
 
     fun update(customer: Customer): Int {
@@ -62,14 +85,14 @@ object CustomerDao:
                 .firstOrNull() ?: throw Exception()
 
             CustomerTable.update({ CustomerTable.id eq customer.id }) {
-                customer.firstName?.let { e -> it[firstName] = e }
-                customer.lastName?.let { e -> it[lastName] = e }
-                customer.email?.let { e -> it[email] = e }
-                customer.phone?.let { e -> it[phone] = e }
-                customer.street?.let { e -> it[street] = e }
-                customer.city?.let { e -> it[city] = e }
-                customer.state?.let { e -> it[state] = e }
-                customer.zipCode?.let { e -> it[zipCode] = e }
+                customer.firstName?.let     { e -> it[firstName] = e }
+                customer.lastName?.let      { e -> it[lastName] = e }
+                customer.email?.let         { e -> it[email] = e }
+                customer.phone?.let         { e -> it[phone] = e }
+                customer.street?.let        { e -> it[street] = e }
+                customer.city?.let          { e -> it[city] = e }
+                customer.state?.let         { e -> it[state] = e }
+                customer.zipCode?.let       { e -> it[zipCode] = e }
             }
         }
     }
