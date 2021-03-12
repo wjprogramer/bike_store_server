@@ -6,6 +6,13 @@ import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
+/**
+ * ref: https://stackoverflow.com/questions/52930722/psql-case-insensitive-search-using-exposed
+ */
+class ILikeOp(expr1: Expression<*>, expr2: Expression<*>) : ComparisonOp(expr1, expr2, "ILIKE")
+
+infix fun<T:String?> ExpressionWithColumnType<T>.ilike(pattern: String): Op<Boolean> = ILikeOp(this, QueryParameter(pattern, columnType))
+
 //fun Op<Boolean>?.or(x: Op<Boolean>) = this?.or(x) ?: x
 
 //fun <V> Op<Boolean>.tryAnd(

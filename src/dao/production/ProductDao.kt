@@ -7,16 +7,15 @@ import com.giant_giraffe.data.production.category.CategoryTable
 import com.giant_giraffe.data.production.product.Product
 import com.giant_giraffe.data.production.product.ProductEntity
 import com.giant_giraffe.data.production.product.ProductTable
+import com.giant_giraffe.utils.ilike
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.match
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object ProductDao:
@@ -56,19 +55,21 @@ object ProductDao:
     ): PagedData<Product> {
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
-        // FIXME: keyword
-        keyword?.let        { predicates = predicates and (ProductTable.name match it)  }
-        modelYear?.let      { predicates = predicates and (ProductTable.modelYear eq it)  }
-        brandId?.let        { predicates = predicates and (ProductTable.brandId eq it)  }
-        categoryId?.let     { predicates = predicates and (ProductTable.categoryId eq it)  }
-        minListPrice?.let   { predicates = predicates and (ProductTable.listPrice greaterEq it)  }
-        maxListPrice?.let   { predicates = predicates and (ProductTable.listPrice lessEq it)  }
+        return transaction {
 
-        return ProductEntity.findAndGetPagedData(
-            page = page,
-            size = size,
-            predicates = predicates
-        )
+            keyword?.let        { predicates = predicates and (ProductTable.name ilike "%$it%") }
+            modelYear?.let      { predicates = predicates and (ProductTable.modelYear eq it)  }
+            brandId?.let        { predicates = predicates and (ProductTable.brandId eq it)  }
+            categoryId?.let     { predicates = predicates and (ProductTable.categoryId eq it)  }
+            minListPrice?.let   { predicates = predicates and (ProductTable.listPrice greaterEq it)  }
+            maxListPrice?.let   { predicates = predicates and (ProductTable.listPrice lessEq it)  }
+
+            ProductEntity.findAndGetPagedData(
+                page = page,
+                size = size,
+                predicates = predicates
+            )
+        }
     }
 
     fun update(product: Product): Int {
