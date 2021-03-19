@@ -1,5 +1,7 @@
 package com.giant_giraffe.data.sales.store
 
+import com.giant_giraffe.data.BaseView
+
 data class StoreView(
     var id:             Int?        = null,
     var storeName:      String?     = null,
@@ -9,4 +11,4 @@ data class StoreView(
     var city:           String?     = null,
     var state:          String?     = null,
     var zipCode:        String?     = null,
-)
+): BaseView

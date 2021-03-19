@@ -1,5 +1,6 @@
 package com.giant_giraffe.data.sales.staff
 
+import com.giant_giraffe.data.BaseView
 import com.giant_giraffe.data.sales.store.StoreView
 
 data class StaffView(
@@ -12,4 +13,4 @@ data class StaffView(
     var storeId:        Int?        = null,
     var managerId:      Int?        = null,
     var store:          StoreView?  = null,
-)
+): BaseView

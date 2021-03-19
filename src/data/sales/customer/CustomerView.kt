@@ -1,5 +1,7 @@
 package com.giant_giraffe.data.sales.customer
 
+import com.giant_giraffe.data.BaseView
+
 data class CustomerView(
     var id:             Int?        = null,
     var firstName:      String?     = null,
@@ -10,4 +12,4 @@ data class CustomerView(
     var city:           String?     = null,
     var state:          String?     = null,
     var zipCode:        String?     = null,
-)
+): BaseView

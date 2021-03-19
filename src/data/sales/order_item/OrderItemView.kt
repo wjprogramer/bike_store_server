@@ -1,5 +1,6 @@
 package com.giant_giraffe.data.sales.order_item
 
+import com.giant_giraffe.data.BaseView
 import com.giant_giraffe.data.production.product.ProductView
 
 data class OrderItemView(
@@ -10,4 +11,4 @@ data class OrderItemView(
     var discount:   String?         = null,
     var productId:  Int?            = null,
     var product:    ProductView?    = null,
-)
+): BaseView

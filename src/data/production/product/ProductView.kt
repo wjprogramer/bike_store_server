@@ -1,5 +1,7 @@
 package com.giant_giraffe.data.production.product
 
+import com.giant_giraffe.data.BaseView
+
 data class ProductView(
     var id:         Int?        = null,
     var name:       String?     = null,
@@ -7,4 +9,4 @@ data class ProductView(
     var listPrice:  String?     = null,
     var brandId:    Int?        = null,
     var categoryId: Int?        = null,
-)
+): BaseView
