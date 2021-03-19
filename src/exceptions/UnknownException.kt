@@ -1,5 +1,8 @@
 package com.giant_giraffe.exceptions
 
-class UnknownException: MyBaseException(
-    errorCode = 5200
+class UnknownException(
+    message: String? = "Internal Server Error"
+): MyBaseException(
+    errorCode = 5000,
+    message = message
 )
