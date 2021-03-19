@@ -3,6 +3,7 @@ package com.giant_giraffe.services.sales.staff
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.sales.StaffDao
 import com.giant_giraffe.data.sales.staff.Staff
+import com.giant_giraffe.exceptions.BadRequestException
 import com.giant_giraffe.utility.PasswordUtility
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.Exception
@@ -19,7 +20,7 @@ class StaffServiceImpl: StaffService {
             staff.password == null ||
             staff.active == null
         ) {
-            throw Exception()
+            throw BadRequestException()
         }
 
         staff.password = PasswordUtility.encode(staff.password!!)

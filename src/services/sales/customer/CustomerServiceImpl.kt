@@ -41,6 +41,7 @@ class CustomerServiceImpl: CustomerService {
     }
 
     override fun update(customer: Customer): Int {
+        customer.password = null
         return dao.update(customer)
     }
 

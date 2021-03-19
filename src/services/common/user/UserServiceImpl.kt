@@ -3,6 +3,9 @@ package com.giant_giraffe.services.common.user
 import com.giant_giraffe.data.common.EmailPasswordCredential
 import com.giant_giraffe.data.common.User
 import com.giant_giraffe.enums.UserType
+import com.giant_giraffe.exceptions.NotFoundException
+import com.giant_giraffe.exceptions.UnauthorizedException
+import com.giant_giraffe.exceptions.UnknownException
 import com.giant_giraffe.services.sales.customer.CustomerService
 import com.giant_giraffe.services.sales.staff.StaffService
 import com.giant_giraffe.utility.PasswordUtility
@@ -26,13 +29,13 @@ class UserServiceImpl(application: Application): UserService {
                     getCustomerUserByCredential(credential)
                 }
                 UserType.UNKNOWN -> {
-                    throw Exception()
+                    throw UnknownException()
                 }
             }
 
             val encodedPassword = PasswordUtility.encode(credential.password)
             if (encodedPassword != validateInfo.password) {
-                throw Exception()
+                throw UnauthorizedException("Incorrect password")
             }
 
             return validateInfo.user
@@ -42,39 +45,31 @@ class UserServiceImpl(application: Application): UserService {
     }
 
     private fun getCustomerUserByCredential(credential: EmailPasswordCredential): ValidateInfo {
-        try {
-            val email = credential.email
-            val customer = customerService.getByEmail(email) ?: throw Exception()
+        val email = credential.email
+        val customer = customerService.getByEmail(email) ?: throw NotFoundException("Not found this account")
 
-            return ValidateInfo(
-                User(
-                    id = customer.id,
-                    email = customer.email,
-                    type = UserType.STAFF,
-                ),
-                password = customer.password,
-            )
-        } catch (e: Exception) {
-            throw e
-        }
+        return ValidateInfo(
+            User(
+                id = customer.id,
+                email = customer.email,
+                type = UserType.STAFF,
+            ),
+            password = customer.password,
+        )
     }
 
     private fun getStaffUserByCredential(credential: EmailPasswordCredential): ValidateInfo {
-        try {
-            val email = credential.email
-            val staff = staffService.getByEmail(email) ?: throw Exception()
+        val email = credential.email
+        val staff = staffService.getByEmail(email) ?: throw NotFoundException("Not found this account")
 
-            return ValidateInfo(
-                User(
-                    id = staff.id,
-                    email = staff.email,
-                    type = UserType.STAFF,
-                ),
-                password = staff.password,
-            )
-        } catch (e: Exception) {
-            throw e
-        }
+        return ValidateInfo(
+            User(
+                id = staff.id,
+                email = staff.email,
+                type = UserType.STAFF,
+            ),
+            password = staff.password,
+        )
     }
 
     inner class ValidateInfo(
