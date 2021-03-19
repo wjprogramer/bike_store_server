@@ -3,15 +3,16 @@ package com.giant_giraffe.controllers.production
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.brand.BrandConverter
+import com.giant_giraffe.data.production.brand.BrandView
+import com.giant_giraffe.data.receiveAndToModel
+import com.giant_giraffe.exceptions.BadRequestException
 import com.giant_giraffe.services.production.brand.BrandService
-import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
-import java.lang.Exception
 
 fun Route.brandController() {
 
@@ -20,38 +21,30 @@ fun Route.brandController() {
     route("/brands") {
 
         get {
-            try {
-                val queryParameters = call.request.queryParameters
+            val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
+            val page = queryParameters["page"]?.toInt() ?: 0
+            val size = queryParameters["size"]?.toInt() ?: 10
 
-                val pagingData = brandService.find(
-                    page = page,
-                    size = size
+            val pagingData = brandService.find(
+                page = page,
+                size = size
+            )
+
+            call.respondApiResult(
+                result = PagedData(
+                    pagingData.data.map { it.toView() },
+                    pagingData.pageInfo,
                 )
-
-                call.respondApiResult(
-                    result = PagedData(
-                        pagingData.data.map { it.toView() },
-                        pagingData.pageInfo,
-                    )
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            )
         }
 
         get("/all") {
-            try {
-                val brands = brandService.findAll()
+            val brands = brandService.findAll()
 
-                call.respondApiResult(
-                    result = brands.map { it.toView() }
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(
+                result = brands.map { it.toView() }
+            )
         }
 
     }
@@ -59,60 +52,42 @@ fun Route.brandController() {
     route("/brand") {
 
         post("/create") {
-            try {
-                val form = call.receiveParameters()
-                val brand = BrandConverter.parametersToModel(form)
+            val brand = BrandConverter.receiveAndToModel(call)
 
-                val createdBrand = brandService.create(brand)
+            val createdBrand = brandService.create(brand)
 
-                call.respondApiResult(
-                    result = createdBrand.toView()
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(
+                result = createdBrand.toView()
+            )
         }
 
         get("/{id}") {
-            try {
-                val brandId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val brandId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of brand")
 
-                val brand = brandService.getById(brandId)
-                    ?: throw NotFoundException()
+            val brand = brandService.getById(brandId)
+                ?: throw NotFoundException()
 
-                call.respondApiResult(result = brand.toView())
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(result = brand.toView())
         }
 
         post("/update/{id}") {
-            try {
-                val form = call.receiveParameters()
-                val brand = BrandConverter.parametersToModel(form)
+            val brand = BrandConverter.receiveAndToModel(call)
 
-                val brandId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-                brand.id = brandId
+            val brandId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of brand")
+            brand.id = brandId
 
-                val result = brandService.update(brand)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = brandService.update(brand)
+            call.respondApiResult(result = result)
         }
 
         post("/delete/{id}") {
-            try {
-                val brandId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val brandId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of brand")
 
-                val result = brandService.delete(brandId)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = brandService.delete(brandId)
+            call.respondApiResult(result = result)
         }
 
     }

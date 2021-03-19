@@ -2,16 +2,16 @@ package com.giant_giraffe.controllers.sales
 
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
+import com.giant_giraffe.data.receiveAndToModel
 import com.giant_giraffe.data.sales.customer.CustomerConverter
+import com.giant_giraffe.exceptions.BadRequestException
 import com.giant_giraffe.services.sales.customer.CustomerService
-import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
-import java.lang.Exception
 
 fun Route.customerController() {
 
@@ -20,28 +20,24 @@ fun Route.customerController() {
     route("/customers") {
 
         get {
-            try {
-                val queryParameters = call.request.queryParameters
+            val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
-                val keyword = queryParameters["keyword"]
+            val page = queryParameters["page"]?.toInt() ?: 0
+            val size = queryParameters["size"]?.toInt() ?: 10
+            val keyword = queryParameters["keyword"]
 
-                val pagingData = customerService.find(
-                    page = page,
-                    size = size,
-                    keyword = keyword,
+            val pagingData = customerService.find(
+                page = page,
+                size = size,
+                keyword = keyword,
+            )
+
+            call.respondApiResult(
+                result = PagedData(
+                    pagingData.data.map { it.toView() },
+                    pagingData.pageInfo,
                 )
-
-                call.respondApiResult(
-                    result = PagedData(
-                        pagingData.data.map { it.toView() },
-                        pagingData.pageInfo,
-                    )
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            )
         }
 
     }
@@ -49,63 +45,46 @@ fun Route.customerController() {
     route("/customer") {
 
         post("/create") {
-            try {
-                val form = call.receiveParameters()
-                val customer = CustomerConverter.parametersToModel(form)
-                customer.password = form["password"]
+            val body = call.receiveOrNull<Map<String, String>>()
+                ?: throw BadRequestException()
+            val customer = CustomerConverter.mapToModel(body)
 
-                val createdCustomer = customerService.create(customer)
+            val createdCustomer = customerService.create(customer)
 
-                call.respondApiResult(
-                    result = createdCustomer.toView()
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(
+                result = createdCustomer.toView()
+            )
         }
 
         get("/{id}") {
-            try {
-                val customerId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val customerId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of customer")
 
-                val customer = customerService.getById(customerId)
-                    ?: throw NotFoundException()
+            val customer = customerService.getById(customerId)
+                ?: throw NotFoundException()
 
-                call.respondApiResult(
-                    result = customer.toView()
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(
+                result = customer.toView()
+            )
         }
 
         post("/update/{id}") {
-            try {
-                val form = call.receiveParameters()
-                val customer = CustomerConverter.parametersToModel(form)
+            val customer = CustomerConverter.receiveAndToModel(call)
 
-                val customerId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-                customer.id = customerId
+            val customerId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of customer")
+            customer.id = customerId
 
-                val result = customerService.update(customer)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = customerService.update(customer)
+            call.respondApiResult(result = result)
         }
 
         post("/delete/{id}") {
-            try {
-                val customerId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val customerId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of customer")
 
-                val result = customerService.delete(customerId)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = customerService.delete(customerId)
+            call.respondApiResult(result = result)
         }
 
     }

@@ -3,15 +3,15 @@ package com.giant_giraffe.controllers.production
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.core.respondApiResult
 import com.giant_giraffe.data.production.stock.StockConverter
+import com.giant_giraffe.data.receiveAndToModel
+import com.giant_giraffe.exceptions.BadRequestException
 import com.giant_giraffe.services.production.stock.StockService
-import com.giant_giraffe.utility.ApiUtility
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import org.kodein.di.instance
 import org.kodein.di.ktor.di
-import java.lang.Exception
 
 fun Route.stockController() {
 
@@ -20,30 +20,26 @@ fun Route.stockController() {
     route("/stocks") {
 
         get {
-            try {
-                val queryParameters = call.request.queryParameters
+            val queryParameters = call.request.queryParameters
 
-                val page = queryParameters["page"]?.toInt() ?: 0
-                val size = queryParameters["size"]?.toInt() ?: 10
-                val storeId = queryParameters["store_id"]?.toIntOrNull()
-                val productId = queryParameters["product_id"]?.toIntOrNull()
+            val page = queryParameters["page"]?.toInt() ?: 0
+            val size = queryParameters["size"]?.toInt() ?: 10
+            val storeId = queryParameters["store_id"]?.toIntOrNull()
+            val productId = queryParameters["product_id"]?.toIntOrNull()
 
-                val pagingData = stockService.find(
-                    page = page,
-                    size = size,
-                    storeId = storeId,
-                    productId = productId,
+            val pagingData = stockService.find(
+                page = page,
+                size = size,
+                storeId = storeId,
+                productId = productId,
+            )
+
+            call.respondApiResult(
+                result = PagedData(
+                    pagingData.data.map { it.toView() },
+                    pagingData.pageInfo,
                 )
-
-                call.respondApiResult(
-                    result = PagedData(
-                        pagingData.data.map { it.toView() },
-                        pagingData.pageInfo,
-                    )
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            )
         }
 
     }
@@ -51,60 +47,42 @@ fun Route.stockController() {
     route("/stock") {
 
         post("/create") {
-            try {
-                val form = call.receiveParameters()
-                val stock = StockConverter.parametersToModel(form)
+            val stock = StockConverter.receiveAndToModel(call)
 
-                val createdStock = stockService.create(stock)
+            val createdStock = stockService.create(stock)
 
-                call.respondApiResult(
-                    result = createdStock.toView()
-                )
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(
+                result = createdStock.toView()
+            )
         }
 
         get("/{id}") {
-            try {
-                val stockId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val stockId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of stock")
 
-                val stock = stockService.getById(stockId)
-                    ?: throw NotFoundException()
+            val stock = stockService.getById(stockId)
+                ?: throw NotFoundException()
 
-                call.respondApiResult(result = stock.toView())
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            call.respondApiResult(result = stock.toView())
         }
 
         post("/update/{id}") {
-            try {
-                val form = call.receiveParameters()
-                val stock = StockConverter.parametersToModel(form)
+            val stock = StockConverter.receiveAndToModel(call)
 
-                val stockId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
-                stock.id = stockId
+            val stockId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of stock")
+            stock.id = stockId
 
-                val result = stockService.update(stock)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = stockService.update(stock)
+            call.respondApiResult(result = result)
         }
 
         post("/delete/{id}") {
-            try {
-                val stockId = call.parameters["id"]?.toIntOrNull()
-                    ?: throw NotFoundException()
+            val stockId = call.parameters["id"]?.toIntOrNull()
+                ?: throw BadRequestException("No ID of stock")
 
-                val result = stockService.delete(stockId)
-                call.respondApiResult(result = result)
-            } catch (e: Exception) {
-                ApiUtility.handleError(e, call)
-            }
+            val result = stockService.delete(stockId)
+            call.respondApiResult(result = result)
         }
 
     }
