@@ -35,4 +35,8 @@ object OrderConverter: BaseConverter<OrderEntity, Order, OrderView> {
         orderItems =    view.orderItems?.map { OrderItemConverter.viewToModel(it) }
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): OrderView {
+        TODO("Not yet implemented")
+    }
+
 }

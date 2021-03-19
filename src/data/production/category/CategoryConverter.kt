@@ -19,4 +19,8 @@ object CategoryConverter: BaseConverter<CategoryEntity, Category, CategoryView> 
         name =  view.name,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): CategoryView {
+        TODO("Not yet implemented")
+    }
+
 }

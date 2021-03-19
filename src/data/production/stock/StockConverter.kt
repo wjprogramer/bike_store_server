@@ -23,4 +23,8 @@ object StockConverter: BaseConverter<StockEntity, Stock, StockView> {
         productId =     view.productId,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): StockView {
+        TODO("Not yet implemented")
+    }
+
 }

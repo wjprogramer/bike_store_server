@@ -27,4 +27,8 @@ object OrderItemConverter: BaseConverter<OrderItemEntity, OrderItem, OrderItemVi
         productId =     view.productId,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): OrderItemView {
+        TODO("Not yet implemented")
+    }
+
 }

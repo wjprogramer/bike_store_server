@@ -1,6 +1,7 @@
 package com.giant_giraffe.data.production.brand
 
 import com.giant_giraffe.data.BaseConverter
+import io.ktor.application.*
 import io.ktor.http.*
 
 object BrandConverter: BaseConverter<BrandEntity, Brand, BrandView> {
@@ -18,5 +19,9 @@ object BrandConverter: BaseConverter<BrandEntity, Brand, BrandView> {
         id =    view.id,
         name =  view.name,
     )
+
+    override fun mapToView(mapping: Map<String, Any?>): BrandView {
+        TODO("Not yet implemented")
+    }
 
 }

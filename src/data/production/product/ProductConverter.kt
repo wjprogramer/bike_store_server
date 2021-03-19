@@ -27,4 +27,8 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView> {
         categoryId =    view.categoryId,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): ProductView {
+        TODO("Not yet implemented")
+    }
+
 }

@@ -31,4 +31,19 @@ object StoreConverter: BaseConverter<StoreEntity, Store, StoreView> {
         zipCode =       view.zipCode,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): StoreView {
+        val view = StoreView()
+
+        view.id             = mapping["id"]?.toString()?.toIntOrNull()
+        view.storeName      = mapping["store_name"]?.toString()
+        view.phone          = mapping["phone"]?.toString()
+        view.email          = mapping["email"]?.toString()
+        view.street         = mapping["street"]?.toString()
+        view.city           = mapping["city"]?.toString()
+        view.state          = mapping["state"]?.toString()
+        view.zipCode        = mapping["zip_code"]?.toString()
+
+        return view
+    }
+
 }

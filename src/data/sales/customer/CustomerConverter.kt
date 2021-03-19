@@ -34,4 +34,28 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView> 
         zipCode =       view.zipCode,
     )
 
+    override fun mapToView(mapping: Map<String, Any?>): CustomerView {
+        val view = CustomerView()
+
+        view.id             = mapping.getOrDefault("id", null)?.toString()?.toIntOrNull()
+        view.firstName      = mapping.getOrDefault("first_name", null)?.toString()
+        view.lastName       = mapping.getOrDefault("last_name", null)?.toString()
+        view.email          = mapping.getOrDefault("email", null)?.toString()
+        view.phone          = mapping.getOrDefault("phone", null)?.toString()
+        view.street         = mapping.getOrDefault("street", null)?.toString()
+        view.city           = mapping.getOrDefault("city", null)?.toString()
+        view.state          = mapping.getOrDefault("state", null)?.toString()
+        view.zipCode        = mapping.getOrDefault("zip_code", null)?.toString()
+
+        return view
+    }
+
+    override fun mapToModel(mapping: Map<String, Any?>): Customer {
+        val model = super.mapToModel(mapping)
+
+        model.password = mapping.getOrDefault("password", null)?.toString()
+
+        return model
+    }
+
 }
