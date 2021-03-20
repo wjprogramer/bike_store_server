@@ -3,6 +3,7 @@ package com.giant_giraffe
 import com.giant_giraffe.app.JwtConfig
 import com.giant_giraffe.app.initAuth
 import com.giant_giraffe.app.initServices
+import com.giant_giraffe.app.initStatusPage
 import com.giant_giraffe.controllers.common.authController
 import com.giant_giraffe.controllers.production.brandController
 import com.giant_giraffe.controllers.production.categoryController
@@ -54,6 +55,7 @@ fun Application.module(testing: Boolean = false) {
 
     initDB()
     initAuth()
+    initStatusPage()
 
     routing {
 

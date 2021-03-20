@@ -8,9 +8,10 @@ import java.lang.Exception
 
 object ApiUtility {
 
+    // TODO: Need to process built-in exception
     suspend fun handleError(e: Exception, call: ApplicationCall) {
-        e.printStackTrace()
         val error = if (e !is MyBaseException) {
+            e.printStackTrace()
             UnknownException()
         } else {
             e

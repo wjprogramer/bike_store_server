@@ -1,27 +1,42 @@
 package com.giant_giraffe.core
 
+import com.giant_giraffe.data.BaseModel
+import com.giant_giraffe.exceptions.UnknownException
+import com.giant_giraffe.utils.printError
 import io.ktor.application.*
 import io.ktor.response.*
 
 const val SUCCESS_CODE = 2000
 
 suspend inline fun <T> ApplicationCall.respondApiResult(
-    actionName: String? = null,
-    message: String? = null,
     result: T,
+    code: Int = SUCCESS_CODE,
+    title: String? = null,
+    message: String? = null,
 ) {
+    val resultContainsModel = result is BaseModel<*> || (
+            result is PagedData<*> &&
+                    result.data.firstOrNull { it is BaseModel<*> } != null
+            )
+
+    if (resultContainsModel) {
+        printError("Shouldn't return model")
+        throw UnknownException()
+    }
+
     respond(
         ApiResult(
-            actionName = actionName,
-            message = message,
             result = result,
+            code = code,
+            title = title,
+            message = message,
         )
     )
 }
 
 data class ApiResult<T>(
-    val code: Int = SUCCESS_CODE,
-    val actionName: String? = null,
-    val message: String? = null,
     val result: T,
+    val code: Int = SUCCESS_CODE,
+    val title: String? = null,
+    val message: String? = null,
 )
