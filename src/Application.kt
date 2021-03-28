@@ -28,12 +28,19 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
 
+    install(DefaultHeaders)
     install(CORS) {
         method(HttpMethod.Options)
         method(HttpMethod.Put)
+        method(HttpMethod.Post)
+        method(HttpMethod.Get)
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
+        header(HttpHeaders.AccessControlAllowHeaders)
+        header(HttpHeaders.ContentType)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.AccessControlRequestMethod)
         header("MyCustomHeader")
         allowCredentials = true
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
