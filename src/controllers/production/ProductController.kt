@@ -6,9 +6,9 @@ import com.giant_giraffe.data.production.product.ProductConverter
 import com.giant_giraffe.data.receiveAndToModel
 import com.giant_giraffe.enums.UserType
 import com.giant_giraffe.exceptions.BadRequestException
+import com.giant_giraffe.extensions.authPost
+import com.giant_giraffe.extensions.user
 import com.giant_giraffe.services.production.product.ProductService
-import com.giant_giraffe.utils.authPost
-import com.giant_giraffe.utils.user
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.routing.*

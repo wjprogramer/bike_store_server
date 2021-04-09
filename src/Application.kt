@@ -1,9 +1,6 @@
 package com.giant_giraffe
 
-import com.giant_giraffe.app.JwtConfig
-import com.giant_giraffe.app.initAuth
-import com.giant_giraffe.app.initServices
-import com.giant_giraffe.app.initStatusPage
+import com.giant_giraffe.app.*
 import com.giant_giraffe.controllers.common.authController
 import com.giant_giraffe.controllers.common.fileController
 import com.giant_giraffe.controllers.production.brandController
@@ -11,7 +8,6 @@ import com.giant_giraffe.controllers.production.categoryController
 import com.giant_giraffe.controllers.production.productController
 import com.giant_giraffe.controllers.production.stockController
 import com.giant_giraffe.controllers.sales.*
-import com.giant_giraffe.data.initDB
 import com.google.gson.FieldNamingPolicy
 import io.ktor.application.*
 import io.ktor.features.*

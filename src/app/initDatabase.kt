@@ -1,4 +1,4 @@
-package com.giant_giraffe.data
+package com.giant_giraffe.app
 
 import com.giant_giraffe.data.production.brand.BrandTable
 import com.giant_giraffe.data.production.category.CategoryTable

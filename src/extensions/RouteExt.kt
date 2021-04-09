@@ -1,4 +1,4 @@
-package com.giant_giraffe.utils
+package com.giant_giraffe.extensions
 
 import io.ktor.application.*
 import io.ktor.auth.*

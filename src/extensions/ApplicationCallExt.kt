@@ -1,4 +1,4 @@
-package com.giant_giraffe.utils
+package com.giant_giraffe.extensions
 
 import com.giant_giraffe.data.common.User
 import io.ktor.application.*
