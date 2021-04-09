@@ -5,6 +5,7 @@ import com.giant_giraffe.app.initAuth
 import com.giant_giraffe.app.initServices
 import com.giant_giraffe.app.initStatusPage
 import com.giant_giraffe.controllers.common.authController
+import com.giant_giraffe.controllers.common.fileController
 import com.giant_giraffe.controllers.production.brandController
 import com.giant_giraffe.controllers.production.categoryController
 import com.giant_giraffe.controllers.production.productController
@@ -68,6 +69,7 @@ fun Application.module(testing: Boolean = false) {
 
         // common
         authController()
+        fileController()
 
         // production
         brandController()
