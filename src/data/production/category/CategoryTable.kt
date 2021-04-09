@@ -1,7 +1,7 @@
 package com.giant_giraffe.data.production.category
 
-import org.jetbrains.exposed.dao.IntIdTable
+import com.giant_giraffe.data.BaseIntIdTable
 
-object CategoryTable: IntIdTable("categories") {
+object CategoryTable: BaseIntIdTable("categories") {
     val name = varchar("name", 255)
 }

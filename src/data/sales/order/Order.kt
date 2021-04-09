@@ -23,7 +23,7 @@ class Order(
     var store: Store? = null,
     var staff: Staff? = null,
     var orderItems: List<OrderItem>? = null,
-): BaseModel<OrderView> {
+): BaseModel<OrderView>() {
 
     constructor(
         orderEntity: OrderEntity,

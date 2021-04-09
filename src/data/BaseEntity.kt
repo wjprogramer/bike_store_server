@@ -1,10 +1,11 @@
 package com.giant_giraffe.data
 
+@Deprecated("Use BaseIntEntity")
 /**
  * @property M Model
  * @property V View
  */
-interface BaseEntity<M: BaseModel<V>, V> {
+interface BaseEntity<M: BaseModel<M, V>, V> {
 
     /**
      * Convert entity to model that used in internal server

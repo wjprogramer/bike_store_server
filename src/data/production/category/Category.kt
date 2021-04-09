@@ -5,18 +5,21 @@ import com.giant_giraffe.data.BaseModel
 class Category(
     var id: Int? = null,
     var name: String? = null,
-): BaseModel<CategoryView> {
+    entity: CategoryEntity? = null,
+): BaseModel<Category, CategoryView>(entity) {
 
-    constructor(categoryEntity: CategoryEntity): this(
-            id =    categoryEntity.id.value,
-            name =  categoryEntity.name
+    constructor(entity: CategoryEntity): this(
+            id =        entity.id.value,
+            name =      entity.name,
+            entity =    entity,
     )
 
     override fun toView(): CategoryView {
-        return CategoryView(
+        val view = CategoryView(
             id =    id,
             name =  name,
         )
+        return super.appendBaseViewInfo(view)
     }
 
 }

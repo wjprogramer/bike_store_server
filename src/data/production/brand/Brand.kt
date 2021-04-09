@@ -5,18 +5,21 @@ import com.giant_giraffe.data.BaseModel
 class Brand(
     var id: Int? = null,
     var name: String? = null,
-): BaseModel<BrandView> {
+    entity: BrandEntity? = null,
+): BaseModel<Brand, BrandView>(entity) {
 
-    constructor(brandEntity: BrandEntity): this(
-            id =    brandEntity.id.value,
-            name =  brandEntity.name
+    constructor(entity: BrandEntity): this(
+            id =        entity.id.value,
+            name =      entity.name,
+            entity =    entity,
     )
 
     override fun toView(): BrandView {
-        return BrandView(
+        val view = BrandView(
             id =    id,
             name =  name,
         )
+        return super.appendBaseViewInfo(view)
     }
 
 }
