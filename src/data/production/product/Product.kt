@@ -10,6 +10,7 @@ class Product(
     var listPrice: BigDecimal? = null,
     var brandId: Int? = null,
     var categoryId: Int? = null,
+    var imagesUrls: MutableCollection<String>? = null,
 ): BaseModel<ProductView> {
 
     constructor(productEntity: ProductEntity): this(
@@ -19,6 +20,7 @@ class Product(
             listPrice =     productEntity.listPrice,
             brandId =       productEntity.brandId.value,
             categoryId =    productEntity.categoryId.value,
+            imagesUrls =    productEntity.imagesUrls.toMutableList(),
     )
 
     override fun toView(): ProductView {
@@ -29,6 +31,7 @@ class Product(
             listPrice =     listPrice?.toString(),
             brandId =       brandId,
             categoryId =    categoryId,
+            imagesUrls =    imagesUrls?.toTypedArray()
         )
     }
 

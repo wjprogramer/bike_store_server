@@ -30,6 +30,7 @@ object ProductDao:
                 listPrice = product.listPrice!!
                 brandId = EntityID(product.brandId, BrandTable)
                 categoryId = EntityID(product.categoryId, CategoryTable)
+                imagesUrls = product.imagesUrls?.toTypedArray() ?: arrayOf()
             }.toModel()
         }
     }

@@ -14,6 +14,7 @@ class ProductEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Product, Produ
     var listPrice   by ProductTable.listPrice
     var brandId     by ProductTable.brandId
     var categoryId  by ProductTable.categoryId
+    var imagesUrls  by ProductTable.imagesUrls
 
     override fun toModel() =
         Product(this)
