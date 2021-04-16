@@ -57,9 +57,15 @@ object CategoryDao:
         }
     }
 
-    fun delete(categoryId: Int): Int {
+    fun softDelete(categoryId: Int): Int {
         return transaction {
-            CategoryTable.deleteWhere { CategoryTable.id eq categoryId }
+            CategoryEntity
+                .find { CategoryTable.id eq categoryId }
+                .firstOrNull() ?: throw Exception()
+
+            CategoryTable.update({ CategoryTable.id eq categoryId }) {
+                it[isDeleted] = true
+            }
         }
     }
 

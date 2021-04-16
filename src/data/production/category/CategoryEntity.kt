@@ -10,6 +10,8 @@ class CategoryEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Category, Cat
     companion object: IntEntityClass<CategoryEntity>(CategoryTable)
 
     var name by CategoryTable.name
+    var imageUrl by CategoryTable.imageUrl
+    var isDeleted by CategoryTable.isDeleted
 
     override fun toModel() =
         Category(this)

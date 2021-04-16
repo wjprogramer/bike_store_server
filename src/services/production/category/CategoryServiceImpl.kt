@@ -40,7 +40,7 @@ class CategoryServiceImpl: CategoryService {
         var result = true
 
         transaction {
-            val number = dao.delete(categoryId)
+            val number = dao.softDelete(categoryId)
             if (number != 1) {
                 rollback()
                 result = false
