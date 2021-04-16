@@ -10,6 +10,8 @@ class BrandEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Brand, BrandView
     companion object: IntEntityClass<BrandEntity>(BrandTable)
 
     var name by BrandTable.name
+    var imageUrl by BrandTable.imageUrl
+    var isDeleted by BrandTable.isDeleted
 
     override fun toModel() =
         Brand(this)

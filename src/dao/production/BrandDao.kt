@@ -58,9 +58,15 @@ object BrandDao:
         }
     }
 
-    fun delete(brandId: Int): Int {
+    fun softDelete(brandId: Int): Int {
         return transaction {
-            BrandTable.deleteWhere { BrandTable.id eq brandId }
+            BrandEntity
+                .find { BrandTable.id eq brandId }
+                .firstOrNull() ?: throw Exception()
+
+            BrandTable.update({ BrandTable.id eq brandId }) {
+                it[isDeleted] = true
+            }
         }
     }
 

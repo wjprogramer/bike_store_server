@@ -40,7 +40,7 @@ class BrandServiceImpl: BrandService {
         var result = true
 
         transaction {
-            val number = dao.delete(brandId)
+            val number = dao.softDelete(brandId)
             if (number != 1) {
                 rollback()
                 result = false
