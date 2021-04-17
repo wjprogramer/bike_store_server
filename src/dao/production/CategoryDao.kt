@@ -5,6 +5,9 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.category.Category
 import com.giant_giraffe.data.production.category.CategoryEntity
 import com.giant_giraffe.data.production.category.CategoryTable
+import com.giant_giraffe.exceptions.NotFoundException
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -18,6 +21,7 @@ object CategoryDao:
         return transaction {
             CategoryEntity.new {
                 name = category.name!!
+                category.imageUrl?.let { e -> imageUrl = e }
             }.toModel()
         }
     }
@@ -25,7 +29,9 @@ object CategoryDao:
     fun getById(categoryId: Int): Category? {
         return transaction {
             CategoryEntity
-                .find { CategoryTable.id eq categoryId }
+                .find { CategoryTable.id eq categoryId and
+                        (CategoryTable.isDeleted eq false)
+                }
                 .firstOrNull()
                 ?.toModel()
         }
@@ -35,12 +41,14 @@ object CategoryDao:
         return CategoryEntity.findAndGetPagedData(
             page = page,
             size = size,
+            predicates = Op.build { CategoryTable.isDeleted eq false }
         )
     }
 
     fun findAll(): List<Category> {
         return transaction {
-            CategoryEntity.all()
+            CategoryEntity
+                .find { CategoryTable.isDeleted eq false }
                 .map { it.toModel() }
         }
     }
@@ -48,8 +56,10 @@ object CategoryDao:
     fun update(category: Category): Int {
         return transaction {
             CategoryEntity
-                .find { CategoryTable.id eq category.id }
-                .firstOrNull() ?: throw Exception()
+                .find { CategoryTable.id eq category.id and
+                        (CategoryTable.isDeleted eq false)
+                }
+                .firstOrNull() ?: throw NotFoundException()
 
             CategoryTable.update({ CategoryTable.id eq category.id }) {
                 category.name?.let { e -> it[name] = e }
@@ -60,8 +70,10 @@ object CategoryDao:
     fun softDelete(categoryId: Int): Int {
         return transaction {
             CategoryEntity
-                .find { CategoryTable.id eq categoryId }
-                .firstOrNull() ?: throw Exception()
+                .find { CategoryTable.id eq categoryId and
+                        (CategoryTable.isDeleted eq false)
+                }
+                .firstOrNull() ?: throw NotFoundException()
 
             CategoryTable.update({ CategoryTable.id eq categoryId }) {
                 it[isDeleted] = true

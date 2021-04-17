@@ -5,6 +5,8 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.brand.Brand
 import com.giant_giraffe.data.production.brand.BrandEntity
 import com.giant_giraffe.data.production.brand.BrandTable
+import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -18,6 +20,7 @@ object BrandDao:
         return transaction {
             BrandEntity.new {
                 name = brand.name!!
+                brand.imageUrl?.let { e -> imageUrl = e }
             }.toModel()
         }
     }
@@ -25,7 +28,9 @@ object BrandDao:
     fun getById(brandId: Int): Brand? {
         return transaction {
             BrandEntity
-                .find { BrandTable.id eq brandId }
+                .find { BrandTable.id eq brandId and
+                        (BrandTable.isDeleted eq false)
+                }
                 .firstOrNull()
                 ?.toModel()
         }
@@ -35,13 +40,14 @@ object BrandDao:
         return BrandEntity.findAndGetPagedData(
             page = page,
             size = size,
+            predicates = Op.build { BrandTable.isDeleted eq false }
         )
     }
 
     fun findAll(): List<Brand> {
         return transaction {
             BrandEntity
-                .all()
+                .find { BrandTable.isDeleted eq false }
                 .map { it.toModel() }
         }
     }
@@ -49,7 +55,9 @@ object BrandDao:
     fun update(brand: Brand): Int {
         return transaction {
             BrandEntity
-                .find { BrandTable.id eq brand.id }
+                .find { BrandTable.id eq brand.id and
+                        (BrandTable.isDeleted eq false)
+                }
                 .firstOrNull() ?: throw Exception()
 
             BrandTable.update({ BrandTable.id eq brand.id }) {
