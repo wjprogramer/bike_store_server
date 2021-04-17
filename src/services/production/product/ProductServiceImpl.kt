@@ -55,7 +55,7 @@ class ProductServiceImpl: ProductService {
         var result = true
 
         transaction {
-            val number = dao.delete(productId)
+            val number = dao.softDelete(productId)
             if (number != 1) {
                 rollback()
                 result = false

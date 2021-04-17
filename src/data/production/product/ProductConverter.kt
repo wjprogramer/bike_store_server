@@ -14,7 +14,7 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView> {
         result.listPrice    = parameters["list_price"]
         result.brandId      = parameters["brand_id"]?.toInt()
         result.categoryId   = parameters["category_id"]?.toInt()
-        // TODO: imagesUrls
+        // TODO: imagesUrls, visible, isDeleted
 
         return result
     }
@@ -27,6 +27,8 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView> {
         brandId =       view.brandId,
         categoryId =    view.categoryId,
         imagesUrls =    view.imagesUrls?.toMutableList(),
+        visible =       view.visible,
+        isDeleted =     view.isDeleted,
     )
 
     override fun mapToView(mapping: Map<String, Any?>): ProductView {

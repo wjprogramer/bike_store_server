@@ -46,6 +46,15 @@ interface BaseConverter<E, M: BaseModel<V>, V: BaseView> {
 
 }
 
+/**
+ * Usage:
+ *
+ * ```kotlin
+ * post("/update") {
+ *      val product = ProductConverter.receiveAndToModel(call)
+ * }
+ * ```
+ */
 suspend inline fun <E, M : BaseModel<V>, reified V : BaseView> BaseConverter<E, M, V>.receiveAndToModel(call: ApplicationCall): M {
     val view = call.receive<V>()
     return viewToModel(view)

@@ -38,7 +38,9 @@ object ProductDao:
     fun getById(productId: Int): Product? {
         return transaction {
             ProductEntity
-                .find { ProductTable.id eq productId }
+                .find { ProductTable.id eq productId and
+                        (ProductTable.isDeleted eq false)
+                }
                 .firstOrNull()
                 ?.toModel()
         }
@@ -58,6 +60,8 @@ object ProductDao:
 
         return transaction {
 
+            predicates = predicates and (ProductTable.isDeleted eq false)
+
             keyword?.let        { predicates = predicates and (ProductTable.name ilike "%$it%") }
             modelYear?.let      { predicates = predicates and (ProductTable.modelYear eq it)  }
             brandId?.let        { predicates = predicates and (ProductTable.brandId eq it)  }
@@ -76,7 +80,7 @@ object ProductDao:
     fun update(product: Product): Int {
         return transaction {
             ProductEntity
-                .find { ProductTable.id eq product.id }
+                .find { ProductTable.id eq product.id and (ProductTable.isDeleted eq false) }
                 .firstOrNull() ?: throw Exception()
 
             ProductTable.update({ ProductTable.id eq product.id }) {
@@ -85,13 +89,18 @@ object ProductDao:
                 product.listPrice?.let { e -> it[listPrice] = e }
                 product.brandId?.let { e -> it[brandId] = EntityID(e, BrandTable) }
                 product.categoryId?.let { e -> it[categoryId] = EntityID(e, CategoryTable) }
+                product.imagesUrls?.let { e -> it[imagesUrls] = e.toTypedArray() }
+                product.visible?.let { e -> it[visible] = e }
+                product.isDeleted?.let { e -> it[isDeleted] = e }
             }
         }
     }
 
-    fun delete(productId: Int): Int {
+    fun softDelete(productId: Int): Int {
         return transaction {
-            ProductTable.deleteWhere { ProductTable.id eq productId }
+            ProductTable.update({ ProductTable.id eq productId }) {
+                it[isDeleted] = true
+            }
         }
     }
 

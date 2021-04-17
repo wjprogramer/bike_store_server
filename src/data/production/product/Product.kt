@@ -11,6 +11,8 @@ class Product(
     var brandId: Int? = null,
     var categoryId: Int? = null,
     var imagesUrls: MutableCollection<String>? = null,
+    var visible: Boolean? = null,
+    var isDeleted: Boolean? = null,
 ): BaseModel<ProductView> {
 
     constructor(productEntity: ProductEntity): this(
@@ -21,6 +23,8 @@ class Product(
             brandId =       productEntity.brandId.value,
             categoryId =    productEntity.categoryId.value,
             imagesUrls =    productEntity.imagesUrls.toMutableList(),
+            visible =       productEntity.visible,
+            isDeleted =     productEntity.isDeleted,
     )
 
     override fun toView(): ProductView {
@@ -31,7 +35,9 @@ class Product(
             listPrice =     listPrice?.toString(),
             brandId =       brandId,
             categoryId =    categoryId,
-            imagesUrls =    imagesUrls?.toTypedArray()
+            imagesUrls =    imagesUrls?.toTypedArray(),
+            visible =       visible,
+            isDeleted =     isDeleted,
         )
     }
 
