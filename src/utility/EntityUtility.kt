@@ -12,10 +12,30 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object EntityUtility {
 
+    fun getPageInfo(
+        dataCount: Int,
+        totalDataCount: Int,
+        page: Int,
+        size: Int
+    ): PageInfo {
+        var totalPages = totalDataCount / size
+        if (totalDataCount % size != 0) {
+            totalPages++
+        }
+
+        return PageInfo(
+            size = size,
+            page = page,
+            dataCount = dataCount,
+            totalPages = totalPages,
+            totalDataCount = totalDataCount
+        )
+    }
+
     /**
-     * 之後改用 [getPageableData]
+     * Use [getPageInfo]
      */
-    @Deprecated("")
+    @Deprecated("Use `getPageInfo(dataCount, totalDataCount, page, size)`")
     fun <ID: Comparable<ID>> getPageInfo(
         entity: EntityClass<ID, Entity<ID>>,
         page: Int,
@@ -41,16 +61,16 @@ object EntityUtility {
     }
 
     /**
-     * FIXME: 需改成回傳 [M]
+     * Use [getPageInfo]
      */
-    @Deprecated("先暫時不要用")
+    @Deprecated("Use `getPageInfo`")
     fun <E, M, V> getPageableData(
         entity: IntEntityClass<E>, page: Int, pageSize: Int
-    ): PagedData<V> where E: IntEntity, E: BaseEntity<M, V> {
+    ): PagedData<M> where E: IntEntity, E: BaseEntity<M, V> {
         return transaction {
             val data = entity.all()
                 .limit(pageSize, offset = page * pageSize)
-                .map { it.toView() }
+                .map { it.toModel() }
 
             val totalElements = entity.count()
             var totalPages = totalElements / pageSize
@@ -71,26 +91,6 @@ object EntityUtility {
                 pageInfo = pageInfo
             )
         }
-    }
-
-    fun getPageInfo(
-        dataCount: Int,
-        totalDataCount: Int,
-        page: Int,
-        size: Int
-    ): PageInfo {
-        var totalPages = totalDataCount / size
-        if (totalDataCount % size != 0) {
-            totalPages++
-        }
-
-        return PageInfo(
-            size = size,
-            page = page,
-            dataCount = dataCount,
-            totalPages = totalPages,
-            totalDataCount = totalDataCount
-        )
     }
 
 }
