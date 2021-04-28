@@ -64,6 +64,7 @@ object StockDao:
             page = page,
             size = size,
             predicates = predicates,
+            order = arrayOf(StockTable.id to SortOrder.ASC)
         ) { entity ->
             if (needLoadProductModel) {
                 entity.load(StockEntity::product)

@@ -74,7 +74,8 @@ object OrderDao:
         return OrderEntity.findAndGetPagedData(
             page = page,
             size = size,
-            predicates = predicates
+            predicates = predicates,
+            order = arrayOf(OrderTable.id to SortOrder.ASC)
         ) { entity ->
             entity.toDetailsModel()
         }

@@ -74,6 +74,7 @@ object CustomerDao:
                 page = page,
                 size = size,
                 predicates = predicates,
+                order = arrayOf(CustomerTable.id to SortOrder.ASC)
             )
         }
     }

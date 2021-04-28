@@ -5,11 +5,8 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.brand.Brand
 import com.giant_giraffe.data.production.brand.BrandEntity
 import com.giant_giraffe.data.production.brand.BrandTable
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object BrandDao:
@@ -40,7 +37,8 @@ object BrandDao:
         return BrandEntity.findAndGetPagedData(
             page = page,
             size = size,
-            predicates = Op.build { BrandTable.isDeleted eq false }
+            predicates = Op.build { BrandTable.isDeleted eq false },
+            order = arrayOf(BrandTable.id to SortOrder.ASC)
         )
     }
 
@@ -48,6 +46,7 @@ object BrandDao:
         return transaction {
             BrandEntity
                 .find { BrandTable.isDeleted eq false }
+                .orderBy(BrandTable.id to SortOrder.ASC)
                 .map { it.toModel() }
         }
     }

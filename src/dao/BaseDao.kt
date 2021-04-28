@@ -6,7 +6,9 @@ import com.giant_giraffe.data.BaseModel
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
@@ -22,6 +24,7 @@ open class BaseDao<ID: Comparable<ID>, E, M: BaseModel<*>>
         page: Int,
         size: Int,
         predicates: Op<Boolean>? = null,
+        order: Array<Pair<Expression<*>, SortOrder>> = arrayOf(),
         load: ((E) -> M)? = null,
     ): PagedData<M> {
         var totalDataSize = 0
@@ -36,6 +39,7 @@ open class BaseDao<ID: Comparable<ID>, E, M: BaseModel<*>>
 
             allOrFilteredData
                 .limit(size, offset = page * size)
+                .orderBy(*order)
                 .map { entity ->
                     if (load != null) {
                         load(entity)

@@ -5,6 +5,7 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.sales.store.Store
 import com.giant_giraffe.data.sales.store.StoreEntity
 import com.giant_giraffe.data.sales.store.StoreTable
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
@@ -41,6 +42,7 @@ object StoreDao:
         return StoreEntity.findAndGetPagedData(
             page = page,
             size = size,
+            order = arrayOf(StoreTable.id to SortOrder.ASC)
         )
     }
 
@@ -48,6 +50,7 @@ object StoreDao:
         return transaction {
             StoreEntity
                 .all()
+                .orderBy(StoreTable.id to SortOrder.ASC)
                 .map { it.toModel() }
         }
     }

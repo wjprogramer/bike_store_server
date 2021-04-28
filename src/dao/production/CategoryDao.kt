@@ -6,11 +6,8 @@ import com.giant_giraffe.data.production.category.Category
 import com.giant_giraffe.data.production.category.CategoryEntity
 import com.giant_giraffe.data.production.category.CategoryTable
 import com.giant_giraffe.exceptions.NotFoundException
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object CategoryDao:
@@ -41,7 +38,8 @@ object CategoryDao:
         return CategoryEntity.findAndGetPagedData(
             page = page,
             size = size,
-            predicates = Op.build { CategoryTable.isDeleted eq false }
+            predicates = Op.build { CategoryTable.isDeleted eq false },
+            order = arrayOf(CategoryTable.id to SortOrder.ASC)
         )
     }
 
@@ -49,6 +47,7 @@ object CategoryDao:
         return transaction {
             CategoryEntity
                 .find { CategoryTable.isDeleted eq false }
+                .orderBy(CategoryTable.id to SortOrder.ASC)
                 .map { it.toModel() }
         }
     }

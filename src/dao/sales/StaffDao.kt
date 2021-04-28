@@ -8,12 +8,9 @@ import com.giant_giraffe.data.sales.staff.StaffTable
 import com.giant_giraffe.data.sales.store.StoreTable
 import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.load
-import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object StaffDao:
@@ -66,6 +63,7 @@ object StaffDao:
             page = page,
             size = size,
             predicates = predicates,
+            order = arrayOf(StaffTable.id to SortOrder.ASC)
         ) {
             if (needLoadStore) {
                 it.load(StaffEntity::store)

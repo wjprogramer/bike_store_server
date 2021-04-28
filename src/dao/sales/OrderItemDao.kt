@@ -10,12 +10,9 @@ import com.giant_giraffe.data.sales.order_item.OrderItemEntity
 import com.giant_giraffe.data.sales.order_item.OrderItemTable
 import com.giant_giraffe.utility.EntityUtility
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.sql.Op
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import java.lang.Exception
 
 object OrderItemDao:
@@ -58,7 +55,8 @@ object OrderItemDao:
         return OrderItemEntity.findAndGetPagedData(
             page = page,
             size = size,
-            predicates = predicates
+            predicates = predicates,
+            order = arrayOf(OrderItemTable.id to SortOrder.ASC)
         ) { entity ->
             entity.toDetailsModel()
         }

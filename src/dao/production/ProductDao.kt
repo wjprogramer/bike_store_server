@@ -72,7 +72,8 @@ object ProductDao:
             ProductEntity.findAndGetPagedData(
                 page = page,
                 size = size,
-                predicates = predicates
+                predicates = predicates,
+                order = arrayOf(ProductTable.id to SortOrder.ASC)
             )
         }
     }
