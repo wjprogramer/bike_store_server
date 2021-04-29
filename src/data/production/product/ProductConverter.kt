@@ -3,7 +3,7 @@ package com.giant_giraffe.data.production.product
 import com.giant_giraffe.data.BaseConverter
 import io.ktor.http.*
 
-object ProductConverter: BaseConverter<ProductEntity, Product, ProductView> {
+object ProductConverter: BaseConverter<ProductEntity, Product, ProductView>() {
 
     override fun parametersToView(parameters: Parameters): ProductView {
         val result = ProductView()

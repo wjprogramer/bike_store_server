@@ -3,7 +3,7 @@ package com.giant_giraffe.data.production.stock
 import com.giant_giraffe.data.BaseConverter
 import io.ktor.http.*
 
-object StockConverter: BaseConverter<StockEntity, Stock, StockView> {
+object StockConverter: BaseConverter<StockEntity, Stock, StockView>() {
 
     override fun parametersToView(parameters: Parameters): StockView {
         val result = StockView()

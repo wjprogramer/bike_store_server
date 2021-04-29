@@ -3,7 +3,7 @@ package com.giant_giraffe.data.sales.order_item
 import com.giant_giraffe.data.BaseConverter
 import io.ktor.http.*
 
-object OrderItemConverter: BaseConverter<OrderItemEntity, OrderItem, OrderItemView> {
+object OrderItemConverter: BaseConverter<OrderItemEntity, OrderItem, OrderItemView>() {
 
     override fun parametersToView(parameters: Parameters): OrderItemView {
         val result = OrderItemView()

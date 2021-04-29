@@ -6,7 +6,7 @@ import com.giant_giraffe.enums.toOrderStatus
 import com.giant_giraffe.utility.DateTimeUtility
 import io.ktor.http.*
 
-object OrderConverter: BaseConverter<OrderEntity, Order, OrderView> {
+object OrderConverter: BaseConverter<OrderEntity, Order, OrderView>() {
 
     override fun parametersToView(parameters: Parameters): OrderView {
         val result = OrderView()

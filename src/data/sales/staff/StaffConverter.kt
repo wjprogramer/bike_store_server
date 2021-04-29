@@ -4,7 +4,7 @@ import com.giant_giraffe.data.BaseConverter
 import com.giant_giraffe.data.sales.store.StoreConverter
 import io.ktor.http.*
 
-object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView> {
+object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView>() {
 
     override fun parametersToView(parameters: Parameters): StaffView {
         val result = StaffView()
