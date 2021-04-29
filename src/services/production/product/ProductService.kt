@@ -2,6 +2,8 @@ package com.giant_giraffe.services.production.product
 
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.data.production.product.Product
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.SortOrder
 
 interface ProductService {
 
@@ -18,6 +20,7 @@ interface ProductService {
         categoryId: Int? = null,
         minListPrice: Int? = null,
         maxListPrice: Int? = null,
+        sort: Collection<Pair<Expression<*>, SortOrder>>? = null,
     ): PagedData<Product>
 
     fun update(product: Product): Int

@@ -55,6 +55,7 @@ object ProductDao:
         categoryId: Int? = null,
         minListPrice: Int? = null,
         maxListPrice: Int? = null,
+        sort: Collection<Pair<Expression<*>, SortOrder>>?
     ): PagedData<Product> {
         var predicates: Op<Boolean> = Op.build { Op.TRUE }
 
@@ -73,7 +74,7 @@ object ProductDao:
                 page = page,
                 size = size,
                 predicates = predicates,
-                order = arrayOf(ProductTable.id to SortOrder.ASC)
+                order = sort?.toTypedArray() ?: arrayOf(ProductTable.id to SortOrder.ASC)
             )
         }
     }

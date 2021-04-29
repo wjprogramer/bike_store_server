@@ -3,6 +3,8 @@ package com.giant_giraffe.services.production.product
 import com.giant_giraffe.core.PagedData
 import com.giant_giraffe.dao.production.ProductDao
 import com.giant_giraffe.data.production.product.Product
+import org.jetbrains.exposed.sql.Expression
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.Exception
 
@@ -34,6 +36,7 @@ class ProductServiceImpl: ProductService {
                       categoryId: Int?,
                       minListPrice: Int?,
                       maxListPrice: Int?,
+                      sort: Collection<Pair<Expression<*>, SortOrder>>?,
     ): PagedData<Product> {
         return dao.find(
             page,
@@ -44,6 +47,7 @@ class ProductServiceImpl: ProductService {
             categoryId = categoryId,
             minListPrice = minListPrice,
             maxListPrice = maxListPrice,
+            sort = sort,
         )
     }
 

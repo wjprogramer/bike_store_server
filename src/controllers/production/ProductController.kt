@@ -33,6 +33,7 @@ fun Route.productController() {
             val categoryId = queryParameters["category_id"]?.toIntOrNull()
             val minListPrice = queryParameters["min_list_price"]?.toIntOrNull()
             val maxListPrice = queryParameters["max_list_price"]?.toIntOrNull()
+            val sort = ProductConverter.parseSortString(queryParameters["sort"])
 
             val pagingData = productService.find(
                 page = page,
@@ -43,6 +44,7 @@ fun Route.productController() {
                 categoryId = categoryId,
                 minListPrice = minListPrice,
                 maxListPrice = maxListPrice,
+                sort = sort,
             )
 
             call.respondApiResult(
