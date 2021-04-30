@@ -11,6 +11,7 @@ data class ProductView(
     var categoryId: Int?            = null,
     var imagesUrls: Array<String>?  = null,
     var visible:    Boolean?        = null,
+    var enable:     Boolean?        = null,
     var isDeleted:  Boolean?        = null,
 ): BaseView {
 
@@ -31,6 +32,7 @@ data class ProductView(
             if (!imagesUrls.contentEquals(other.imagesUrls)) return false
         } else if (other.imagesUrls != null) return false
         if (visible != other.visible) return false
+        if (enable != other.enable) return false
         if (isDeleted != other.isDeleted) return false
 
         return true
@@ -45,6 +47,7 @@ data class ProductView(
         result = 31 * result + (categoryId ?: 0)
         result = 31 * result + (imagesUrls?.contentHashCode() ?: 0)
         result = 31 * result + (visible?.hashCode() ?: 0)
+        result = 31 * result + (enable?.hashCode() ?: 0)
         result = 31 * result + (isDeleted?.hashCode() ?: 0)
         return result
     }

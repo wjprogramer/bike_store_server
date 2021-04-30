@@ -14,6 +14,7 @@ object ProductTable: IntIdTable("products") {
     val listPrice = decimal("list_price", 10, 2)
     val imagesUrls = array<String>("images_urls", VarCharColumnType())
     val visible = bool("visible").default(true)
+    val enable = bool("enable").default(true)
     val isDeleted = bool("is_deleted").default(false)
 
     val brandId = reference(

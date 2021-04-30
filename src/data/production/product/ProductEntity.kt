@@ -16,6 +16,7 @@ class ProductEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Product, Produ
     var categoryId  by ProductTable.categoryId
     var imagesUrls  by ProductTable.imagesUrls
     var visible     by ProductTable.visible
+    var enable      by ProductTable.enable
     var isDeleted   by ProductTable.isDeleted
 
     override fun toModel() =

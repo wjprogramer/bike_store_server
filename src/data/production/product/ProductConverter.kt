@@ -17,7 +17,7 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView>() {
         result.listPrice    = parameters["list_price"]
         result.brandId      = parameters["brand_id"]?.toInt()
         result.categoryId   = parameters["category_id"]?.toInt()
-        // TODO: imagesUrls, visible, isDeleted
+        // TODO: imagesUrls, visible, enable, isDeleted
 
         return result
     }
@@ -31,6 +31,7 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView>() {
         categoryId =    view.categoryId,
         imagesUrls =    view.imagesUrls?.toMutableList(),
         visible =       view.visible,
+        enable =        view.enable,
         isDeleted =     view.isDeleted,
     )
 
@@ -50,6 +51,7 @@ object ProductConverter: BaseConverter<ProductEntity, Product, ProductView>() {
                     "category_id" -> ProductTable.categoryId
                     "images_urls" -> ProductTable.imagesUrls
                     "visible" -> ProductTable.visible
+                    "enable" -> ProductTable.enable
                     "is_deleted" -> ProductTable.isDeleted
                     else -> null
                 } ?: return@map null

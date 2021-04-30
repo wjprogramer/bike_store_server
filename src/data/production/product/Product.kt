@@ -12,6 +12,7 @@ class Product(
     var categoryId: Int? = null,
     var imagesUrls: MutableCollection<String>? = null,
     var visible: Boolean? = null,
+    var enable: Boolean? = null,
     var isDeleted: Boolean? = null,
 ): BaseModel<ProductView> {
 
@@ -24,6 +25,7 @@ class Product(
             categoryId =    productEntity.categoryId.value,
             imagesUrls =    productEntity.imagesUrls.toMutableList(),
             visible =       productEntity.visible,
+            enable =        productEntity.enable,
             isDeleted =     productEntity.isDeleted,
     )
 
@@ -37,6 +39,7 @@ class Product(
             categoryId =    categoryId,
             imagesUrls =    imagesUrls?.toTypedArray(),
             visible =       visible,
+            enable =        enable,
             isDeleted =     isDeleted,
         )
     }
