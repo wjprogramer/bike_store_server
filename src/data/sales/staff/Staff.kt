@@ -14,6 +14,7 @@ class Staff(
     var storeId: Int? = null,
     var managerId: Int? = null,
     var store: Store? = null,
+    var avatarName: String? = null,
 ): BaseModel<StaffView> {
 
     constructor(staffEntity: StaffEntity): this(
@@ -26,6 +27,7 @@ class Staff(
             active =            staffEntity.active,
             storeId =           staffEntity.storeId.value,
             managerId =         staffEntity.managerId?.value,
+            avatarName =        staffEntity.avatarName,
     )
 
     override fun toView(): StaffView {
@@ -39,6 +41,7 @@ class Staff(
             storeId =           storeId,
             managerId =         managerId,
             store =             store?.toView(),
+            avatarName =        avatarName
         )
     }
 

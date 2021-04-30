@@ -17,6 +17,7 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView>(
         result.city =       parameters["city"]
         result.state =      parameters["state"]
         result.zipCode =    parameters["zip_code"]
+        result.avatarName = parameters["avatar_name"]
 
         return result
     }
@@ -32,6 +33,7 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView>(
         city =          view.city,
         state =         view.state,
         zipCode =       view.zipCode,
+        avatarName =    view.avatarName,
     )
 
     override fun mapToView(mapping: Map<String, Any?>): CustomerView {
@@ -46,6 +48,7 @@ object CustomerConverter: BaseConverter<CustomerEntity, Customer, CustomerView>(
         view.city           = mapping.getOrDefault("city", null)?.toString()
         view.state          = mapping.getOrDefault("state", null)?.toString()
         view.zipCode        = mapping.getOrDefault("zip_code", null)?.toString()
+        view.avatarName     = mapping.getOrDefault("avatar_name", null)?.toString()
 
         return view
     }

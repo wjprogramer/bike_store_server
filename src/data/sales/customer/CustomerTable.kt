@@ -12,4 +12,5 @@ object CustomerTable: IntIdTable("customers") {
     val city =          varchar("city", 50).nullable()
     val state =         varchar("state", 25).nullable()
     val zipCode =       varchar("zip_code", 5).nullable()
+    val avatarName =    text("avatar_name").nullable()
 }

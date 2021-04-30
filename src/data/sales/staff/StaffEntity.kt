@@ -19,6 +19,7 @@ class StaffEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Staff, StaffView
     var active      by StaffTable.active
     var storeId     by StaffTable.storeId
     var managerId   by StaffTable.managerId
+    var avatarName  by StaffTable.avatarName
 
     var store       by StoreEntity referencedOn StaffTable.storeId
 

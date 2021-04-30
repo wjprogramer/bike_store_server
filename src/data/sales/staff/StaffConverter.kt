@@ -17,6 +17,7 @@ object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView>() {
         result.active       = parameters["active"]?.toIntOrNull()
         result.storeId      = parameters["store_id"]?.toIntOrNull()
         result.managerId    = parameters["manager_id"]?.toIntOrNull()
+        result.avatarName   = parameters["avatar_name"]
 
         return result
     }
@@ -31,6 +32,7 @@ object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView>() {
         active =        view.active,
         storeId =       view.storeId,
         managerId =     view.managerId,
+        avatarName =    view.avatarName,
     )
 
     override fun mapToView(mapping: Map<String, Any?>): StaffView {
@@ -44,6 +46,7 @@ object StaffConverter: BaseConverter<StaffEntity, Staff, StaffView>() {
         view.active         = mapping["active"]?.toString()?.toDoubleOrNull()?.toInt()
         view.storeId        = mapping["store_id"]?.toString()?.toDoubleOrNull()?.toInt()
         view.managerId      = mapping["manager_id"]?.toString()?.toDoubleOrNull()?.toInt()
+        view.avatarName     = mapping["avatar_name"]?.toString()
         view.store          = mapping["store"]?.let { value ->
             if (value is Map<*, *>) {
                 value

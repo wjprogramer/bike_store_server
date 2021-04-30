@@ -18,6 +18,7 @@ class CustomerEntity(id: EntityID<Int>): IntEntity(id), BaseEntity<Customer, Cus
     var city        by CustomerTable.city
     var state       by CustomerTable.state
     var zipCode     by CustomerTable.zipCode
+    var avatarName  by CustomerTable.avatarName
 
     override fun toModel() =
         Customer(this)

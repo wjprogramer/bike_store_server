@@ -11,6 +11,7 @@ object StaffTable: IntIdTable("staffs") {
     val password =      text("password")
     val phone =         varchar("phone", 25).nullable()
     val active =        integer("active") // TODO: boolean?
+    val avatarName =    text("avatar_name").nullable()
 
     val storeId = reference(
         "store_id", StoreTable,

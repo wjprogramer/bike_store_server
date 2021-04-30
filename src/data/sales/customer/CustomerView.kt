@@ -12,4 +12,5 @@ data class CustomerView(
     var city:           String?     = null,
     var state:          String?     = null,
     var zipCode:        String?     = null,
+    var avatarName:     String?     = null,
 ): BaseView

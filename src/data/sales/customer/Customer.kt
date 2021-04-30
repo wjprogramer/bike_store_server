@@ -13,6 +13,7 @@ class Customer(
     var city: String? = null,
     var state: String? = null,
     var zipCode: String? = null,
+    var avatarName: String? = null,
 ): BaseModel<CustomerView> {
 
     constructor(customerEntity: CustomerEntity): this(
@@ -26,6 +27,7 @@ class Customer(
             city =          customerEntity.city,
             state =         customerEntity.state,
             zipCode =       customerEntity.zipCode,
+            avatarName =    customerEntity.avatarName,
     )
 
     override fun toView(): CustomerView {
@@ -39,6 +41,7 @@ class Customer(
             city =          city,
             state =         state,
             zipCode =       zipCode,
+            avatarName =    avatarName,
         )
     }
 

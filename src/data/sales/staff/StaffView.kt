@@ -13,4 +13,5 @@ data class StaffView(
     var storeId:        Int?        = null,
     var managerId:      Int?        = null,
     var store:          StoreView?  = null,
+    var avatarName:     String?     = null,
 ): BaseView
