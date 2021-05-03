@@ -25,10 +25,12 @@ fun Route.brandController() {
 
             val page = queryParameters["page"]?.toInt() ?: 0
             val size = queryParameters["size"]?.toInt() ?: 10
+            val keyword = queryParameters["keyword"]
 
             val pagingData = brandService.find(
                 page = page,
-                size = size
+                size = size,
+                keyword = keyword,
             )
 
             call.respondApiResult(

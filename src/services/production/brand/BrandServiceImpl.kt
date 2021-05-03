@@ -24,8 +24,8 @@ class BrandServiceImpl: BrandService {
         return dao.getById(brandId)
     }
 
-    override fun find(page: Int, size: Int): PagedData<Brand> {
-        return dao.find(page, size)
+    override fun find(page: Int, size: Int, keyword: String?): PagedData<Brand> {
+        return dao.find(page, size, keyword)
     }
 
     override fun findAll(): List<Brand> {

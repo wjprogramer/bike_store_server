@@ -5,6 +5,7 @@ import com.giant_giraffe.dao.BaseDao
 import com.giant_giraffe.data.production.brand.Brand
 import com.giant_giraffe.data.production.brand.BrandEntity
 import com.giant_giraffe.data.production.brand.BrandTable
+import com.giant_giraffe.utils.ilike
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.lang.Exception
@@ -33,11 +34,15 @@ object BrandDao:
         }
     }
 
-    fun find(page: Int, size: Int): PagedData<Brand> {
+    fun find(page: Int, size: Int, keyword: String?): PagedData<Brand> {
+        var predicates = Op.build { BrandTable.isDeleted eq false }
+
+        keyword?.let { predicates = predicates and (BrandTable.name ilike "%$it%") }
+
         return BrandEntity.findAndGetPagedData(
             page = page,
             size = size,
-            predicates = Op.build { BrandTable.isDeleted eq false },
+            predicates = predicates,
             order = arrayOf(BrandTable.id to SortOrder.ASC)
         )
     }

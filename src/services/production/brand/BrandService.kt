@@ -9,7 +9,7 @@ interface BrandService {
 
     fun getById(brandId: Int): Brand?
 
-    fun find(page: Int, size: Int): PagedData<Brand>
+    fun find(page: Int, size: Int, keyword: String?): PagedData<Brand>
 
     fun findAll(): List<Brand>
 
